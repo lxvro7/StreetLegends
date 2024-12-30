@@ -3,6 +3,6 @@ module com.game.street_legends {
     requires javafx.fxml;
 
 
-    opens com.game.street_legends to javafx.fxml;
-    exports com.game.street_legends;
+    opens com.game to javafx.fxml;
+    exports com.game;
 }
