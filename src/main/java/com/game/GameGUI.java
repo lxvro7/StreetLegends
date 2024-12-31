@@ -1,7 +1,6 @@
 package com.game;
 import javafx.application.Application;
-import javafx.geometry.Insets;
-import javafx.geometry.Pos;
+import javafx.scene.control.TextField;
 import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
@@ -10,10 +9,10 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
+import javafx.stage.Screen;
 import javafx.stage.Stage;
 import java.net.URL;
-
-
+import java.util.Objects;
 
 public class GameGUI extends Application {
     private Scene scene;
@@ -22,39 +21,33 @@ public class GameGUI extends Application {
     public static void main(String[] args) {
         launch(args);
     }
+
     @Override
     public void start(Stage primaryStage) {
+        double screenWidth = Screen.getPrimary().getBounds().getWidth();
+        double screenHeight = Screen.getPrimary().getBounds().getHeight();
+
         root = new StackPane();
+
         Node entryLayout = createEntry();
         root.getChildren().add(entryLayout);
-        scene = new Scene(root, 600, 400);
-        // CSS-Data
-        scene.getStylesheets().add(getClass().getResource("/styles.css").toExternalForm());
-       /* try {
-            URL cssUrl = getClass().getResource("/styles.css");
-            if (cssUrl == null) {
-                System.err.println("styles.css not found!");
-            } else {
-                scene.getStylesheets().add(cssUrl.toExternalForm());
-                System.out.println("CSS loaded: " + cssUrl.toExternalForm());
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }*/
+        scene = new Scene(root, screenWidth, screenHeight);
+
+        readFromCss();
+
         primaryStage.setTitle("Street Legends");
         primaryStage.setScene(scene);
-        primaryStage.setFullScreen(false);
-        primaryStage.setResizable(true);
+        primaryStage.setMaximized(true);
         primaryStage.show();
     }
+
     public Node createEntry() {
-        // TODO: Create a welcome screen with a text field where the user can enter their name.
-        // If button clicked, because name is fine, switch to menu scene otherwise you will get a error -> switchScene(createMenu()).
+        // TODO: Add a Background Image
 
-
-        Label welcomeLabel = new Label("Willkommen zu Street Legends!");
+        Label welcomeLabel = new Label("Welcome to Street Legends");
         welcomeLabel.getStyleClass().add("title");
-        javafx.scene.control.TextField nameField = new javafx.scene.control.TextField();
+
+        TextField nameField = new TextField();
         nameField.setPromptText("Please enter your name");
 
         Button startButton = new Button("Start");
@@ -74,11 +67,13 @@ public class GameGUI extends Application {
             }
         });
 
-        VBox layout = new VBox(20);
-        layout.getStyleClass().add("vbox-layout");
-        layout.getChildren().addAll(welcomeLabel, nameField, startButton, errorLabel);
+        // TODO: change the entry like the 1st Discord Pic, see createMenu (BorderPane, VBox, etc.)
 
-        return layout;
+        VBox entryLayout = new VBox(20);
+        entryLayout.getStyleClass().add("vbox-layout");
+        entryLayout.getChildren().addAll(welcomeLabel, nameField, startButton, errorLabel);
+
+        return entryLayout;
     }
 
     public BorderPane createMenu() {
@@ -90,13 +85,11 @@ public class GameGUI extends Application {
         Button helpButton = new Button("Help");
         Button exitButton = new Button("Exit");
 
-        // CSS-Klasse für die Buttons
         playButton.getStyleClass().add("menu-button");
         difficultyButton.getStyleClass().add("menu-button");
         helpButton.getStyleClass().add("menu-button");
         exitButton.getStyleClass().add("menu-button");
 
-        // Layout für die Buttons
         HBox titleBox = new HBox();
         titleBox.getChildren().add(title);
         titleBox.getStyleClass().add("title-box");
@@ -109,14 +102,45 @@ public class GameGUI extends Application {
         menuLayout.setTop(titleBox);
         menuLayout.setCenter(buttonBox);
 
+        // Check Discord Pic (second one)
+
+        // Tip for these 2 TODOS, Label1 = "Welcome: ", Label2 = (change dynamically), same for the diffPart
+        // TODO: Add "Welcome Label, -> Welcome: <Lovro>, <Alton>, ...
+        // TODO: Add "Difficulty Label, bottom right -> Difficulty: <Easy>, <Middle>, <Hard>
+        // TODO: If difficultyButton pressed, call switchScene(createDifficultyMenu())
+
         return menuLayout;
     }
 
-    // Not tested yet!
+    public Node createDifficultyMenu() {
+        // TODO: Create the Layout 3rd Discord Pic!
+        // TODO: If you selected Easy, Medium or Hard, it goes back to the Menu screen tip: SwitchScene(createMenu)
+        //  AND the difficulty level in the menu bottom right changes desired to difficulty level
+
+        return null;
+    }
+
     private void switchScene(Node newScene) {
         // Clear the current content
         root.getChildren().clear();
         // Add the new layout
         root.getChildren().add(newScene);
+    }
+
+    private void readFromCss() {
+        scene.getStylesheets().add(Objects.requireNonNull(getClass().getResource("/styles.css")).toExternalForm());
+        try {
+            URL cssUrl = getClass().getResource("/styles.css");
+            if (cssUrl == null) {
+                System.err.println("styles.css not found!");
+            }
+            else {
+                scene.getStylesheets().add(cssUrl.toExternalForm());
+                System.out.println("CSS loaded: " + cssUrl.toExternalForm());
+            }
+        }
+        catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 }
