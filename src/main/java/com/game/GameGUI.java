@@ -1,22 +1,27 @@
 package com.game;
 import javafx.application.Application;
+import javafx.geometry.Pos;
 import javafx.scene.control.TextField;
 import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
-import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.StackPane;
-import javafx.scene.layout.VBox;
+import javafx.scene.image.Image;
+import javafx.scene.layout.*;
+import javafx.scene.paint.Color;
+import javafx.scene.shape.Rectangle;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
 import java.net.URL;
 import java.util.Objects;
+import javafx.animation.FadeTransition;
+import javafx.util.Duration;
 
 public class GameGUI extends Application {
     private Scene scene;
     private StackPane root;
+    private String difficulty = "Easy";
+    private String playerName = "";
 
     public static void main(String[] args) {
         launch(args);
@@ -24,61 +29,89 @@ public class GameGUI extends Application {
 
     @Override
     public void start(Stage primaryStage) {
-        double screenWidth = Screen.getPrimary().getBounds().getWidth();
-        double screenHeight = Screen.getPrimary().getBounds().getHeight();
-
         root = new StackPane();
-
+        background();
         Node entryLayout = createEntry();
         root.getChildren().add(entryLayout);
-        scene = new Scene(root, screenWidth, screenHeight);
-
+        fadeIn(entryLayout);
         readFromCss();
-
         primaryStage.setTitle("Street Legends");
         primaryStage.setScene(scene);
         primaryStage.setMaximized(true);
         primaryStage.show();
     }
 
+    // Sets the background image and overlay for the application, adjusting it to the screen size.
+    public void background() {
+        double screenWidth = Screen.getPrimary().getBounds().getWidth();
+        double screenHeight = Screen.getPrimary().getBounds().getHeight();
+        String imagePath = Objects.requireNonNull(getClass().getResource("/images/banner.jpg")).toExternalForm();
+        BackgroundImage backgroundImage = new BackgroundImage(
+                new Image(imagePath, screenWidth, screenHeight, false, true),
+                BackgroundRepeat.NO_REPEAT,
+                BackgroundRepeat.NO_REPEAT,
+                BackgroundPosition.DEFAULT,
+                BackgroundSize.DEFAULT
+        );
+        Rectangle overlay = new Rectangle(screenWidth, screenHeight, Color.BLACK);
+        overlay.setOpacity(0.4);
+        root.getChildren().add(overlay);
+        root.setBackground(new Background(backgroundImage));
+        scene = new Scene(root, screenWidth, screenHeight);
+    }
+
+    //Creates the layout for the player's name entry screen, including labels, text fields, and a button.
     public Node createEntry() {
-        // TODO: Add a Background Image
 
         Label welcomeLabel = new Label("Welcome to Street Legends");
         welcomeLabel.getStyleClass().add("title");
 
         TextField nameField = new TextField();
-        nameField.setPromptText("Please enter your name");
+        nameField.getStyleClass().add("name-field");
+        nameField.setPromptText("Please enter your name...");
 
         Button startButton = new Button("Start");
         startButton.getStyleClass().add("menu-button");
+
+        fadeIn(startButton);
 
         Label errorLabel = new Label();
         errorLabel.getStyleClass().add("error-label");
         errorLabel.setVisible(false);
 
         startButton.setOnAction(event -> {
-            String playerName = nameField.getText().trim();
+            playerName = nameField.getText().trim(); // save name
             if (playerName.isEmpty()) {
                 errorLabel.setText("Please enter your Username!");
                 errorLabel.setVisible(true);
             } else {
-                switchScene(createMenu());
+                switchScene(createMenu(playerName));
             }
         });
-
-        // TODO: change the entry like the 1st Discord Pic, see createMenu (BorderPane, VBox, etc.)
-
         VBox entryLayout = new VBox(20);
         entryLayout.getStyleClass().add("vbox-layout");
-        entryLayout.getChildren().addAll(welcomeLabel, nameField, startButton, errorLabel);
-
+        entryLayout.getChildren().addAll(welcomeLabel, nameField,errorLabel ,startButton );
         return entryLayout;
     }
 
-    public BorderPane createMenu() {
+    //Applies a fade-in transition effect to make the specified node gradually appear on the screen.
+    public void fadeIn(Node node) {
+        FadeTransition fadeTransition = new FadeTransition(Duration.seconds(1), node);
+        fadeTransition.setFromValue(0);
+        fadeTransition.setToValue(5);
+        fadeTransition.play();
+    }
+
+    //Creates the main menu layout with buttons for playing the game, changing difficulty, getting help, and exiting.
+    public BorderPane createMenu(String playerName) {
         Label title = new Label("Street Legends");
         title.getStyleClass().add("title");
+
+        Label playerLabel = new Label("Welcome: " + playerName);
+        playerLabel.getStyleClass().add("player-label");
+
+        Label difficultyLabel = new Label("Difficulty: " + difficulty);
+        difficultyLabel.getStyleClass().add("difficulty-label");
 
         Button playButton = new Button("Play");
         Button difficultyButton = new Button("Difficulty");
@@ -90,7 +123,9 @@ public class GameGUI extends Application {
         helpButton.getStyleClass().add("menu-button");
         exitButton.getStyleClass().add("menu-button");
 
-        HBox titleBox = new HBox();
+        difficultyButton.setOnAction(e -> switchScene(DifficultyMenu(difficultyLabel)));
+
+        VBox titleBox = new VBox();
         titleBox.getChildren().add(title);
         titleBox.getStyleClass().add("title-box");
 
@@ -98,28 +133,56 @@ public class GameGUI extends Application {
         buttonBox.getChildren().addAll(playButton, difficultyButton, helpButton, exitButton);
         buttonBox.getStyleClass().add("button-box");
 
+        VBox centerLayout = new VBox(30);
+        centerLayout.getChildren().addAll(playerLabel, buttonBox);
+        centerLayout.setAlignment(Pos.CENTER);
+
+        HBox difficultyBox = new HBox(10);
+        difficultyBox.setAlignment(Pos.CENTER_RIGHT);
+        difficultyBox.getChildren().add(difficultyLabel);
+
         BorderPane menuLayout = new BorderPane();
-        menuLayout.setTop(titleBox);
-        menuLayout.setCenter(buttonBox);
-
-        // Check Discord Pic (second one)
-
-        // Tip for these 2 TODOS, Label1 = "Welcome: ", Label2 = (change dynamically), same for the diffPart
-        // TODO: Add "Welcome Label, -> Welcome: <Lovro>, <Alton>, ...
-        // TODO: Add "Difficulty Label, bottom right -> Difficulty: <Easy>, <Middle>, <Hard>
-        // TODO: If difficultyButton pressed, call switchScene(createDifficultyMenu())
-
+        menuLayout.setTop(new VBox(10, titleBox));
+        menuLayout.setCenter(centerLayout);
+        menuLayout.setBottom(difficultyBox);
         return menuLayout;
     }
 
-    public Node createDifficultyMenu() {
-        // TODO: Create the Layout 3rd Discord Pic!
-        // TODO: If you selected Easy, Medium or Hard, it goes back to the Menu screen tip: SwitchScene(createMenu)
-        //  AND the difficulty level in the menu bottom right changes desired to difficulty level
+    //Creates a menu layout for selecting the difficulty level (Easy, Medium, Hard).
+    public Node DifficultyMenu(Label difficultyLabel) {
+        Label Diff = new Label("Please select:");
+        Diff.getStyleClass().add("Diff");
 
-        return null;
+        Button easyButton = new Button("Easy");
+        easyButton.getStyleClass().add("button");
+        Button mediumButton = new Button("Medium");
+        mediumButton.getStyleClass().add("button");
+        Button hardButton = new Button("Hard");
+        hardButton.getStyleClass().add("button");
+
+        easyButton.setOnAction(e -> {
+            difficulty = "Easy";
+            difficultyLabel.setText("Difficulty: " + difficulty);
+            switchScene(createMenu(playerName));
+        });
+        mediumButton.setOnAction(e -> {
+            difficulty = "Medium";
+            difficultyLabel.setText("Difficulty: " + difficulty);
+            switchScene(createMenu(playerName));
+        });
+        hardButton.setOnAction(e -> {
+            difficulty = "Hard";
+            difficultyLabel.setText("Difficulty: " + difficulty);
+            switchScene(createMenu(playerName));
+
+        });
+
+        VBox difficultyBox = new VBox(10, Diff,easyButton, mediumButton, hardButton);
+        difficultyBox.getStyleClass().add("difficulty-box");
+        return difficultyBox;
     }
 
+    //Switches to a new scene by clearing the existing layout and adding the new layout.
     private void switchScene(Node newScene) {
         // Clear the current content
         root.getChildren().clear();
@@ -127,8 +190,8 @@ public class GameGUI extends Application {
         root.getChildren().add(newScene);
     }
 
+    //Loads the CSS stylesheet to apply custom styling to the application.
     private void readFromCss() {
-        scene.getStylesheets().add(Objects.requireNonNull(getClass().getResource("/styles.css")).toExternalForm());
         try {
             URL cssUrl = getClass().getResource("/styles.css");
             if (cssUrl == null) {
