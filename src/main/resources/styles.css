@@ -1,0 +1,74 @@
+/* Design for Template */
+
+/* Title label style */
+.title {
+    -fx-font-size: 36px;
+    -fx-font-weight: bold;
+    -fx-font-family: 'Lucida Handwriting';
+}
+
+/* Button style */
+.menu-button {
+    -fx-font-size: 18px;
+    -fx-font-weight: bold;
+    -fx-font-family: 'Verdana';
+    -fx-pref-width: 300px;
+    -fx-pref-height: 100px;
+}
+
+/* Button box layout */
+.button-box {
+    -fx-spacing: 20px;
+    -fx-padding: 20px;
+    -fx-alignment: center;
+}
+
+/* Title box layout */
+.title-box {
+    -fx-padding: 30px 0 0 0;
+    -fx-alignment: center;
+}
+
+/* Error label style */
+.error-label {
+    -fx-text-fill: red;
+    -fx-font-size: 14px;
+    -fx-font-weight: bold;
+}
+
+/* Layout for Entry Screen */
+.entry-layout {
+    -fx-alignment: center;
+    -fx-padding: 20px;
+}
+
+/* Styling for the Start button */
+.start-button {
+    -fx-font-size: 16px;
+    -fx-font-weight: bold;
+    -fx-font-family: 'Verdana';
+    -fx-background-color: #4CAF50;
+    -fx-text-fill: white;
+}
+/* Layout für das VBox */
+.vbox-layout {
+    -fx-alignment: center; /* Zentriert alle Elemente im VBox */
+    -fx-padding: 20; /* Fügt Padding (Abstand) um das VBox-Layout hinzu */
+}
+
+/* Styling for the Name input field */
+.name-field {
+    -fx-font-size: 16px;
+    -fx-font-family: 'Verdana';
+    -fx-padding: 8px;
+    -fx-min-width: 200px;
+}
+
+
+/* Styling for the Error label on Entry screen */
+.entry-error-label {
+    -fx-text-fill: red;
+    -fx-font-size: 14px;
+    -fx-font-weight: bold;
+    -fx-padding: 5px;
+}
