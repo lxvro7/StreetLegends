@@ -1,6 +1,7 @@
 module com.game.street_legends {
     requires javafx.controls;
     requires javafx.fxml;
+    requires java.sql;
 
 
     opens com.game to javafx.fxml;

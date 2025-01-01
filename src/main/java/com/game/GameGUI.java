@@ -1,6 +1,8 @@
 package com.game;
 import javafx.application.Application;
 import javafx.geometry.Pos;
+import javafx.scene.canvas.Canvas;
+import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.TextField;
 import javafx.scene.Node;
 import javafx.scene.Scene;
@@ -13,6 +15,7 @@ import javafx.scene.shape.Rectangle;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.Objects;
 import javafx.animation.FadeTransition;
 import javafx.util.Duration;
@@ -60,7 +63,7 @@ public class GameGUI extends Application {
         scene = new Scene(root, screenWidth, screenHeight);
     }
 
-    //Creates the layout for the player's name entry screen, including labels, text fields, and a button.
+    // Creates the layout for the player's name entry screen, including labels, text fields, and a button.
     public Node createEntry() {
 
         Label welcomeLabel = new Label("Welcome to Street Legends");
@@ -94,7 +97,7 @@ public class GameGUI extends Application {
         return entryLayout;
     }
 
-    //Applies a fade-in transition effect to make the specified node gradually appear on the screen.
+    // Applies a fade-in transition effect to make the specified node gradually appear on the screen.
     public void fadeIn(Node node) {
         FadeTransition fadeTransition = new FadeTransition(Duration.seconds(1), node);
         fadeTransition.setFromValue(0);
@@ -102,7 +105,7 @@ public class GameGUI extends Application {
         fadeTransition.play();
     }
 
-    //Creates the main menu layout with buttons for playing the game, changing difficulty, getting help, and exiting.
+    // Creates the main menu layout with buttons for playing the game, changing difficulty, getting help, and exiting.
     public BorderPane createMenu(String playerName) {
         Label title = new Label("Street Legends");
         title.getStyleClass().add("title");
@@ -124,6 +127,10 @@ public class GameGUI extends Application {
         exitButton.getStyleClass().add("menu-button");
 
         difficultyButton.setOnAction(e -> switchScene(DifficultyMenu(difficultyLabel)));
+        playButton.setOnAction(e -> {
+            root.setBackground(null);
+            switchScene((createGame(playerName)));
+        });
 
         VBox titleBox = new VBox();
         titleBox.getChildren().add(title);
@@ -148,7 +155,7 @@ public class GameGUI extends Application {
         return menuLayout;
     }
 
-    //Creates a menu layout for selecting the difficulty level (Easy, Medium, Hard).
+    // Creates a menu layout for selecting the difficulty level (Easy, Medium, Hard).
     public Node DifficultyMenu(Label difficultyLabel) {
         Label Diff = new Label("Please select:");
         Diff.getStyleClass().add("Diff");
@@ -182,7 +189,38 @@ public class GameGUI extends Application {
         return difficultyBox;
     }
 
-    //Switches to a new scene by clearing the existing layout and adding the new layout.
+    public Node createGame(String playerName) {
+        GameHandler gameHandler = new GameHandler();
+        gameHandler.spawnNpcVehicles();
+
+        // The area, where JavaFX draws
+        Canvas canvas = new Canvas(500, 200);
+        GraphicsContext gc = canvas.getGraphicsContext2D();
+        gc.setFill(Color.BLUE);
+
+        VBox gameLayout = new VBox();
+        gameLayout.setAlignment(Pos.CENTER);
+        gameLayout.getChildren().add(canvas);
+
+        gameHandler.setUpdateCallback(vehicles -> drawVehicles(vehicles, gc));
+        // Start game loop
+        gameHandler.startGameLoop();
+        // Handles the keys, that are pressed during the game
+        scene.setOnKeyPressed(keyEvent -> {
+            gameHandler.processUserInput(keyEvent.getCode());
+        });
+
+        return gameLayout;
+    }
+    // Draw the vehicle images on the canvas
+    public void drawVehicles(ArrayList<Vehicle> vehicles, GraphicsContext gc) {
+        gc.clearRect(0, 0, 800, 600);
+        for(Vehicle vehicle : vehicles) {
+            gc.drawImage(vehicle.getVehicleImage(), vehicle.x, vehicle.y);
+        }
+    }
+
+    // Switches to a new scene by clearing the existing layout and adding the new layout.
     private void switchScene(Node newScene) {
         // Clear the current content
         root.getChildren().clear();
@@ -190,7 +228,7 @@ public class GameGUI extends Application {
         root.getChildren().add(newScene);
     }
 
-    //Loads the CSS stylesheet to apply custom styling to the application.
+    // Loads the CSS stylesheet to apply custom styling to the application.
     private void readFromCss() {
         try {
             URL cssUrl = getClass().getResource("/styles.css");
