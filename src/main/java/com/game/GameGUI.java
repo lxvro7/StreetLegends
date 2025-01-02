@@ -1,5 +1,6 @@
 package com.game;
 import javafx.application.Application;
+import javafx.application.Platform;
 import javafx.geometry.Pos;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
@@ -25,6 +26,9 @@ public class GameGUI extends Application {
     private StackPane root;
     private String difficulty = "Easy";
     private String playerName = "";
+    private double windowWidth;
+    private double windowHeight;
+    private Vehicle.color selectedColor = Vehicle.color.BLUE;
 
     public static void main(String[] args) {
         launch(args);
@@ -42,6 +46,8 @@ public class GameGUI extends Application {
         primaryStage.setScene(scene);
         primaryStage.setMaximized(true);
         primaryStage.show();
+        windowHeight = primaryStage.getWidth();
+        windowWidth = primaryStage.getHeight();
     }
 
     // Sets the background image and overlay for the application, adjusting it to the screen size.
@@ -116,14 +122,21 @@ public class GameGUI extends Application {
         Label difficultyLabel = new Label("Difficulty: " + difficulty);
         difficultyLabel.getStyleClass().add("difficulty-label");
 
+        Label color = new Label("Color: " + capitalize(selectedColor.toString()));
+        color.getStyleClass().add("color-label");
+
         Button playButton = new Button("Play");
         Button difficultyButton = new Button("Difficulty");
+        Button colorButton = new Button("Select color");
         Button helpButton = new Button("Help");
+        Button backButton = new Button("Back");
         Button exitButton = new Button("Exit");
 
         playButton.getStyleClass().add("menu-button");
         difficultyButton.getStyleClass().add("menu-button");
+        colorButton.getStyleClass().add("menu-button");
         helpButton.getStyleClass().add("menu-button");
+        backButton.getStyleClass().add("menu-button");
         exitButton.getStyleClass().add("menu-button");
 
         difficultyButton.setOnAction(e -> switchScene(DifficultyMenu(difficultyLabel)));
@@ -131,28 +144,68 @@ public class GameGUI extends Application {
             root.setBackground(null);
             switchScene((createGame(playerName)));
         });
+        exitButton.setOnAction(e -> {
+            Platform.exit();
+        });
+        backButton.setOnAction(e -> {
+            switchScene(createEntry());
+        });
+        colorButton.setOnAction(e -> switchScene(createColorSelection(color)));
 
         VBox titleBox = new VBox();
         titleBox.getChildren().add(title);
         titleBox.getStyleClass().add("title-box");
 
         VBox buttonBox = new VBox(20);
-        buttonBox.getChildren().addAll(playButton, difficultyButton, helpButton, exitButton);
+        buttonBox.getChildren().addAll(playButton, difficultyButton, colorButton, helpButton, backButton, exitButton);
         buttonBox.getStyleClass().add("button-box");
 
         VBox centerLayout = new VBox(30);
         centerLayout.getChildren().addAll(playerLabel, buttonBox);
         centerLayout.setAlignment(Pos.CENTER);
 
-        HBox difficultyBox = new HBox(10);
-        difficultyBox.setAlignment(Pos.CENTER_RIGHT);
-        difficultyBox.getChildren().add(difficultyLabel);
+        HBox bottomInfoBox = new HBox(20);
+        bottomInfoBox.setAlignment(Pos.BOTTOM_CENTER);
+        bottomInfoBox.getChildren().addAll(color, difficultyLabel);
 
         BorderPane menuLayout = new BorderPane();
         menuLayout.setTop(new VBox(10, titleBox));
         menuLayout.setCenter(centerLayout);
-        menuLayout.setBottom(difficultyBox);
+        menuLayout.setBottom(bottomInfoBox);
+
         return menuLayout;
+    }
+    private Node createColorSelection(Label color) {
+        Label colorLabel = new Label("Select a color:");
+        colorLabel.getStyleClass().add("color-label");
+
+        Button blackButton = new Button("Black");
+        Button blueButton = new Button("Blue");
+        Button greenButton = new Button("Green");
+        blackButton.setOnAction(e -> {
+            selectedColor = Vehicle.color.BLACK;
+            color.setText("Color: " + selectedColor);
+            switchScene(createMenu(playerName));
+        });
+        blueButton.setOnAction(e -> {
+            selectedColor = Vehicle.color.BLUE;
+            color.setText("Color: " + selectedColor);
+            switchScene(createMenu(playerName));
+        });
+        greenButton.setOnAction(e -> {
+            selectedColor = Vehicle.color.GREEN;
+            color.setText("Color: " + selectedColor);
+            switchScene(createMenu(playerName));
+        });
+        VBox colorBox = new VBox(20, colorLabel, blackButton, blueButton, greenButton);
+        colorBox.setAlignment(Pos.CENTER);
+        colorBox.getStyleClass().add("vbox-layout");
+
+        return colorBox;
+    }
+    private String capitalize(String text){
+        if(text==null || text.isEmpty())return text;
+        return text.substring(0,1).toUpperCase()+text.substring(1).toLowerCase();
     }
 
     // Creates a menu layout for selecting the difficulty level (Easy, Medium, Hard).
@@ -189,20 +242,31 @@ public class GameGUI extends Application {
         return difficultyBox;
     }
 
+
     public Node createGame(String playerName) {
-        GameHandler gameHandler = new GameHandler();
+        GameHandler gameHandler = new GameHandler(playerName, selectedColor, difficulty);
         gameHandler.spawnNpcVehicles();
 
         // The area, where JavaFX draws
-        Canvas canvas = new Canvas(500, 200);
+        double canvasWidth = windowWidth / 3;
+        double canvasHeight = windowHeight;
+
+        Canvas canvas = new Canvas(canvasWidth, canvasHeight);
         GraphicsContext gc = canvas.getGraphicsContext2D();
         gc.setFill(Color.BLUE);
 
+        StackPane canvasContainer = new StackPane();
+        canvasContainer.getChildren().add(canvas);
+        canvasContainer.setAlignment(Pos.CENTER);
+
+        System.out.println(canvasWidth);
+        System.out.println(canvasHeight);
+
         VBox gameLayout = new VBox();
         gameLayout.setAlignment(Pos.CENTER);
-        gameLayout.getChildren().add(canvas);
+        gameLayout.getChildren().add(canvasContainer);
 
-        gameHandler.setUpdateCallback(vehicles -> drawVehicles(vehicles, gc));
+        gameHandler.setUpdateCallback(vehicles -> drawVehicles(vehicles, gc, canvasWidth, canvasHeight));
         // Start game loop
         gameHandler.startGameLoop();
         // Handles the keys, that are pressed during the game
@@ -213,8 +277,8 @@ public class GameGUI extends Application {
         return gameLayout;
     }
     // Draw the vehicle images on the canvas
-    public void drawVehicles(ArrayList<Vehicle> vehicles, GraphicsContext gc) {
-        gc.clearRect(0, 0, 800, 600);
+    public void drawVehicles(ArrayList<Vehicle> vehicles, GraphicsContext gc, double canvasWidth, double canvasHeight) {
+        gc.clearRect(0, 0, canvasWidth, canvasHeight);
         for(Vehicle vehicle : vehicles) {
             gc.drawImage(vehicle.getVehicleImage(), vehicle.x, vehicle.y);
         }

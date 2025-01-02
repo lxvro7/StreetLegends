@@ -15,9 +15,9 @@ public class GameHandler {
     private Consumer<ArrayList<Vehicle>> updateCallback;
     private final KeyEventHandler keyEventHandler;
 
-    public GameHandler() {
+    public GameHandler(String playerName, Vehicle.color selectedColor, String difficulty) {
         npcs = new ArrayList<>();
-        createPlayerVehicle();
+        createPlayerVehicle(playerName, selectedColor, difficulty);
         keyEventHandler = new KeyEventHandler(player);
     }
 
@@ -38,12 +38,20 @@ public class GameHandler {
         }
     }
 
-    public void createPlayerVehicle() {
-        // TODO Alton: Set Username here, desired color and different car for a different difficulty
-        if(player == null) {
-            player = new Player("Lovro", new Vehicle(300, 300,
-                    Vehicle.type.CAR, Vehicle.color.BLACK, Vehicle.playerType.PLAYER));
+    public void createPlayerVehicle(String playerName, Vehicle.color selectedColor, String difficulty) {
+        Vehicle.type vehicleType = null;
+        switch (difficulty) {
+            case "Easy":
+                vehicleType = Vehicle.type.BIKE;
+                break;
+            case "Medium":
+                vehicleType = Vehicle.type.CAR;
+                break;
+            case "Hard":
+                vehicleType = Vehicle.type.TRUCK;
+                break;
         }
+        player = new Player(playerName, new Vehicle(300, 300, vehicleType, selectedColor, Vehicle.playerType.PLAYER));
     }
 
     public void setUpdateCallback(Consumer<ArrayList<Vehicle>> callback) {
@@ -59,6 +67,9 @@ public class GameHandler {
                 long currentTime = System.nanoTime();
                 double diffSeconds = (currentTime - lastTime) / 1_000_000_000.0;
                 lastTime = currentTime;
+
+                update(diffSeconds);
+
 
                 moveAllVehicles(diffSeconds);
                 if(updateCallback != null) {
@@ -92,6 +103,15 @@ public class GameHandler {
             npc.move(diffSeconds);
         }
     }
+    public void update(double diffSeconds) {
+        // slowly if no key is pressed
+        if (!keyEventHandler.isAnyKeyPressed()) {
+            player.slowDown();
+        }
+        moveAllVehicles(diffSeconds);
+    }
+
+
 
     // Handles the events, that occurred during the game
     public void processUserInput(KeyCode keyCode) {
@@ -107,6 +127,9 @@ public class GameHandler {
                 break;
             case RIGHT:
                 keyEventHandler.onRightArrowPressed();
+                break;
+            case Q:
+                keyEventHandler.onQPressed();
                 break;
         }
     }

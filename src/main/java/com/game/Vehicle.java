@@ -59,14 +59,14 @@ public class Vehicle {
                 brakeForce = 20;
                 break;
             case TRUCK:
-                maxVelocity = 6;
-                acceleration = 5;
-                brakeForce = 15;
+                maxVelocity = 99;
+                acceleration = 7;
+                brakeForce = 20;
                 break;
             case BIKE:
-                maxVelocity = 9;
-                acceleration = 10;
-                brakeForce = 10;
+                maxVelocity = 101;
+                acceleration = 7;
+                brakeForce = 20;
                 break;
         }
     }

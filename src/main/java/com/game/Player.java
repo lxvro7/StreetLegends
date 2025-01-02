@@ -25,15 +25,24 @@ public class Player {
         acceleration = playerVehicle.getAcceleration();
     }
 
-    // TODO Alton: Fix this method, so the car brakes and when stopped, it drives backwards
     public void brake() {
         velocity -= (brakeForce / 100) * velocity;
-        if(Math.abs(velocity) < 0.5) {
-            // Drive with the car backwards
-            playerVehicle.setAlfa(Math.PI/2);
+        if (velocity < 0) {
+            velocity = 0;
+        }
+
+        playerVehicle.setVelocity(velocity);
+    }
+    public void reverse() {
+        if (velocity > -maxVelocity / 2) {
+            velocity -= (acceleration / 100) * maxVelocity;
+            if (velocity < -maxVelocity / 2) {
+                velocity = -maxVelocity / 2;
+            }
         }
         playerVehicle.setVelocity(velocity);
     }
+
 
     public void accelerate() {
         if(velocity < maxVelocity) {
@@ -45,15 +54,36 @@ public class Player {
         playerVehicle.setVelocity(velocity);
     }
 
-    public void noButtonPressed() {
-        // TODO Alton: Car should slowly stop, if no button is pressed -> velocity gets smaller
+    public void slowDown() {
+        if (Math.abs(velocity) > 0) {
+            float deceleration = brakeForce / 100;
+
+            if (velocity > 0) {
+                velocity -= deceleration * maxVelocity;
+                if (velocity < 0) velocity = 0;
+            }
+            else if (velocity < 0) {
+                velocity += deceleration * maxVelocity;
+                if (velocity > 0) velocity = 0;
+            }
+
+            playerVehicle.setVelocity(velocity);
+        }
     }
 
-    public void driveLeft() {
-        // TODO Alton: Car should drive left -> change alfa in vehicle -> playerVehicle.setAlfa(new degree)
+
+    public void driveLeft(double diffSeconds) {
+        // TODO alpha winkel ändern
+        Vehicle vehicle = getPlayerVehicle();
+        double direction = velocity < 0 ? 1 : -1;
+        vehicle.setX(vehicle.getX() + direction * vehicle.getVelocity() * diffSeconds);
     }
 
-    public void driveRight() {
-        // TODO Alton: Car should drive right -> change alfa in vehicle -> playerVehicle.setAlfa(new degree)
+
+    public void driveRight(double diffSeconds) {
+        // TODO alpha winkel ändern
+        Vehicle vehicle = getPlayerVehicle();
+        double direction = velocity < 0 ? -1 : 1;
+        vehicle.setX(vehicle.getX() + direction * vehicle.getVelocity() * diffSeconds);
     }
 }
