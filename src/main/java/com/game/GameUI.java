@@ -16,12 +16,13 @@ import javafx.scene.shape.Rectangle;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
 import java.net.URL;
-import java.util.ArrayList;
 import java.util.Objects;
 import javafx.animation.FadeTransition;
 import javafx.util.Duration;
 
-public class GameGUI extends Application {
+// TODO Alton: Create a Scoreboard button, and the layout!
+
+public class GameUI extends Application {
     private Scene scene;
     private StackPane root;
     private String difficulty = "Easy";
@@ -46,8 +47,8 @@ public class GameGUI extends Application {
         primaryStage.setScene(scene);
         primaryStage.setMaximized(true);
         primaryStage.show();
-        windowHeight = primaryStage.getWidth();
-        windowWidth = primaryStage.getHeight();
+        windowHeight = primaryStage.getHeight();
+        windowWidth = primaryStage.getWidth();
     }
 
     // Sets the background image and overlay for the application, adjusting it to the screen size.
@@ -107,7 +108,7 @@ public class GameGUI extends Application {
     public void fadeIn(Node node) {
         FadeTransition fadeTransition = new FadeTransition(Duration.seconds(1), node);
         fadeTransition.setFromValue(0);
-        fadeTransition.setToValue(5);
+        fadeTransition.setToValue(1);
         fadeTransition.play();
     }
 
@@ -203,8 +204,9 @@ public class GameGUI extends Application {
 
         return colorBox;
     }
+
     private String capitalize(String text){
-        if(text==null || text.isEmpty())return text;
+        if(text==null || text.isEmpty()) return text;
         return text.substring(0,1).toUpperCase()+text.substring(1).toLowerCase();
     }
 
@@ -244,44 +246,44 @@ public class GameGUI extends Application {
 
 
     public Node createGame(String playerName) {
-        GameHandler gameHandler = new GameHandler(playerName, selectedColor, difficulty);
-        gameHandler.spawnNpcVehicles();
+        String roadImagePath = Objects.requireNonNull(getClass().
+                getResource("/images/street/road.png")).toExternalForm();
 
-        // The area, where JavaFX draws
-        double canvasWidth = windowWidth / 3;
+        double canvasWidth = windowWidth;
         double canvasHeight = windowHeight;
+        GameHandler gameHandler = new GameHandler(playerName, selectedColor, difficulty);
 
-        Canvas canvas = new Canvas(canvasWidth, canvasHeight);
-        GraphicsContext gc = canvas.getGraphicsContext2D();
-        gc.setFill(Color.BLUE);
+        Canvas backgroundCanvas = new Canvas(canvasWidth, canvasHeight);
+        Canvas vehicleCanvas = new Canvas(canvasWidth, canvasHeight);
+
+        GraphicsContext backgroundGraphicsContext = backgroundCanvas.getGraphicsContext2D();
+        GraphicsContext vehicleGraphicsContext = vehicleCanvas.getGraphicsContext2D();
 
         StackPane canvasContainer = new StackPane();
-        canvasContainer.getChildren().add(canvas);
+        canvasContainer.getChildren().addAll(backgroundCanvas, vehicleCanvas);
         canvasContainer.setAlignment(Pos.CENTER);
-
-        System.out.println(canvasWidth);
-        System.out.println(canvasHeight);
 
         VBox gameLayout = new VBox();
         gameLayout.setAlignment(Pos.CENTER);
-        gameLayout.getChildren().add(canvasContainer);
+        gameLayout.getChildren().addAll(canvasContainer);
 
-        gameHandler.setUpdateCallback(vehicles -> drawVehicles(vehicles, gc, canvasWidth, canvasHeight));
-        // Start game loop
+        gameHandler.getGameWorld().drawBackground(backgroundGraphicsContext, roadImagePath, canvasWidth, canvasHeight);
+        gameHandler.setUpdateCallback(vehicles -> gameHandler.getGameWorld().drawVehicles(vehicles, vehicleGraphicsContext,
+                canvasWidth, canvasHeight));
+
         gameHandler.startGameLoop();
-        // Handles the keys, that are pressed during the game
+
+        // Check if any key is pressed
         scene.setOnKeyPressed(keyEvent -> {
             gameHandler.processUserInput(keyEvent.getCode());
         });
 
+        // Check if any key is released
+        scene.setOnKeyReleased(keyEvent ->  {
+            gameHandler.processKeyRelease(keyEvent.getCode());
+        });
+
         return gameLayout;
-    }
-    // Draw the vehicle images on the canvas
-    public void drawVehicles(ArrayList<Vehicle> vehicles, GraphicsContext gc, double canvasWidth, double canvasHeight) {
-        gc.clearRect(0, 0, canvasWidth, canvasHeight);
-        for(Vehicle vehicle : vehicles) {
-            gc.drawImage(vehicle.getVehicleImage(), vehicle.x, vehicle.y);
-        }
     }
 
     // Switches to a new scene by clearing the existing layout and adding the new layout.

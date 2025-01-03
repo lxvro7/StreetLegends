@@ -4,6 +4,8 @@ public class Player {
 
     private final Vehicle playerVehicle;
     private String playerName;
+    private boolean turningLeft = false;
+    private boolean turningRight = false;
 
     private final float brakeForce;
 
@@ -43,7 +45,6 @@ public class Player {
         playerVehicle.setVelocity(velocity);
     }
 
-
     public void accelerate() {
         if(velocity < maxVelocity) {
             velocity += (acceleration / 100) * maxVelocity;
@@ -54,36 +55,29 @@ public class Player {
         playerVehicle.setVelocity(velocity);
     }
 
-    public void slowDown() {
-        if (Math.abs(velocity) > 0) {
-            float deceleration = brakeForce / 100;
-
-            if (velocity > 0) {
-                velocity -= deceleration * maxVelocity;
-                if (velocity < 0) velocity = 0;
-            }
-            else if (velocity < 0) {
-                velocity += deceleration * maxVelocity;
-                if (velocity > 0) velocity = 0;
-            }
-
-            playerVehicle.setVelocity(velocity);
-        }
+    public void driveLeft() {
+        playerVehicle.setAlfa(5 * (Math.PI/4));
+        turningLeft = true;
     }
 
-
-    public void driveLeft(double diffSeconds) {
-        // TODO alpha winkel ändern
-        Vehicle vehicle = getPlayerVehicle();
-        double direction = velocity < 0 ? 1 : -1;
-        vehicle.setX(vehicle.getX() + direction * vehicle.getVelocity() * diffSeconds);
+    public void driveRight() {
+        playerVehicle.setAlfa(7* (Math.PI/4));
+        turningRight = true;
     }
 
+    public boolean isTurningRight() {
+        return turningRight;
+    }
 
-    public void driveRight(double diffSeconds) {
-        // TODO alpha winkel ändern
-        Vehicle vehicle = getPlayerVehicle();
-        double direction = velocity < 0 ? -1 : 1;
-        vehicle.setX(vehicle.getX() + direction * vehicle.getVelocity() * diffSeconds);
+    public void setTurningRight(boolean turningRight) {
+        this.turningRight = turningRight;
+    }
+
+    public boolean isTurningLeft() {
+        return turningLeft;
+    }
+
+    public void setTurningLeft(boolean turningLeft) {
+        this.turningLeft = turningLeft;
     }
 }

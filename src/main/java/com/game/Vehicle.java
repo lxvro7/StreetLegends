@@ -1,10 +1,7 @@
 package com.game;
 
 import javafx.scene.image.Image;
-
 import java.util.Objects;
-
-// Don't change anything here, only in the method initializeAttributes()
 
 public class Vehicle {
 
@@ -14,8 +11,9 @@ public class Vehicle {
 
     private type vehicleType;
     private color vehicleColor;
-    public double x, y;
-    public double alfa = 3 * (Math.PI/2);
+    private double x, y;
+    private double alfa = 3 * (Math.PI/2);
+    private double radius;
 
     public double getAlfa() {
         return alfa;
@@ -52,21 +50,24 @@ public class Vehicle {
     public void initializeAttributes() {
         // Set different attribute based on the selected vehicle type
         switch(vehicleType) {
-            // TODO: Fix these values, so the vehicle moves better
+            // TODO Alton: Play with these radius values
             case CAR:
                 maxVelocity = 100;
                 acceleration = 7;
                 brakeForce = 20;
+                radius = 1;
                 break;
             case TRUCK:
-                maxVelocity = 99;
+                maxVelocity = 100;
                 acceleration = 7;
                 brakeForce = 20;
+                radius = 1;
                 break;
             case BIKE:
-                maxVelocity = 101;
+                maxVelocity = 100;
                 acceleration = 7;
                 brakeForce = 20;
+                radius = 1;
                 break;
         }
     }
@@ -110,8 +111,15 @@ public class Vehicle {
             }
         }
         // Check if image path exists
-        if(imagePath != null) {
+        checkImagePath(imagePath);
+    }
+
+    private void checkImagePath(String imagePath) {
+        try {
             vehicleImage = new Image(Objects.requireNonNull(getClass().getResource(imagePath)).toExternalForm());
+        }
+        catch (NullPointerException e) {
+            e.printStackTrace();
         }
     }
 
@@ -143,28 +151,9 @@ public class Vehicle {
     public Image getVehicleImage() {
         return vehicleImage;
     }
-    public double getY() {
-        return y;
-    }
-
-    public void setY(double y) {
-        this.y = y;
-    }
-
-    public double getX() {
-        return x;
-    }
-
-    public void setX(double x) {
-        this.x = x;
-    }
 
     public float getBrakeForce() {
         return brakeForce;
-    }
-
-    public void setBrakeForce(float brakeForce) {
-        this.brakeForce = brakeForce;
     }
 
     public float getMaxVelocity() {
@@ -175,13 +164,6 @@ public class Vehicle {
         return acceleration;
     }
 
-    public void setAcceleration(float acceleration) {
-        this.acceleration = acceleration;
-    }
-
-    public void setMaxVelocity(float maxVelocity) {
-        this.maxVelocity = maxVelocity;
-    }
     public float getVelocity() {
         return velocity;
     }
@@ -189,4 +171,17 @@ public class Vehicle {
     public void setVelocity(float velocity) {
         this.velocity = velocity;
     }
+
+    public double getX() {
+        return x;
+    }
+
+    public double getY() {
+        return y;
+    }
+
+    public double getRadius() {
+        return radius;
+    }
+
 }

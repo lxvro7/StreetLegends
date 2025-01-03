@@ -9,49 +9,16 @@ import java.util.function.Consumer;
 
 public class GameHandler {
 
-    private final ArrayList<NPC> npcs;
     private Player player;
     private boolean running;
     private Consumer<ArrayList<Vehicle>> updateCallback;
     private final KeyEventHandler keyEventHandler;
+    private final GameWorld gameWorld;
 
     public GameHandler(String playerName, Vehicle.color selectedColor, String difficulty) {
-        npcs = new ArrayList<>();
-        createPlayerVehicle(playerName, selectedColor, difficulty);
+        player = createPlayerVehicle(playerName, selectedColor, difficulty);
         keyEventHandler = new KeyEventHandler(player);
-    }
-
-    // Spawns NPC vehicles
-    public void spawnNpcVehicles() {
-        Random random = new Random();
-        // Change the bound, to spawn more or less cars
-        int quantity = random.nextInt(5) + 3;
-        for(int i = 0; i < quantity; i++) {
-            double x = random.nextDouble() * 1000;
-            double y = random.nextDouble() * 1000;
-            // Creates random vehicle types and colors
-            Vehicle.type vehicleType = Vehicle.type.values()[random.nextInt(Vehicle.type.values().length)];
-            Vehicle.color vehicleColor = Vehicle.color.values()[random.nextInt(Vehicle.type.values().length)];
-            Vehicle vehicle = new Vehicle(x, y, vehicleType, vehicleColor, Vehicle.playerType.NPC);
-            NPC npc = new NPC(vehicle);
-            npcs.add(npc);
-        }
-    }
-
-    public void createPlayerVehicle(String playerName, Vehicle.color selectedColor, String difficulty) {
-        Vehicle.type vehicleType = null;
-        switch (difficulty) {
-            case "Easy":
-                vehicleType = Vehicle.type.BIKE;
-                break;
-            case "Medium":
-                vehicleType = Vehicle.type.CAR;
-                break;
-            case "Hard":
-                vehicleType = Vehicle.type.TRUCK;
-                break;
-        }
-        player = new Player(playerName, new Vehicle(300, 300, vehicleType, selectedColor, Vehicle.playerType.PLAYER));
+        gameWorld = new GameWorld(player);
     }
 
     public void setUpdateCallback(Consumer<ArrayList<Vehicle>> callback) {
@@ -63,17 +30,14 @@ public class GameHandler {
         Thread gameLoopThread = new Thread(() -> {
             long lastTime = System.nanoTime();
             while(running) {
-                // Don't change this
                 long currentTime = System.nanoTime();
                 double diffSeconds = (currentTime - lastTime) / 1_000_000_000.0;
                 lastTime = currentTime;
+                // Rendering
+                gameWorld.update(diffSeconds);
 
-                update(diffSeconds);
-
-
-                moveAllVehicles(diffSeconds);
                 if(updateCallback != null) {
-                    Platform.runLater(() -> updateCallback.accept(getAllVehicles()));
+                    Platform.runLater(() -> updateCallback.accept(gameWorld.getAllVehicles()));
                 }
                 // 60 FPS
                 try {
@@ -87,31 +51,6 @@ public class GameHandler {
         gameLoopThread.setDaemon(true);
         gameLoopThread.start();
     }
-
-    public ArrayList<Vehicle> getAllVehicles() {
-        ArrayList<Vehicle> allVehicles = new ArrayList<>();
-        allVehicles.add(player.getPlayerVehicle());
-        for (NPC npc : npcs) {
-            allVehicles.add(npc.getNpcVehicle());
-        }
-        return allVehicles;
-    }
-
-    public void moveAllVehicles(double diffSeconds) {
-        player.getPlayerVehicle().move(diffSeconds);
-        for(NPC npc : npcs) {
-            npc.move(diffSeconds);
-        }
-    }
-    public void update(double diffSeconds) {
-        // slowly if no key is pressed
-        if (!keyEventHandler.isAnyKeyPressed()) {
-            player.slowDown();
-        }
-        moveAllVehicles(diffSeconds);
-    }
-
-
 
     // Handles the events, that occurred during the game
     public void processUserInput(KeyCode keyCode) {
@@ -132,5 +71,39 @@ public class GameHandler {
                 keyEventHandler.onQPressed();
                 break;
         }
+    }
+
+    public void processKeyRelease(KeyCode key) {
+        switch (key) {
+            case LEFT:
+                player.setTurningLeft(false);
+                break;
+            case RIGHT:
+                player.setTurningRight(false);
+                break;
+        }
+        if(!player.isTurningLeft() && !player.isTurningRight()) {
+            player.getPlayerVehicle().setAlfa(3 * Math.PI/2);
+        }
+    }
+
+    // Creates a player vehicle for the specified color and difficulty
+    private Player createPlayerVehicle(String playerName, Vehicle.color selectedColor, String difficulty) {
+        Vehicle.type vehicleType = switch (difficulty) {
+            case "Easy"   -> Vehicle.type.BIKE;
+            case "Medium" -> Vehicle.type.CAR;
+            case "Hard"   -> Vehicle.type.TRUCK;
+            default -> null;
+        };
+        Random random = new Random();
+        // Don't change these values
+        double x = random.nextDouble(1400 - 540) + 540;
+        double y = random.nextDouble(1900);
+        player = new Player(playerName, new Vehicle(x, y, vehicleType, selectedColor, Vehicle.playerType.PLAYER));
+        return player;
+    }
+
+    public GameWorld getGameWorld() {
+        return gameWorld;
     }
 }
