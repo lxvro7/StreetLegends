@@ -14,11 +14,19 @@ public class GameHandler {
     private Consumer<ArrayList<Vehicle>> updateCallback;
     private final KeyEventHandler keyEventHandler;
     private final GameWorld gameWorld;
+    private GameLogic gameLogic;
+    private GameUI gameUI;
+    private Thread gameLoopThread;
 
-    public GameHandler(String playerName, Vehicle.color selectedColor, String difficulty) {
+
+
+    public GameHandler(String playerName, Vehicle.color selectedColor, String difficulty, GameUI gameUI) {
+        this.gameUI=gameUI;
         player = createPlayerVehicle(playerName, selectedColor, difficulty);
         keyEventHandler = new KeyEventHandler(player);
-        gameWorld = new GameWorld(player);
+        gameWorld = new GameWorld(player,this);
+        gameWorld.reset();
+        gameLogic = new GameLogic(player, null, gameWorld, this);
     }
 
     public void setUpdateCallback(Consumer<ArrayList<Vehicle>> callback) {
@@ -27,7 +35,7 @@ public class GameHandler {
 
     public void startGameLoop() {
         running = true;
-        Thread gameLoopThread = new Thread(() -> {
+        gameLoopThread = new Thread(() -> {
             long lastTime = System.nanoTime();
             while(running) {
                 long currentTime = System.nanoTime();
@@ -35,6 +43,7 @@ public class GameHandler {
                 lastTime = currentTime;
                 // Rendering
                 gameWorld.update(diffSeconds);
+
 
                 if(updateCallback != null) {
                     Platform.runLater(() -> updateCallback.accept(gameWorld.getAllVehicles()));
@@ -55,20 +64,11 @@ public class GameHandler {
     // Handles the events, that occurred during the game
     public void processUserInput(KeyCode keyCode) {
         switch(keyCode) {
-            case UP:
-                keyEventHandler.onUpArrowPressed();
-                break;
-            case DOWN:
-                keyEventHandler.onDownArrowPressed();
-                break;
             case LEFT:
                 keyEventHandler.onLeftArrowPressed();
                 break;
             case RIGHT:
                 keyEventHandler.onRightArrowPressed();
-                break;
-            case Q:
-                keyEventHandler.onQPressed();
                 break;
         }
     }
@@ -86,6 +86,14 @@ public class GameHandler {
             player.getPlayerVehicle().setAlfa(3 * Math.PI/2);
         }
     }
+    public void stopGame() {
+        running = false;
+        System.out.println("Game Loop wurde gestoppt...");
+        Platform.runLater(() -> {
+            GameUI.showGameOverWindow(player.getPlayerName(), gameUI);
+        });
+    }
+
 
     // Creates a player vehicle for the specified color and difficulty
     private Player createPlayerVehicle(String playerName, Vehicle.color selectedColor, String difficulty) {
@@ -105,5 +113,8 @@ public class GameHandler {
 
     public GameWorld getGameWorld() {
         return gameWorld;
+    }
+    public GameLogic getGameLogic() {
+        return gameLogic;
     }
 }

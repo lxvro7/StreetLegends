@@ -26,35 +26,6 @@ public class Player {
         maxVelocity = playerVehicle.getMaxVelocity();
         acceleration = playerVehicle.getAcceleration();
     }
-
-    public void brake() {
-        velocity -= (brakeForce / 100) * velocity;
-        if (velocity < 0) {
-            velocity = 0;
-        }
-
-        playerVehicle.setVelocity(velocity);
-    }
-    public void reverse() {
-        if (velocity > -maxVelocity / 2) {
-            velocity -= (acceleration / 100) * maxVelocity;
-            if (velocity < -maxVelocity / 2) {
-                velocity = -maxVelocity / 2;
-            }
-        }
-        playerVehicle.setVelocity(velocity);
-    }
-
-    public void accelerate() {
-        if(velocity < maxVelocity) {
-            velocity += (acceleration / 100) * maxVelocity;
-            if(velocity > maxVelocity) {
-                velocity = maxVelocity;
-            }
-        }
-        playerVehicle.setVelocity(velocity);
-    }
-
     public void driveLeft() {
         playerVehicle.setAlfa(5 * (Math.PI/4));
         turningLeft = true;
@@ -64,7 +35,6 @@ public class Player {
         playerVehicle.setAlfa(7* (Math.PI/4));
         turningRight = true;
     }
-
     public boolean isTurningRight() {
         return turningRight;
     }
@@ -80,4 +50,8 @@ public class Player {
     public void setTurningLeft(boolean turningLeft) {
         this.turningLeft = turningLeft;
     }
+    public String getPlayerName() {
+        return playerName;
+    }
+
 }

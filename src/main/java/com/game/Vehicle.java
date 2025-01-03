@@ -5,6 +5,8 @@ import java.util.Objects;
 
 public class Vehicle {
 
+
+
     public enum playerType { PLAYER, NPC};
     public enum type { CAR, TRUCK, BIKE}
     public enum color { BLACK, BLUE, GREEN }
@@ -39,12 +41,8 @@ public class Vehicle {
         initializeAttributes();
         bindVehicleToPng();
         // Maybe need to change this
-        if(playerType == Vehicle.playerType.PLAYER) {
-            velocity = 2;
-        }
-        else {
-            velocity = 100;
-        }
+        velocity = 100;
+
     }
 
     public void initializeAttributes() {
@@ -58,13 +56,13 @@ public class Vehicle {
                 radius = 1;
                 break;
             case TRUCK:
-                maxVelocity = 100;
+                maxVelocity = 101;
                 acceleration = 7;
                 brakeForce = 20;
                 radius = 1;
                 break;
             case BIKE:
-                maxVelocity = 100;
+                maxVelocity = 500;
                 acceleration = 7;
                 brakeForce = 20;
                 radius = 1;
@@ -128,7 +126,6 @@ public class Vehicle {
         x += Math.cos(alfa) * velocity * diffSeconds;
         y += Math.sin(alfa) * velocity * diffSeconds;
     }
-
     public color getVehicleColor() {
         return vehicleColor;
     }
@@ -179,7 +176,9 @@ public class Vehicle {
     public double getY() {
         return y;
     }
-
+    public void setX(double x) {
+        this.x=x;
+    }
     public double getRadius() {
         return radius;
     }

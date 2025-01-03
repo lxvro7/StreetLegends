@@ -42,7 +42,7 @@ public class GameUI extends Application {
         Node entryLayout = createEntry();
         root.getChildren().add(entryLayout);
         fadeIn(entryLayout);
-        readFromCss();
+        readFromCss(scene);
         primaryStage.setTitle("Street Legends");
         primaryStage.setScene(scene);
         primaryStage.setMaximized(true);
@@ -251,7 +251,7 @@ public class GameUI extends Application {
 
         double canvasWidth = windowWidth;
         double canvasHeight = windowHeight;
-        GameHandler gameHandler = new GameHandler(playerName, selectedColor, difficulty);
+        GameHandler gameHandler = new GameHandler(playerName, selectedColor, difficulty,this);
 
         Canvas backgroundCanvas = new Canvas(canvasWidth, canvasHeight);
         Canvas vehicleCanvas = new Canvas(canvasWidth, canvasHeight);
@@ -285,6 +285,46 @@ public class GameUI extends Application {
 
         return gameLayout;
     }
+    public static void showGameOverWindow(String playerName, GameUI gameUI) {
+        System.out.println("Game Over Window wird angezeigt...");
+
+        Stage gameOverStage = new Stage();
+        gameOverStage.setTitle("Game Over");
+
+        Stage highscore =new Stage();
+        highscore.setTitle("Highscore");
+
+        Label gameOverLabel = new Label("Game Over, " + playerName + "!" );
+        gameOverLabel.getStyleClass().add("game-over-label");
+
+        Button restartButton = new Button("Restart");
+        restartButton.getStyleClass().add("game-over-button");
+
+        Button exitButton = new Button("Exit");
+        exitButton.getStyleClass().add("game-over-button");
+
+        restartButton.setOnAction(e -> {
+            gameOverStage.close();
+            gameUI.restartGame();
+        });
+
+        exitButton.setOnAction(e -> Platform.exit());
+
+        VBox layout = new VBox(20, gameOverLabel, restartButton, exitButton);
+        layout.setAlignment(Pos.CENTER);
+        layout.getStyleClass().add("game-over-box");
+
+        Scene scene = new Scene(layout, 400, 300);
+        gameUI.readFromCss(scene);
+        gameOverStage.setScene(scene);
+        gameOverStage.requestFocus();
+        gameOverStage.show();
+    }
+    private void restartGame() {
+        GameHandler gameHandler = new GameHandler(playerName, selectedColor, difficulty, this);
+        gameHandler.getGameWorld().reset();
+        switchScene(createGame(playerName));
+    }
 
     // Switches to a new scene by clearing the existing layout and adding the new layout.
     private void switchScene(Node newScene) {
@@ -295,19 +335,18 @@ public class GameUI extends Application {
     }
 
     // Loads the CSS stylesheet to apply custom styling to the application.
-    private void readFromCss() {
+    private void readFromCss(Scene scene) {
         try {
             URL cssUrl = getClass().getResource("/styles.css");
             if (cssUrl == null) {
                 System.err.println("styles.css not found!");
-            }
-            else {
+            } else {
                 scene.getStylesheets().add(cssUrl.toExternalForm());
                 System.out.println("CSS loaded: " + cssUrl.toExternalForm());
             }
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
+
 }

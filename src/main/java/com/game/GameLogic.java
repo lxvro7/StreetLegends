@@ -2,17 +2,19 @@ package com.game;
 
 import java.util.ArrayList;
 
-// TODO: You need to work with this class, so that we get collisions between Player.Vehicles and NPC.Vehicles
-//  NOT NPC.Vehicles and NPC.Vehicles
 
 public class GameLogic {
     private Player player;
     private NPC npc;
     private GameWorld gameWorld;
-    public GameLogic(Player player, NPC npc) {
+    private GameHandler gameHandler;
+    public GameLogic(Player player, NPC npc, GameWorld gameWorld, GameHandler gameHandler) {
         this.player = player;
         this.npc = npc;
+        this.gameHandler=gameHandler;
+        this.gameWorld=gameWorld;
     }
+
 
     // TODO Alton: Page 53 Script, work with this. This is only a template.
     public ArrayList<Vehicle> getCollision(Vehicle vehicle) {
@@ -34,18 +36,23 @@ public class GameLogic {
         }
         return result;
     }
-    // TODO Alton: If you fixed all other tasks, you need to call this method in gameWorld.update()
-    //  but let this task rest first
+
     public void handleCollisions(ArrayList<Vehicle> allVehicles) {
-        // TODO Alton: Care here, because the collisions now happen even if a NPC vehicle collides with another NPC vehicle
-        //  We need to fix gameWorld.spawnNpcVehicles() first.
-        for(Vehicle vehicle : allVehicles) {
-            ArrayList<Vehicle> collisions = getCollision(vehicle);
-            if(!collisions.isEmpty()) {
-                // TODO Alton: If collision happened, something happens
-                System.out.println("Collision happened!");
+        Vehicle playerVehicle = player.getPlayerVehicle();
+
+        for (NPC npc : gameWorld.getAllNpcs()) {
+            Vehicle npcVehicle = npc.getNpcVehicle();
+
+            double dx = Math.abs(playerVehicle.getX() - npcVehicle.getX());
+            double dy = Math.abs(playerVehicle.getY() - npcVehicle.getY());
+
+            if (dx < 55 && dy < 55) {
+                System.out.println("Player collided with NPC!");
+                gameHandler.stopGame(); // Spiel beenden
+                break;
             }
         }
+
     }
 }
 
