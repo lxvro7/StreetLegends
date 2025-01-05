@@ -28,65 +28,65 @@ public class Vehicle {
         this.vehicleColor = vehicleColor;
         initializeAttributes();
         bindVehicleToPng();
-        // Maybe need to change this
-        velocity = 100;
+        if (playerType == playerType.PLAYER) {
+            velocity = maxVelocity;
+        } else {
+            velocity = 100;  // Standardgeschwindigkeit für NPCs
+        }
 
     }
 
     public void initializeAttributes() {
-        // Set different attribute for the player, based on the selected vehicle type
         switch(vehicleType) {
             case CAR:
-                maxVelocity = 100;
-                radius = 50;
+                maxVelocity = GameConstants.CAR_MAX_VELOCITY;
+                radius = GameConstants.CAR_RADIUS;
                 break;
             case TRUCK:
-                maxVelocity = 80;
-                radius = 70;
+                maxVelocity = GameConstants.TRUCK_MAX_VELOCITY;
+                radius = GameConstants.TRUCK_RADIUS;
                 break;
             case BIKE:
-                maxVelocity = 500;
-                radius = 30;
+                maxVelocity = GameConstants.BIKE_MAX_VELOCITY;
+                radius = GameConstants.BIKE_RADIUS;
                 break;
         }
     }
-
-    // Associates the corresponding image path with a specific vehicle type and color combination
     public void bindVehicleToPng() {
-        if(vehicleType == type.CAR) {
+        if (vehicleType == type.CAR) {
             switch (vehicleColor) {
                 case GREEN:
-                    imagePath = "/images/car/green.png";
+                    imagePath = GameConstants.CAR_GREEN_IMAGE;
                     break;
                 case BLUE:
-                    imagePath = "/images/car/blue.png";
+                    imagePath = GameConstants.CAR_BLUE_IMAGE;
                     break;
                 case BLACK:
-                    imagePath = "/images/car/black.png";
+                    imagePath = GameConstants.CAR_BLACK_IMAGE;
             }
         }
-        if(vehicleType == type.TRUCK) {
+        if (vehicleType == type.TRUCK) {
             switch (vehicleColor) {
                 case GREEN:
-                    imagePath = "/images/truck/green.png";
+                    imagePath = GameConstants.TRUCK_GREEN_IMAGE;
                     break;
                 case BLUE:
-                    imagePath = "/images/truck/blue.png";
+                    imagePath = GameConstants.TRUCK_BLUE_IMAGE;
                     break;
                 case BLACK:
-                    imagePath = "/images/truck/black.png";
+                    imagePath = GameConstants.TRUCK_BLACK_IMAGE;
             }
         }
-        if(vehicleType == type.BIKE) {
+        if (vehicleType == type.BIKE) {
             switch (vehicleColor) {
                 case GREEN:
-                    imagePath = "/images/bike/green.png";
+                    imagePath = GameConstants.BIKE_GREEN_IMAGE;
                     break;
                 case BLUE:
-                    imagePath = "/images/bike/blue.png";
+                    imagePath = GameConstants.BIKE_BLUE_IMAGE;
                     break;
                 case BLACK:
-                    imagePath = "/images/bike/black.png";
+                    imagePath = GameConstants.BIKE_BLACK_IMAGE;
             }
         }
         // Check if image path exists
@@ -152,4 +152,12 @@ public class Vehicle {
     public void setAlfa(double alfa) {
         this.alfa = alfa;
     }
+    public double getWidth() {
+        return radius * 2;  // Breite entspricht dem Durchmesser des Fahrzeugs
+    }
+
+    public double getHeight() {
+        return radius * 2;  // Höhe entspricht dem Durchmesser des Fahrzeugs
+    }
+
 }

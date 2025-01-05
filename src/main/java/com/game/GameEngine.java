@@ -18,17 +18,15 @@ public class GameEngine {
     private double canvasWidth;
     private double canvasHeight;
     private final GameUI gameUI;
-    private static final double DEGREE = 3 * Math.PI/2;
 
+    private static final double DEGREE = GameConstants.DEGREE;
 
     public GameEngine(String playerName, Vehicle.color selectedColor, String difficulty, GameUI gameUI) {
         this.gameUI=gameUI;
         this.player = createPlayerVehicle(playerName, selectedColor, difficulty);
-        this.gameManager = new GameManager(player);
+        this.gameManager = new GameManager(player,difficulty,this);
         this.keyEventHandler = new KeyEventHandler(player);
     }
-
-
     public void setUpdateCallback(Consumer<ArrayList<Vehicle>> callback) {
         this.updateCallback = callback;
     }
@@ -54,7 +52,7 @@ public class GameEngine {
                 });
                 // 60 FPS
                 try {
-                    Thread.sleep(16);
+                    Thread.sleep(GameConstants.FRAME_DELAY);
                 } catch (InterruptedException e) {
                     Thread.currentThread().interrupt();
                 }
@@ -109,7 +107,7 @@ public class GameEngine {
         Random random = new Random();
         // Don't change these values
         double x = random.nextDouble(1400 - 540) + 540;
-        double y = 11000;
+        double y = GameConstants.INITIAL_PLAYER_Y;
         player = new Player(playerName, new Vehicle(x, y, vehicleType, selectedColor, Vehicle.playerType.PLAYER));
         return player;
     }
@@ -129,4 +127,9 @@ public class GameEngine {
     public void setCanvasHeight(double canvasHeight) {
         this.canvasHeight = canvasHeight;
     }
+    public double getCanvasHeight() {
+        return canvasHeight;
+    }
+
+
 }

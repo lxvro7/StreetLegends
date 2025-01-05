@@ -298,6 +298,8 @@ public class GameUI extends Application {
 
         Button restartButton = new Button("Restart");
         restartButton.getStyleClass().add("game-over-button");
+        Button backToMenuButton = new Button("Back to Menu");
+        backToMenuButton.getStyleClass().add("game-over-button");
 
         Button exitButton = new Button("Exit");
         exitButton.getStyleClass().add("game-over-button");
@@ -306,10 +308,15 @@ public class GameUI extends Application {
             gameOverStage.close();
             gameUI.restartGame();
         });
+        backToMenuButton.setOnAction(e -> {
+            gameOverStage.close();
+            gameUI.switchScene(gameUI.createMenu(gameUI.playerName)); // Wechselt zurück zum Hauptmenü
+        });
+
 
         exitButton.setOnAction(e -> Platform.exit());
 
-        VBox layout = new VBox(20, gameOverLabel, restartButton, exitButton);
+        VBox layout = new VBox(20, gameOverLabel, restartButton, backToMenuButton,exitButton);
         layout.setAlignment(Pos.CENTER);
         layout.getStyleClass().add("game-over-box");
 
@@ -327,11 +334,21 @@ public class GameUI extends Application {
 
     // Switches to a new scene by clearing the existing layout and adding the new layout.
     private void switchScene(Node newScene) {
-        // Clear the current content
         root.getChildren().clear();
-        // Add the new layout
         root.getChildren().add(newScene);
+        double screenWidth = Screen.getPrimary().getBounds().getWidth();
+        double screenHeight = Screen.getPrimary().getBounds().getHeight();
+        String imagePath = Objects.requireNonNull(getClass().getResource("/images/banner.jpg")).toExternalForm();
+        BackgroundImage backgroundImage = new BackgroundImage(
+                new Image(imagePath, screenWidth, screenHeight, false, true),
+                BackgroundRepeat.NO_REPEAT,
+                BackgroundRepeat.NO_REPEAT,
+                BackgroundPosition.DEFAULT,
+                BackgroundSize.DEFAULT
+        );
+        root.setBackground(new Background(backgroundImage));
     }
+
 
     // Loads the CSS stylesheet to apply custom styling to the application.
     private void readFromCss(Scene scene) {

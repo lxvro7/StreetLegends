@@ -11,7 +11,7 @@ public class GameRenderer {
             getResource("/images/street/road.png")).toExternalForm();
     private final Image image;
     private final GameManager gameManager;
-    private double canvasStartY = 10_000;
+    private double canvasStartY = 5_000000;//not Static!
 
     public GameRenderer(GameManager gameManager) {
         this.gameManager = gameManager;
