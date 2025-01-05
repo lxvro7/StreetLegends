@@ -20,7 +20,6 @@ import java.util.Objects;
 import javafx.animation.FadeTransition;
 import javafx.util.Duration;
 
-// TODO Alton: Create a Scoreboard button, and the layout!
 
 public class GameUI extends Application {
     private Scene scene;
@@ -30,6 +29,7 @@ public class GameUI extends Application {
     private double windowWidth;
     private double windowHeight;
     private Vehicle.color selectedColor = Vehicle.color.BLUE;
+    private GraphicsContext backgroundGraphicsContext;
 
     public static void main(String[] args) {
         launch(args);
@@ -246,17 +246,15 @@ public class GameUI extends Application {
 
 
     public Node createGame(String playerName) {
-        String roadImagePath = Objects.requireNonNull(getClass().
-                getResource("/images/street/road.png")).toExternalForm();
 
         double canvasWidth = windowWidth;
         double canvasHeight = windowHeight;
-        GameHandler gameHandler = new GameHandler(playerName, selectedColor, difficulty,this);
+        GameEngine gameEngine = new GameEngine(playerName, selectedColor, difficulty,this);
 
         Canvas backgroundCanvas = new Canvas(canvasWidth, canvasHeight);
         Canvas vehicleCanvas = new Canvas(canvasWidth, canvasHeight);
 
-        GraphicsContext backgroundGraphicsContext = backgroundCanvas.getGraphicsContext2D();
+        backgroundGraphicsContext = backgroundCanvas.getGraphicsContext2D();
         GraphicsContext vehicleGraphicsContext = vehicleCanvas.getGraphicsContext2D();
 
         StackPane canvasContainer = new StackPane();
@@ -267,32 +265,33 @@ public class GameUI extends Application {
         gameLayout.setAlignment(Pos.CENTER);
         gameLayout.getChildren().addAll(canvasContainer);
 
-        gameHandler.getGameWorld().drawBackground(backgroundGraphicsContext, roadImagePath, canvasWidth, canvasHeight);
-        gameHandler.setUpdateCallback(vehicles -> gameHandler.getGameWorld().drawVehicles(vehicles, vehicleGraphicsContext,
-                canvasWidth, canvasHeight));
+        gameEngine.setCanvasHeight(canvasHeight);
+        gameEngine.setCanvasWidth(canvasWidth);
+        gameEngine.renderBackground(backgroundGraphicsContext);
+        gameEngine.setUpdateCallback(
+                vehicles -> gameEngine.renderVehicles(vehicleGraphicsContext, vehicles));
 
-        gameHandler.startGameLoop();
+        gameEngine.startGameLoop();
 
         // Check if any key is pressed
         scene.setOnKeyPressed(keyEvent -> {
-            gameHandler.processUserInput(keyEvent.getCode());
+            gameEngine.processUserInput(keyEvent.getCode());
         });
 
         // Check if any key is released
         scene.setOnKeyReleased(keyEvent ->  {
-            gameHandler.processKeyRelease(keyEvent.getCode());
+            gameEngine.processKeyRelease(keyEvent.getCode());
         });
 
         return gameLayout;
     }
     public static void showGameOverWindow(String playerName, GameUI gameUI) {
-        System.out.println("Game Over Window wird angezeigt...");
 
         Stage gameOverStage = new Stage();
         gameOverStage.setTitle("Game Over");
 
-        Stage highscore =new Stage();
-        highscore.setTitle("Highscore");
+        Stage highScore =new Stage();
+        highScore.setTitle("High score");
 
         Label gameOverLabel = new Label("Game Over, " + playerName + "!" );
         gameOverLabel.getStyleClass().add("game-over-label");
@@ -320,9 +319,9 @@ public class GameUI extends Application {
         gameOverStage.requestFocus();
         gameOverStage.show();
     }
+
     private void restartGame() {
-        GameHandler gameHandler = new GameHandler(playerName, selectedColor, difficulty, this);
-        gameHandler.getGameWorld().reset();
+        GameEngine gameEngine = new GameEngine(playerName, selectedColor, difficulty, this);
         switchScene(createGame(playerName));
     }
 
@@ -349,4 +348,7 @@ public class GameUI extends Application {
         }
     }
 
+    public GraphicsContext getBackgroundGraphicsContext() {
+        return backgroundGraphicsContext;
+    }
 }

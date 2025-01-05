@@ -14,4 +14,8 @@ public class KeyEventHandler {
     public void onRightArrowPressed() {
         player.driveRight();
     }
+
+    public void onEscapePressed() {
+        // TODO: Pause
+    }
 }
