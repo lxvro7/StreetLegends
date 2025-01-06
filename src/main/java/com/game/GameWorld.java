@@ -2,81 +2,41 @@ package com.game;
 
 import java.util.ArrayList;
 import java.util.Random;
+import static com.game.Vehicle.type;
+import static com.game.Vehicle.color;
+import static com.game.Vehicle.playerType;
+
+/**
+ * Represents the Game World, including the spawning of NPCs, vehicle movement,
+ * and adjustments of the world, relative of the player's position
+ *
+ * @author lxvro7
+ * @author bekoal01
+ * */
 
 public class GameWorld {
     private final Player player;
     private final GameManager gameManager;
-    private static final int SCROLL_BOUNDS = GameConstants.SCROLL_BOUNDS;
-    private double worldPartY = 10000;
+    private double worldPartY = GameConstants.INITIAL_WORLD_PART_Y;
     private final ArrayList<NPC> npcs;
+    private final Random random = new Random();
+    private double spawnTriggerY;
 
     public GameWorld(GameManager gameManager) {
         this.gameManager = gameManager;
         this.player = gameManager.getPlayer();
         this.npcs = new ArrayList<>();
+        addNewNpcs();
+        spawnTriggerY = GameConstants.INITIAL_PLAYER_Y - gameManager.getCanvasHeight()/3;
     }
 
     public void update(double diffSeconds) {
         moveAllVehicles(diffSeconds);
     }
 
-    // Spawn NPC vehicles
-    public ArrayList<NPC> spawnTheNpcVehicles(String difficulty) {
-        ArrayList<NPC> npcs = new ArrayList<>();
-        Random random = new Random();
-        int quantity;
-        switch (difficulty) {
-            case "Easy":
-                quantity = 3;
-                break;
-            case "Medium":
-                quantity = 5;
-                break;
-            case "Hard":
-                quantity = 10;
-                break;
-            default:
-                quantity = GameConstants.MIN_NPC_QUANTITY;
-        }
-
-        while (npcs.size() < quantity) {
-            boolean placed = false;
-            int attempts = 0;
-
-            while (!placed && attempts < GameConstants.MAX_NPC_ATTEMPTS) {
-                double randomXValue = GameConstants.LANES[random.nextInt(GameConstants.LANES.length)];
-                double y = player.getPlayerVehicle().getY() + random.nextDouble() * 400 - 200;
-
-                Vehicle.type vehicleType = Vehicle.type.values()[random.nextInt(Vehicle.type.values().length)];
-                Vehicle.color vehicleColor = Vehicle.color.values()[random.nextInt(Vehicle.color.values().length)];
-                Vehicle newVehicle = new Vehicle(randomXValue, y, vehicleType, vehicleColor, Vehicle.playerType.NPC);
-
-                boolean collision = false;
-                for (NPC existingNpc : npcs) {
-                    Vehicle existingVehicle = existingNpc.getNpcVehicle();
-                    double dy = Math.abs(existingVehicle.getY() - newVehicle.getY());
-                    double minYDistance = existingVehicle.getRadius() + newVehicle.getRadius() + 100;
-
-                    if (dy < minYDistance) {
-                        collision = true;
-                        break;
-                    }
-                }
-
-                if (!collision) {
-                    NPC npc = new NPC(newVehicle);
-                    npcs.add(npc);
-                    placed = true;
-                }
-                attempts++;
-            }
-
-            if (attempts >= GameConstants.MAX_NPC_ATTEMPTS) {
-                System.err.println("MAXIMUM ATTEMPTS REACHED FOR NPC SPAWN");
-                break;
-            }
-        }
-        return npcs;
+    public void addNewNpcs() {
+        ArrayList<NPC> newNpcs = spawnTheNpcVehicles();
+        npcs.addAll(newNpcs);
     }
 
     public ArrayList<Vehicle> getAllVehicles() {
@@ -91,8 +51,8 @@ public class GameWorld {
     public boolean adjustWorld() {
         boolean worldHasChanged = false;
 
-        if (player.getPlayerVehicle().getY() < worldPartY + SCROLL_BOUNDS) {
-            worldPartY = player.getPlayerVehicle().getY() - SCROLL_BOUNDS;
+        if (player.getPlayerVehicle().getY() < worldPartY + GameConstants.SCROLL_BOUNDS) {
+            worldPartY = player.getPlayerVehicle().getY() - GameConstants.SCROLL_BOUNDS;
 
             if (worldPartY <= 0) {
                 worldPartY = 0;
@@ -106,10 +66,7 @@ public class GameWorld {
         return npcs;
     }
 
-    public void reset() {
-        npcs.clear();
-        npcs.addAll(spawnTheNpcVehicles(gameManager.getDifficulty()));
-    }
+    public void reset() {}
 
     public void moveAllVehicles(double diffSeconds) {
         player.getPlayerVehicle().move(diffSeconds);
@@ -118,7 +75,81 @@ public class GameWorld {
         }
     }
 
+    public boolean isNewSpawnNeeded() {
+        double canvasHeight = gameManager.getCanvasHeight();
+        double playerY = player.getPlayerVehicle().getY();
+        boolean withinTolerance = Math.abs(playerY - spawnTriggerY) < GameConstants.SPAWN_TRIGGER_TOLERANCE;
+        if(withinTolerance) {
+            spawnTriggerY = playerY - canvasHeight - canvasHeight/2;
+            return true;
+        }
+        return false;
+    }
+
+    public ArrayList<NPC> spawnTheNpcVehicles() {
+        ArrayList<NPC> newNpcs = new ArrayList<>();
+        int quantity = calculateNpcSpawningAmount();
+        while(newNpcs.size() < quantity) {
+            NPC npc = generateUniqueNpc(newNpcs);
+            if (npc != null) {
+                newNpcs.add(npc);
+            } else {
+                System.err.println("FAILED TO PLACE NPC AFTER MAXIMAL ATTEMPTS");
+                break;
+            }
+        }
+        return newNpcs;
+    }
+
+    private NPC generateUniqueNpc(ArrayList<NPC> existingNpcs) {
+        final int MAX_ATTEMPTS    = GameConstants.MAX_NPC_ATTEMPTS;
+        final double SPAWN_OFFSET = GameConstants.SPAWN_OFFSET;
+        final double SPAWN_RANGE  = GameConstants.SPAWN_RANGE;
+        final double [] LANES     = GameConstants.LANES;
+        int attempts = 0;
+        while(attempts < MAX_ATTEMPTS) {
+            // Create random coordinates
+            double randomXValue = LANES[random.nextInt(LANES.length)];
+            double y = spawnTriggerY - SPAWN_OFFSET + random.nextDouble() * SPAWN_RANGE - SPAWN_OFFSET;
+            // Create random type and color
+            type vehicleType   = type.values()[random.nextInt(type.values().length)];
+            color vehicleColor = color.values()[random.nextInt(color.values().length)];
+
+            Vehicle newVehicle = new Vehicle(randomXValue, y, vehicleType, vehicleColor, playerType.NPC);
+            if(!hasCollisionWithExistingNpcs(existingNpcs, newVehicle)) {
+                return new NPC(newVehicle);
+            }
+            attempts++;
+        }
+        return null;
+    }
+
+    private int calculateNpcSpawningAmount() {
+        String difficulty = gameManager.getDifficulty();
+        return switch (difficulty) {
+            case "Easy"   -> GameConstants.EASY_DIFFICULTY_NPC_AMOUNT;
+            case "Middle" -> GameConstants.MIDDLE_DIFFICULTY_NPC_AMOUNT;
+            case "Hard"   -> GameConstants.HARD_DIFFICULTY_NPC_AMOUNT;
+            default       -> GameConstants.MIN_NPC_QUANTITY;
+        };
+    }
+
+    private boolean hasCollisionWithExistingNpcs(ArrayList<NPC> newNpcs, Vehicle newVehicle) {
+        final double NPC_PADDING  = GameConstants.NPC_COLLISION_PADDING;
+        for (NPC existingNpc : newNpcs) {
+            Vehicle existingVehicle = existingNpc.getNpcVehicle();
+            double dy = Math.abs(existingVehicle.getY() - newVehicle.getY());
+            double minYDistance = existingVehicle.getRadius() + newVehicle.getRadius() + NPC_PADDING;
+            if (dy < minYDistance) {
+                return true;
+            }
+        }
+        return false;
+    }
+
     public double getWorldPartY() {
         return worldPartY;
     }
 }
+
+

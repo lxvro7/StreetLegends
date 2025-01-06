@@ -7,15 +7,12 @@ import java.util.ArrayList;
 import java.util.Objects;
 
 public class GameRenderer {
-    private final String roadImagePath = Objects.requireNonNull(getClass().
-            getResource("/images/street/road.png")).toExternalForm();
     private final Image image;
     private final GameManager gameManager;
-    private double canvasStartY = 5_000000;//not Static!
 
     public GameRenderer(GameManager gameManager) {
         this.gameManager = gameManager;
-        image = new Image(roadImagePath);
+        image = createImage(GameConstants.BACKGROUND_IMAGE);
     }
 
     public void drawVehicles(ArrayList<Vehicle> vehicles,
@@ -32,12 +29,8 @@ public class GameRenderer {
         }
     }
 
-    public double getCanvasStartY() {
-        return canvasStartY;
-    }
-
     public void drawBackground(GraphicsContext backgroundGraphicsContext, double canvasWidth, double canvasHeight) {
-        // Clear the background canvas
+
         backgroundGraphicsContext.clearRect(0, 0, canvasWidth, canvasHeight);
 
         double imageHeight = image.getHeight();
@@ -52,4 +45,9 @@ public class GameRenderer {
             backgroundGraphicsContext.drawImage(image, 0, y, canvasWidth, imageHeight);
         }
     }
+
+    public Image createImage(String backgroundImagePath) {
+        return new Image(Objects.requireNonNull(getClass().getResource(backgroundImagePath)).toExternalForm());
+    }
 }
+

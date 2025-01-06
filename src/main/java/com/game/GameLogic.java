@@ -34,7 +34,7 @@ public class GameLogic {
         ArrayList<Vehicle> collisions = getCollision();
         // If the collision list is not empty, stop the game
         if(!collisions.isEmpty()) {
-            gameManager.stopGame();
+            // TODO: Implement, game over!
             System.out.println("Game terminated");
         }
     }

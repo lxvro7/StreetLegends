@@ -30,6 +30,7 @@ public class GameUI extends Application {
     private double windowHeight;
     private Vehicle.color selectedColor = Vehicle.color.BLUE;
     private GraphicsContext backgroundGraphicsContext;
+    private GraphicsContext vehicleGraphicsContext;
 
     public static void main(String[] args) {
         launch(args);
@@ -249,13 +250,13 @@ public class GameUI extends Application {
 
         double canvasWidth = windowWidth;
         double canvasHeight = windowHeight;
-        GameEngine gameEngine = new GameEngine(playerName, selectedColor, difficulty,this);
+        GameEngine gameEngine = new GameEngine(playerName, selectedColor, difficulty,this, canvasHeight, canvasWidth);
 
         Canvas backgroundCanvas = new Canvas(canvasWidth, canvasHeight);
         Canvas vehicleCanvas = new Canvas(canvasWidth, canvasHeight);
 
         backgroundGraphicsContext = backgroundCanvas.getGraphicsContext2D();
-        GraphicsContext vehicleGraphicsContext = vehicleCanvas.getGraphicsContext2D();
+        vehicleGraphicsContext = vehicleCanvas.getGraphicsContext2D();
 
         StackPane canvasContainer = new StackPane();
         canvasContainer.getChildren().addAll(backgroundCanvas, vehicleCanvas);
@@ -328,8 +329,8 @@ public class GameUI extends Application {
     }
 
     private void restartGame() {
-        GameEngine gameEngine = new GameEngine(playerName, selectedColor, difficulty, this);
-        switchScene(createGame(playerName));
+        //GameEngine gameEngine = new GameEngine(playerName, selectedColor, difficulty, this);
+        //switchScene(createGame(playerName));
     }
 
     // Switches to a new scene by clearing the existing layout and adding the new layout.
@@ -367,5 +368,9 @@ public class GameUI extends Application {
 
     public GraphicsContext getBackgroundGraphicsContext() {
         return backgroundGraphicsContext;
+    }
+
+    public GraphicsContext getVehicleGraphicsContext() {
+        return vehicleGraphicsContext;
     }
 }

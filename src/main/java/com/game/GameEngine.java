@@ -19,14 +19,14 @@ public class GameEngine {
     private double canvasHeight;
     private final GameUI gameUI;
 
-    private static final double DEGREE = GameConstants.DEGREE;
-
-    public GameEngine(String playerName, Vehicle.color selectedColor, String difficulty, GameUI gameUI) {
+    public GameEngine(String playerName, Vehicle.color selectedColor, String difficulty, GameUI gameUI,
+                      double canvasHeight, double canvasWidth) {
         this.gameUI=gameUI;
         this.player = createPlayerVehicle(playerName, selectedColor, difficulty);
-        this.gameManager = new GameManager(player,difficulty,this);
+        this.gameManager = new GameManager(player, difficulty, canvasHeight, canvasWidth);
         this.keyEventHandler = new KeyEventHandler(player);
     }
+
     public void setUpdateCallback(Consumer<ArrayList<Vehicle>> callback) {
         this.updateCallback = callback;
     }
@@ -47,7 +47,15 @@ public class GameEngine {
                     }
                     System.out.println(player.getPlayerVehicle().getY());
                     if (gameManager.adjustWorld()) {
-                        gameManager.drawBackground(gameUI.getBackgroundGraphicsContext(), canvasWidth, canvasHeight);
+                        gameManager.drawBackground(gameUI.getBackgroundGraphicsContext(),
+                                canvasWidth, canvasHeight);
+                    }
+                    if(gameManager.isNewSpawnNeeded()) {
+                        System.out.println("CHANGE");
+                        gameManager.addNewNpcs();
+                        gameManager.drawVehicles(gameManager.getAllVehicles(), gameUI.getVehicleGraphicsContext(),
+                                canvasWidth, canvasHeight);
+
                     }
                 });
                 // 60 FPS
@@ -85,7 +93,7 @@ public class GameEngine {
                 break;
         }
         if(!player.isTurningLeft() && !player.isTurningRight()) {
-            player.getPlayerVehicle().setAlfa(DEGREE);
+            player.getPlayerVehicle().setAlfa(GameConstants.ROTATION_270_RAD);
         }
     }
 
@@ -127,9 +135,5 @@ public class GameEngine {
     public void setCanvasHeight(double canvasHeight) {
         this.canvasHeight = canvasHeight;
     }
-    public double getCanvasHeight() {
-        return canvasHeight;
-    }
-
 
 }

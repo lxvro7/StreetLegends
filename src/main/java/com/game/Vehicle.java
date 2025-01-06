@@ -106,7 +106,6 @@ public class Vehicle {
     public void move(double diffSeconds) {
         x += Math.cos(alfa) * velocity * diffSeconds;
         y += Math.sin(alfa) * velocity * diffSeconds;
-        System.out.println("Speed: " + velocity + ", diffSeconds: " + diffSeconds);
     }
 
     public String getImagePath() {
