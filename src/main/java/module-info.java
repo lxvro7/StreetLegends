@@ -1,7 +1,7 @@
 module com.game.street_legends {
     requires javafx.controls;
     requires javafx.fxml;
-    requires java.sql;
+    requires javafx.media;
     requires org.jetbrains.annotations;
 
 

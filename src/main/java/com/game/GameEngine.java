@@ -23,8 +23,9 @@ public class GameEngine {
                       double canvasHeight, double canvasWidth) {
         this.gameUI=gameUI;
         this.player = createPlayerVehicle(playerName, selectedColor, difficulty);
-        this.gameManager = new GameManager(player, difficulty, canvasHeight, canvasWidth);
+        this.gameManager = new GameManager(player, difficulty, canvasHeight, canvasWidth,this);
         this.keyEventHandler = new KeyEventHandler(player);
+        gameManager.setCollisionListener(() -> stopGameSound());
     }
 
     public void setUpdateCallback(Consumer<ArrayList<Vehicle>> callback) {
@@ -100,7 +101,7 @@ public class GameEngine {
     public void stopGame() {
         running = false;
         Platform.runLater(() -> {
-            GameUI.showGameOverWindow(player.getPlayerName(), gameUI);
+            GameUI.showGameOverWindow(player.getPlayerName(), gameUI, gameUI.getPrimaryStage());
         });
     }
 
@@ -123,6 +124,7 @@ public class GameEngine {
     public void renderVehicles(GraphicsContext vgc, ArrayList<Vehicle> vehicles) {
         gameManager.drawVehicles(vehicles, vgc, canvasWidth, canvasHeight);
     }
+    public interface CollisionListener { void onCollisionDetected();}
 
     public void renderBackground(GraphicsContext bgc) {
         gameManager.drawBackground(bgc, canvasWidth, canvasHeight);
@@ -135,5 +137,9 @@ public class GameEngine {
     public void setCanvasHeight(double canvasHeight) {
         this.canvasHeight = canvasHeight;
     }
-
+    public void stopGameSound() {
+        if (gameUI != null) {
+            gameUI.stopGameSound();
+        }
+    }
 }

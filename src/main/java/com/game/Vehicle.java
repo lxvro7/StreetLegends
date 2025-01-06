@@ -31,7 +31,7 @@ public class Vehicle {
         if (playerType == playerType.PLAYER) {
             velocity = maxVelocity;
         } else {
-            velocity = 100;  // Standardgeschwindigkeit für NPCs
+            velocity = 100;
         }
 
     }

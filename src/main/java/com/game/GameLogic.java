@@ -5,11 +5,15 @@ import java.util.ArrayList;
 
 public class GameLogic {
     private final GameManager gameManager;
+    private GameEngine.CollisionListener collisionListener;
+
 
     public GameLogic(GameManager gameManager) {
         this.gameManager = gameManager;
     }
-
+    public void setCollisionListener(GameEngine.CollisionListener listener) {
+        this.collisionListener = listener;
+    }
     public ArrayList<Vehicle> getCollision() {
         ArrayList<Vehicle> collisions = new ArrayList<>();
         Player player = gameManager.getPlayer();
@@ -34,8 +38,11 @@ public class GameLogic {
         ArrayList<Vehicle> collisions = getCollision();
         // If the collision list is not empty, stop the game
         if(!collisions.isEmpty()) {
-            // TODO: Implement, game over!
+            gameManager.stopGame();
             System.out.println("Game terminated");
+            if (collisionListener != null) {
+                collisionListener.onCollisionDetected();
+            }
         }
     }
 }

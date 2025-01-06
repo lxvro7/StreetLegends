@@ -146,3 +146,17 @@
     -fx-scale-y: 1.1;
     -fx-cursor: hand;
 }
+/*------------------------------------*/
+/*Sound menu*/
+
+.sound-button {
+    -fx-background-color: transparent; /* Kein Hintergrund */
+    -fx-padding: 5;
+    -fx-border-color: transparent;     /* Kein Rahmen */
+}
+
+.sound-button:hover {
+    -fx-scale-x: 1;
+    -fx-scale-y: 1;
+}
+

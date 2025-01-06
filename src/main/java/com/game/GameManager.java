@@ -16,12 +16,17 @@ public class GameManager {
     private final GameRenderer gameRenderer;
     private final String difficulty;
     private final Player player;
+    private final GameEngine gameEngine;
+
+    private GameEngine.CollisionListener collisionListener;
+
     private final double canvasHeight;
 
-    public GameManager(Player player, String difficulty, double canvasHeight, double canvasWidth) {
+    public GameManager(Player player, String difficulty, double canvasHeight, double canvasWidth, GameEngine gameEngine) {
         this.player = player;
         this.difficulty = difficulty;
         this.canvasHeight = canvasHeight;
+        this.gameEngine=gameEngine;
 
         // Initialize game components
         this.gameLogic = new GameLogic(this);
@@ -65,8 +70,17 @@ public class GameManager {
      */
 
     public void handleCollisions() {
-        gameLogic.handleCollisions();
+        ArrayList<Vehicle> collisions = gameLogic.getCollision();
+        if (!collisions.isEmpty()) {
+            if (collisionListener != null) {
+                collisionListener.onCollisionDetected(); // Listener informieren
+            }
+            stopGame();
+        }
+
     }
+
+
 
     public Player getPlayer() {
         return player;
@@ -102,6 +116,15 @@ public class GameManager {
 
     public double getCanvasHeight() {
         return canvasHeight;
+    }
+    public void stopGame() {
+        gameEngine.stopGame();
+    }
+    public void onCollisionDetected() {
+        gameEngine.stopGameSound();
+    }
+    public void setCollisionListener(GameEngine.CollisionListener listener) {
+        this.collisionListener = listener;
     }
 
 }
