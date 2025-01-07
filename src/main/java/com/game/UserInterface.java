@@ -20,8 +20,6 @@ import java.net.URL;
 import java.util.Objects;
 import javafx.animation.FadeTransition;
 import javafx.util.Duration;
-import javafx.scene.media.Media;
-import javafx.scene.media.MediaPlayer;
 
 public class UserInterface extends Application {
     private Scene scene;
@@ -30,19 +28,9 @@ public class UserInterface extends Application {
     private String playerName = "";
     private double windowWidth;
     private double windowHeight;
-    private Vehicle.color selectedColor = Vehicle.color.BLUE;
     private GraphicsContext backgroundGraphicsContext;
     private GraphicsContext vehicleGraphicsContext;
-    private Stage primaryStage;
-    private MediaPlayer menuMediaPlayer;
-    private final MediaPlayer gameMediaPlayer;
-
-    public UserInterface() {
-        Media gameMedia = new Media(getClass().getResource("/audio/car-engine-loop.wav").toExternalForm());
-        gameMediaPlayer = new MediaPlayer(gameMedia);
-        gameMediaPlayer.setCycleCount(MediaPlayer.INDEFINITE);
-        gameMediaPlayer.setMute(true);
-    }
+    private final SoundManager soundManager = new SoundManager();
 
     public static void main(String[] args) {
         launch(args);
@@ -50,8 +38,7 @@ public class UserInterface extends Application {
 
     @Override
     public void start(Stage primaryStage) {
-        this.primaryStage=primaryStage;
-        startMenuSound();
+        soundManager.startMenuSound();
         root = new StackPane();
         background();
         Node entryLayout = createEntry();
@@ -83,34 +70,6 @@ public class UserInterface extends Application {
         root.getChildren().add(overlay);
         root.setBackground(new Background(backgroundImage));
         scene = new Scene(root, screenWidth, screenHeight);
-    }
-    private void startMenuSound() {
-        if (menuMediaPlayer == null) {
-            Media menuMedia = new Media(getClass().getResource("/audio/menu.mp3").toExternalForm());
-            menuMediaPlayer = new MediaPlayer(menuMedia);
-            menuMediaPlayer.setCycleCount(MediaPlayer.INDEFINITE);
-        }
-        if (!menuMediaPlayer.isMute()) {
-            if (menuMediaPlayer.getStatus() == MediaPlayer.Status.STOPPED) {
-                menuMediaPlayer.seek(Duration.ZERO);
-            }
-            menuMediaPlayer.play();
-        }
-    }
-    private void stopMenuSound() {
-        if (menuMediaPlayer != null) {
-            menuMediaPlayer.stop();
-        }
-    }
-    private void startGameSound() {
-        if (!gameMediaPlayer.isMute()) {
-            gameMediaPlayer.play();
-        }
-    }
-    public void stopGameSound() {
-        if (gameMediaPlayer != null) {
-            gameMediaPlayer.pause();
-        }
     }
 
     // Creates the layout for the player's name entry screen, including labels, text fields, and a button.
@@ -166,9 +125,6 @@ public class UserInterface extends Application {
         Label difficultyLabel = new Label("Difficulty: " + difficulty);
         difficultyLabel.getStyleClass().add("difficulty-label");
 
-        Label color = new Label("Color: " + capitalize(selectedColor.toString()));
-        color.getStyleClass().add("color-label");
-
         Button playButton = new Button("Play");
         Button difficultyButton = new Button("Difficulty");
         Button colorButton = new Button("Select color");
@@ -199,7 +155,6 @@ public class UserInterface extends Application {
         });
         backButton.setOnAction(e -> {switchScene(createEntry());});
         soundButton.setOnAction(e -> switchScene(createSoundSettingsMenu()));
-        colorButton.setOnAction(e -> switchScene(createColorSelection(color)));
 
         VBox titleBox = new VBox();
         titleBox.getChildren().add(title);
@@ -213,49 +168,11 @@ public class UserInterface extends Application {
         centerLayout.getChildren().addAll(playerLabel, buttonBox);
         centerLayout.setAlignment(Pos.CENTER);
 
-        HBox bottomInfoBox = new HBox(20);
-        bottomInfoBox.setAlignment(Pos.BOTTOM_CENTER);
-        bottomInfoBox.getChildren().addAll(color, difficultyLabel);
-
         BorderPane menuLayout = new BorderPane();
         menuLayout.setTop(new VBox(10, titleBox));
         menuLayout.setCenter(centerLayout);
-        menuLayout.setBottom(bottomInfoBox);
 
         return menuLayout;
-    }
-    private Node createColorSelection(Label color) {
-        Label colorLabel = new Label("Select a color:");
-        colorLabel.getStyleClass().add("color-label");
-
-        Button blackButton = new Button("Black");
-        Button blueButton = new Button("Blue");
-        Button greenButton = new Button("Green");
-        blackButton.setOnAction(e -> {
-            selectedColor = Vehicle.color.BLACK;
-            color.setText("Color: " + selectedColor);
-            switchScene(createMenu(playerName));
-        });
-        blueButton.setOnAction(e -> {
-            selectedColor = Vehicle.color.BLUE;
-            color.setText("Color: " + selectedColor);
-            switchScene(createMenu(playerName));
-        });
-        greenButton.setOnAction(e -> {
-            selectedColor = Vehicle.color.GREEN;
-            color.setText("Color: " + selectedColor);
-            switchScene(createMenu(playerName));
-        });
-        VBox colorBox = new VBox(20, colorLabel, blackButton, blueButton, greenButton);
-        colorBox.setAlignment(Pos.CENTER);
-        colorBox.getStyleClass().add("vbox-layout");
-
-        return colorBox;
-    }
-
-    private String capitalize(String text){
-        if(text==null || text.isEmpty()) return text;
-        return text.substring(0,1).toUpperCase()+text.substring(1).toLowerCase();
     }
 
     // Creates a menu layout for selecting the difficulty level (Easy, Medium, Hard).
@@ -293,11 +210,11 @@ public class UserInterface extends Application {
     }
 
     public Node createGame(String playerName) {
-        stopMenuSound();
-        startGameSound();
+        soundManager.stopMenuSound();
+        soundManager.startGameSound();
         double canvasWidth = windowWidth;
         double canvasHeight = windowHeight;
-        GameEngine gameEngine = new GameEngine(playerName, selectedColor, difficulty,this, canvasHeight, canvasWidth);
+        GameEngine gameEngine = new GameEngine(playerName, difficulty,this, canvasHeight, canvasWidth);
 
         Canvas backgroundCanvas = new Canvas(canvasWidth, canvasHeight);
         Canvas vehicleCanvas = new Canvas(canvasWidth, canvasHeight);
@@ -341,21 +258,21 @@ public class UserInterface extends Application {
         Label soundSettingsTitle = new Label("Sound Settings");
         soundSettingsTitle.getStyleClass().add("title");
 
-        Button menuSoundToggleButton = new Button(menuMediaPlayer.isMute() ? "Menu Sound: Off" : "Menu Sound: On");
+        Button menuSoundToggleButton = new Button(soundManager.isMenuSoundMuted() ? "Menu Sound: Off" : "Menu Sound: On");
         menuSoundToggleButton.setOnAction(e -> {
-            boolean isMuted = menuMediaPlayer.isMute();
-            menuMediaPlayer.setMute(!isMuted);
+            boolean isMuted = soundManager.isMenuSoundMuted();
+            soundManager.setMenuSoundMuted(!isMuted);
             menuSoundToggleButton.setText(isMuted ? "Menu Sound: On" : "Menu Sound: Off");
 
             if (!isMuted) {
-                startMenuSound();
+                soundManager.startMenuSound();
             }
         });
 
-        Button gameSoundToggleButton = new Button(gameMediaPlayer.isMute() ? "In-Game Sound: Off" : "In-Game Sound: On");
+        Button gameSoundToggleButton = new Button(soundManager.isGameSoundMuted() ? "In-Game Sound: Off" : "In-Game Sound: On");
         gameSoundToggleButton.setOnAction(e -> {
-            boolean isMuted = gameMediaPlayer.isMute();
-            gameMediaPlayer.setMute(!isMuted);
+            boolean isMuted = soundManager.isGameSoundMuted();
+            soundManager.setGameSoundMuted((!isMuted));
             gameSoundToggleButton.setText(isMuted ? "In-Game Sound: On" : "In-Game Sound: Off");
         });
 
@@ -367,54 +284,26 @@ public class UserInterface extends Application {
         return soundSettingsLayout;
     }
 
-    // TODO Alton: Only 1 Stage
-    public static void showGameOverWindow(String playerName, UserInterface userInterface, Stage primaryStage) {
-
-        Stage gameOverStage = new Stage();
-        gameOverStage.setTitle("Game Over");
-
-        Stage highScore =new Stage();
-        highScore.setTitle("High score");
+    public void showGameOverWindow() {
 
         Label gameOverLabel = new Label("Game Over, " + playerName + "!" );
         gameOverLabel.getStyleClass().add("game-over-label");
+        gameOverLabel.setAlignment(Pos.CENTER);
 
-        Button restartButton = new Button("Restart");
-        restartButton.getStyleClass().add("game-over-button");
-        Button backToMenuButton = new Button("Back to Menu");
-        backToMenuButton.getStyleClass().add("game-over-button");
+        Label instructionLabel = new Label("Press 'R' to Restart");
+        instructionLabel.getStyleClass().add("game-over-instruction");
+        instructionLabel.setAlignment(Pos.CENTER);
 
-        Button exitButton = new Button("Exit");
-        exitButton.getStyleClass().add("game-over-button");
+        VBox layout = new VBox(20, gameOverLabel, instructionLabel);
+        layout.setAlignment(Pos.TOP_CENTER);
 
-        restartButton.setOnAction(e -> {
-            gameOverStage.close();
-            userInterface.restartGame();
-            primaryStage.requestFocus();
+        root.getChildren().add(layout);
 
+        scene.setOnKeyPressed(keyEvent -> {
+            if(keyEvent.getCode().toString().equals("R")) {
+                restartGame();
+            }
         });
-        backToMenuButton.setOnAction(e -> {
-            gameOverStage.close();
-            userInterface.stopGameSound();
-            userInterface.startMenuSound();
-            userInterface.switchScene(userInterface.createMenu(userInterface.playerName));
-            primaryStage.requestFocus();
-        });
-
-        exitButton.setOnAction(e ->{
-            userInterface.stopGameSound();
-            Platform.exit();
-        });
-
-        VBox layout = new VBox(20, gameOverLabel, restartButton, backToMenuButton,exitButton);
-        layout.setAlignment(Pos.CENTER);
-        layout.getStyleClass().add("game-over-box");
-
-        Scene scene = new Scene(layout, 400, 300);
-        userInterface.readFromCss(scene);
-        gameOverStage.setScene(scene);
-        gameOverStage.requestFocus();
-        gameOverStage.show();
     }
 
     private void restartGame() {
@@ -430,17 +319,6 @@ public class UserInterface extends Application {
     private void switchScene(Node newScene) {
         root.getChildren().clear();
         root.getChildren().add(newScene);
-        double screenWidth = Screen.getPrimary().getBounds().getWidth();
-        double screenHeight = Screen.getPrimary().getBounds().getHeight();
-        String imagePath = Objects.requireNonNull(getClass().getResource("/images/banner.jpg")).toExternalForm();
-        BackgroundImage backgroundImage = new BackgroundImage(
-                new Image(imagePath, screenWidth, screenHeight, false, true),
-                BackgroundRepeat.NO_REPEAT,
-                BackgroundRepeat.NO_REPEAT,
-                BackgroundPosition.DEFAULT,
-                BackgroundSize.DEFAULT
-        );
-        root.setBackground(new Background(backgroundImage));
     }
 
     // Loads the CSS stylesheet to apply custom styling to the application.
@@ -464,9 +342,5 @@ public class UserInterface extends Application {
 
     public GraphicsContext getVehicleGraphicsContext() {
         return vehicleGraphicsContext;
-    }
-
-    public Stage getPrimaryStage() {
-        return primaryStage;
     }
 }

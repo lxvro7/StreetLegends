@@ -10,7 +10,7 @@ public class GameLogic {
         this.gameManager = gameManager;
     }
 
-    public ArrayList<Vehicle> getCollision() {
+    public boolean collisionDetected() {
         ArrayList<Vehicle> collisions = new ArrayList<>();
         Player player = gameManager.getPlayer();
         for(NPC npc : gameManager.getAllNpcs()) {
@@ -27,15 +27,7 @@ public class GameLogic {
                 }
             }
         }
-        return collisions;
-    }
-
-    public void handleCollisions() {
-        ArrayList<Vehicle> collisions = getCollision();
-        // If the collision list is not empty, stop the game
-        if(!collisions.isEmpty()) {
-            gameManager.stopGame();
-        }
+        return !collisions.isEmpty();
     }
 
     // TODO: Calculate score in game, based off the players traveled distance

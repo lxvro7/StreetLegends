@@ -16,9 +16,6 @@ public class GameManager {
     private final GameRenderer gameRenderer;
     private final String difficulty;
     private final Player player;
-    private final GameEngine gameEngine;
-
-    private GameEngine.CollisionListener collisionListener;
 
     private final double canvasHeight;
 
@@ -26,7 +23,6 @@ public class GameManager {
         this.player = player;
         this.difficulty = difficulty;
         this.canvasHeight = canvasHeight;
-        this.gameEngine=gameEngine;
 
         // Initialize game components
         this.gameLogic = new GameLogic(this);
@@ -41,7 +37,6 @@ public class GameManager {
 
     public void updateWorld(double diffSeconds) {
         gameWorld.update(diffSeconds);
-        gameLogic.handleCollisions();
     }
 
     public ArrayList<Vehicle> getAllVehicles() {
@@ -60,27 +55,13 @@ public class GameManager {
         return gameWorld.isNewSpawnNeeded();
     }
 
-
-    public void resetWorld() {
-        gameWorld.reset();
-    }
-
     /**
      * Delegates the GameLogic methods
      */
 
-    public void handleCollisions() {
-        ArrayList<Vehicle> collisions = gameLogic.getCollision();
-        if (!collisions.isEmpty()) {
-            if (collisionListener != null) {
-                collisionListener.onCollisionDetected(); // Listener informieren
-            }
-            stopGame();
-        }
-
+    public boolean collisionDetected() {
+        return gameLogic.collisionDetected();
     }
-
-
 
     public Player getPlayer() {
         return player;
@@ -116,12 +97,6 @@ public class GameManager {
 
     public double getCanvasHeight() {
         return canvasHeight;
-    }
-    public void stopGame() {
-        gameEngine.stopGame();
-    }
-    public void setCollisionListener(GameEngine.CollisionListener listener) {
-        this.collisionListener = listener;
     }
 
 }

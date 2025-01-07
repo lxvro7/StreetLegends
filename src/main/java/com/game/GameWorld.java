@@ -100,6 +100,7 @@ public class GameWorld {
         return newNpcs;
     }
 
+    // TODO: Radius berücksichtigen beim spawnen für Koordinate x!
     private NPC generateUniqueNpc(ArrayList<NPC> existingNpcs) {
         final int MAX_ATTEMPTS    = GameConstants.MAX_NPC_ATTEMPTS;
         final double SPAWN_OFFSET = GameConstants.SPAWN_OFFSET;

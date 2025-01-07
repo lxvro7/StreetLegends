@@ -17,14 +17,15 @@ public class GameEngine {
     private double canvasWidth;
     private double canvasHeight;
     private final UserInterface userInterface;
+    private enum GameState {RUNNING, GAME_OVER}
+    private GameState currentState = GameState.RUNNING;
 
-    public GameEngine(String playerName, Vehicle.color selectedColor, String difficulty, UserInterface userInterface,
+    public GameEngine(String playerName, String difficulty, UserInterface userInterface,
                       double canvasHeight, double canvasWidth) {
         this.userInterface = userInterface;
-        this.player = createPlayerVehicle(playerName, selectedColor, difficulty);
+        this.player = createPlayerVehicle(playerName);
         this.gameManager = new GameManager(player, difficulty, canvasHeight, canvasWidth,this);
         this.keyEventHandler = new KeyEventHandler(player);
-        gameManager.setCollisionListener(this::stopGameSound);
     }
 
     public void setUpdateCallback(Consumer<ArrayList<Vehicle>> callback) {
@@ -40,7 +41,9 @@ public class GameEngine {
                 double diffSeconds = (currentTime - lastTime) / 1_000_000_000.0;
                 lastTime = currentTime;
                 gameManager.updateWorld(diffSeconds);
-                gameManager.handleCollisions();
+                if(gameManager.collisionDetected()) {
+                    stopGame();
+                }
                 Platform.runLater(() -> {
                     if (updateCallback != null) {
                         updateCallback.accept(gameManager.getAllVehicles());
@@ -97,16 +100,16 @@ public class GameEngine {
     }
 
     public void stopGame() {
-        running = false;
-        Platform.runLater(() -> {
-            UserInterface.showGameOverWindow(player.getPlayerName(), userInterface, userInterface.getPrimaryStage());
-        });
+        if(currentState != GameState.GAME_OVER) {
+            currentState = GameState.GAME_OVER;
+            running = false;
+            Platform.runLater(userInterface::showGameOverWindow);
+        }
     }
 
     // Creates a player vehicle for the specified color and difficulty
-    private Player createPlayerVehicle(String playerName, Vehicle.color selectedColor, String difficulty) {
+    private Player createPlayerVehicle(String playerName) {
         Vehicle.VehicleType vehicleType = Vehicle.VehicleType.MUSTANG;
-        // Don't change these values
         double x = GameConstants.INITIAL_PLAYER_X;
         double y = GameConstants.INITIAL_PLAYER_Y;
         player = new Player(playerName, new Vehicle(x, y, vehicleType, Vehicle.PlayerType.PLAYER));
@@ -116,7 +119,6 @@ public class GameEngine {
     public void renderVehicles(GraphicsContext vgc, ArrayList<Vehicle> vehicles) {
         gameManager.drawVehicles(vehicles, vgc, canvasWidth, canvasHeight);
     }
-    public interface CollisionListener { void onCollisionDetected();}
 
     public void renderBackground(GraphicsContext bgc) {
         gameManager.drawBackground(bgc, canvasWidth, canvasHeight);
@@ -128,11 +130,5 @@ public class GameEngine {
 
     public void setCanvasHeight(double canvasHeight) {
         this.canvasHeight = canvasHeight;
-    }
-
-    public void stopGameSound() {
-        if (userInterface != null) {
-            userInterface.stopGameSound();
-        }
     }
 }
