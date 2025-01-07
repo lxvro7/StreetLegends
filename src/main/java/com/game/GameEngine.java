@@ -2,6 +2,7 @@ package com.game;
 
 import javafx.application.Platform;
 import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.control.Label;
 import javafx.scene.input.KeyCode;
 
 import java.util.ArrayList;
@@ -100,12 +101,17 @@ public class GameEngine {
     }
 
     public void stopGame() {
-        if(currentState != GameState.GAME_OVER) {
+        if (currentState != GameState.GAME_OVER) {
             currentState = GameState.GAME_OVER;
             running = false;
-            Platform.runLater(userInterface::showGameOverWindow);
+            Platform.runLater(() -> {
+                int finalDistance = getDistanceTraveled();
+                Label meterLabel = new Label("Klasse, Sie sind " + finalDistance + " Meter gefahren!");
+                userInterface.showGameOverWindow(finalDistance);
+            });
         }
     }
+
 
     // Creates a player vehicle for the specified color and difficulty
     private Player createPlayerVehicle(String playerName) {
@@ -131,4 +137,8 @@ public class GameEngine {
     public void setCanvasHeight(double canvasHeight) {
         this.canvasHeight = canvasHeight;
     }
+    public int getDistanceTraveled() {
+        return gameManager.getDistanceTraveled(); // gameHandler ist die Instanz des GameHandler
+    }
+
 }

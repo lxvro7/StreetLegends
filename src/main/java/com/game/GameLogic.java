@@ -5,6 +5,7 @@ import java.util.ArrayList;
 
 public class GameLogic {
     private final GameManager gameManager;
+    private int distanceTraveled = 0;
 
     public GameLogic(GameManager gameManager) {
         this.gameManager = gameManager;
@@ -29,9 +30,12 @@ public class GameLogic {
         }
         return !collisions.isEmpty();
     }
-
-    // TODO: Calculate score in game, based off the players traveled distance
-
+    public void update() {
+        distanceTraveled += 1;
+    }
+    public int getDistanceTraveled() {
+        return distanceTraveled;
+    }
 
     // TODO: Velocity should get bigger, if the player distance is f.e a specified point
 }

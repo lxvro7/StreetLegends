@@ -31,6 +31,7 @@ public class GameWorld {
 
     public void update(double diffSeconds) {
         moveAllVehicles(diffSeconds);
+        gameManager.getGameLogic().update();
     }
 
     public void addNewNpcs() {

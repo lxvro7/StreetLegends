@@ -1,4 +1,5 @@
 package com.game;
+import javafx.animation.AnimationTimer;
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.geometry.Insets;
@@ -58,6 +59,7 @@ public class UserInterface extends Application {
         double screenWidth = Screen.getPrimary().getBounds().getWidth();
         double screenHeight = Screen.getPrimary().getBounds().getHeight();
         String imagePath = Objects.requireNonNull(getClass().getResource(GameConstants.MENU_BACKGROUND_IMAGE_PATH).toExternalForm());
+
         BackgroundImage backgroundImage = new BackgroundImage(
                 new Image(imagePath, screenWidth, screenHeight, false, true),
                 BackgroundRepeat.NO_REPEAT,
@@ -67,10 +69,11 @@ public class UserInterface extends Application {
         );
         Rectangle overlay = new Rectangle(screenWidth, screenHeight, Color.BLACK);
         overlay.setOpacity(0.4);
-        root.getChildren().add(overlay);
         root.setBackground(new Background(backgroundImage));
+        root.getChildren().add(overlay);
         scene = new Scene(root, screenWidth, screenHeight);
     }
+
 
     // Creates the layout for the player's name entry screen, including labels, text fields, and a button.
     public Node createEntry() {
@@ -100,7 +103,7 @@ public class UserInterface extends Application {
                 switchScene(createMenu(playerName));
             }
         });
-        VBox entryLayout = new VBox(20);
+        VBox entryLayout = new VBox(40);
         entryLayout.getStyleClass().add("vbox-layout");
         entryLayout.getChildren().addAll(welcomeLabel, nameField,errorLabel ,startButton );
         return entryLayout;
@@ -127,7 +130,6 @@ public class UserInterface extends Application {
 
         Button playButton = new Button("Play");
         Button difficultyButton = new Button("Difficulty");
-        Button colorButton = new Button("Select color");
         Button soundButton =new Button("Sounds");
         Button helpButton = new Button("Help");
         Button backButton = new Button("Back");
@@ -137,7 +139,6 @@ public class UserInterface extends Application {
 
         playButton.getStyleClass().add("menu-button");
         difficultyButton.getStyleClass().add("menu-button");
-        colorButton.getStyleClass().add("menu-button");
         soundButton.getStyleClass().add("menu-button");
         helpButton.getStyleClass().add("menu-button");
         backButton.getStyleClass().add("menu-button");
@@ -161,7 +162,7 @@ public class UserInterface extends Application {
         titleBox.getStyleClass().add("title-box");
 
         VBox buttonBox = new VBox(20);
-        buttonBox.getChildren().addAll(playButton, difficultyButton, colorButton, soundButton,helpButton, backButton, exitButton);
+        buttonBox.getChildren().addAll(playButton, difficultyButton, soundButton,helpButton, backButton, exitButton);
         buttonBox.getStyleClass().add("button-box");
 
         VBox centerLayout = new VBox(30);
@@ -187,26 +188,46 @@ public class UserInterface extends Application {
         Button hardButton = new Button("Hard");
         hardButton.getStyleClass().add("button");
 
+        highlightSelectedDifficulty(easyButton, mediumButton, hardButton);
+
         easyButton.setOnAction(e -> {
             difficulty = "Easy";
             difficultyLabel.setText("Difficulty: " + difficulty);
             switchScene(createMenu(playerName));
         });
+
         mediumButton.setOnAction(e -> {
             difficulty = "Medium";
             difficultyLabel.setText("Difficulty: " + difficulty);
             switchScene(createMenu(playerName));
         });
+
         hardButton.setOnAction(e -> {
             difficulty = "Hard";
             difficultyLabel.setText("Difficulty: " + difficulty);
             switchScene(createMenu(playerName));
-
         });
 
         VBox difficultyBox = new VBox(10, Diff,easyButton, mediumButton, hardButton);
         difficultyBox.getStyleClass().add("difficulty-box");
         return difficultyBox;
+    }
+    private void highlightSelectedDifficulty(Button easy, Button medium, Button hard) {
+        easy.getStyleClass().remove("selected-difficulty");
+        medium.getStyleClass().remove("selected-difficulty");
+        hard.getStyleClass().remove("selected-difficulty");
+
+        switch (difficulty) {
+            case "Easy":
+                easy.getStyleClass().add("selected-difficulty");
+                break;
+            case "Medium":
+                medium.getStyleClass().add("selected-difficulty");
+                break;
+            case "Hard":
+                hard.getStyleClass().add("selected-difficulty");
+                break;
+        }
     }
 
     public Node createGame(String playerName) {
@@ -226,9 +247,13 @@ public class UserInterface extends Application {
         canvasContainer.getChildren().addAll(backgroundCanvas, vehicleCanvas);
         canvasContainer.setAlignment(Pos.CENTER);
 
-        VBox gameLayout = new VBox();
-        gameLayout.setAlignment(Pos.CENTER);
-        gameLayout.getChildren().addAll(canvasContainer);
+        Label meterLabel = new Label("Meter: 0");
+        meterLabel.getStyleClass().add("meter-label");
+        meterLabel.setPadding(new Insets(10));
+
+        canvasContainer.getChildren().add(meterLabel);
+        StackPane.setAlignment(meterLabel, Pos.TOP_LEFT);
+
 
         gameEngine.setCanvasHeight(canvasHeight);
         gameEngine.setCanvasWidth(canvasWidth);
@@ -236,6 +261,18 @@ public class UserInterface extends Application {
         gameEngine.setUpdateCallback(vehicles -> gameEngine.renderVehicles(vehicleGraphicsContext, vehicles));
 
         gameEngine.startGameLoop();
+
+        AnimationTimer meterUpdater = new AnimationTimer() {
+            @Override
+            public void handle(long now) {
+                int meters = gameEngine.getDistanceTraveled();
+                meterLabel.setText("Meter: " + meters);
+                System.out.println("Aktuelle Meter: " + meters);
+
+            }
+        };
+        meterUpdater.start();
+
 
         // Check if any key is pressed
         scene.setOnKeyPressed(keyEvent -> {
@@ -247,7 +284,7 @@ public class UserInterface extends Application {
             gameEngine.processKeyRelease(keyEvent.getCode());
         });
 
-        return gameLayout;
+        return canvasContainer;
     }
 
     private Node createSoundSettingsMenu() {
@@ -257,8 +294,8 @@ public class UserInterface extends Application {
 
         Label soundSettingsTitle = new Label("Sound Settings");
         soundSettingsTitle.getStyleClass().add("title");
-
         Button menuSoundToggleButton = new Button(soundManager.isMenuSoundMuted() ? "Menu Sound: Off" : "Menu Sound: On");
+        menuSoundToggleButton.getStyleClass().add("sound-button");
         menuSoundToggleButton.setOnAction(e -> {
             boolean isMuted = soundManager.isMenuSoundMuted();
             soundManager.setMenuSoundMuted(!isMuted);
@@ -270,6 +307,7 @@ public class UserInterface extends Application {
         });
 
         Button gameSoundToggleButton = new Button(soundManager.isGameSoundMuted() ? "In-Game Sound: Off" : "In-Game Sound: On");
+        gameSoundToggleButton.getStyleClass().add("sound-button");
         gameSoundToggleButton.setOnAction(e -> {
             boolean isMuted = soundManager.isGameSoundMuted();
             soundManager.setGameSoundMuted((!isMuted));
@@ -277,6 +315,7 @@ public class UserInterface extends Application {
         });
 
         Button backButton = new Button("Back");
+        backButton.getStyleClass().add("sound-button");
         backButton.setOnAction(e -> switchScene(createMenu(playerName)));
 
         soundSettingsLayout.getChildren().addAll(soundSettingsTitle, menuSoundToggleButton, gameSoundToggleButton, backButton);
@@ -284,24 +323,37 @@ public class UserInterface extends Application {
         return soundSettingsLayout;
     }
 
-    public void showGameOverWindow() {
+    public void showGameOverWindow(int finalDistance) {
 
-        Label gameOverLabel = new Label("Game Over, " + playerName + "!" );
+        Label gameOverLabel = new Label("GAME OVER, " + playerName + "!");
         gameOverLabel.getStyleClass().add("game-over-label");
-        gameOverLabel.setAlignment(Pos.CENTER);
 
-        Label instructionLabel = new Label("Press 'R' to Restart");
-        instructionLabel.getStyleClass().add("game-over-instruction");
-        instructionLabel.setAlignment(Pos.CENTER);
+        Label restartInstruction = new Label("Press 'R' to Restart");
+        restartInstruction.getStyleClass().add("game-over-instruction");
 
-        VBox layout = new VBox(20, gameOverLabel, instructionLabel);
-        layout.setAlignment(Pos.TOP_CENTER);
+        Label menuInstruction = new Label("Press 'Q' to go back to Menu");
+        menuInstruction.getStyleClass().add("game-over-instruction");
+
+        Label quitGame=new Label("Press ESC to Quit the Game");
+        quitGame.getStyleClass().add("game-over-instruction");
+
+        Label meterLabel = new Label("Klasse, Sie sind " + finalDistance + " Meter gefahren!");
+        meterLabel.getStyleClass().add("meter-display");
+
+        VBox layout = new VBox(30, gameOverLabel,meterLabel, restartInstruction, menuInstruction,quitGame);
+        layout.setAlignment(Pos.CENTER);
+        layout.setPadding(new Insets(50));
+        if (root.getChildren().size() > 1) {
+            root.getChildren().remove(1);
+        }
 
         root.getChildren().add(layout);
 
         scene.setOnKeyPressed(keyEvent -> {
-            if(keyEvent.getCode().toString().equals("R")) {
-                restartGame();
+            switch (keyEvent.getCode()) {
+                case R -> restartGame();
+                case Q -> switchScene(createMenu(playerName));
+                case ESCAPE -> Platform.exit();
             }
         });
     }
@@ -317,9 +369,13 @@ public class UserInterface extends Application {
 
     // Switches to a new scene by clearing the existing layout and adding the new layout.
     private void switchScene(Node newScene) {
-        root.getChildren().clear();
+
+        if (root.getChildren().size() > 1) {
+            root.getChildren().remove(1);
+        }
         root.getChildren().add(newScene);
     }
+
 
     // Loads the CSS stylesheet to apply custom styling to the application.
     private void readFromCss(Scene scene) {
@@ -335,7 +391,6 @@ public class UserInterface extends Application {
             e.printStackTrace();
         }
     }
-
     public GraphicsContext getBackgroundGraphicsContext() {
         return backgroundGraphicsContext;
     }
