@@ -12,7 +12,7 @@ public class GameRenderer {
 
     public GameRenderer(GameManager gameManager) {
         this.gameManager = gameManager;
-        image = createImage(GameConstants.BACKGROUND_IMAGE);
+        image = createImage(GameConstants.GAME_BACKGROUND_IMAGE_PATH);
     }
 
     public void drawVehicles(ArrayList<Vehicle> vehicles,

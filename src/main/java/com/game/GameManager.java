@@ -120,9 +120,6 @@ public class GameManager {
     public void stopGame() {
         gameEngine.stopGame();
     }
-    public void onCollisionDetected() {
-        gameEngine.stopGameSound();
-    }
     public void setCollisionListener(GameEngine.CollisionListener listener) {
         this.collisionListener = listener;
     }

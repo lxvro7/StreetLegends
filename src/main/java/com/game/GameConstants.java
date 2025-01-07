@@ -8,21 +8,26 @@ package com.game;
  * @author bekoal01
  */
 
-// TODO: Jede Konstante mit einem Kommentar erklären (Drüber)
-
 public class GameConstants {
 
     // Vehicle properties: Maximum velocity and radius for different vehicle types
-    public static final int CAR_MAX_VELOCITY = 100;
-    public static final int CAR_RADIUS = 30;
-    public static final int TRUCK_MAX_VELOCITY = 200;
+    public static final int NPC_CAR_VELOCITY = 100;
+    public static final int PLAYER_CAR_START_VELOCITY = 300;
+
+    public static final int AMBULANCE_RADIUS = 30;
+    public static final int AUDI_RADIUS = 30;
+    public static final int BLACK_VIPER_RADIUS = 30;
+    public static final int MUSTANG_RADIUS = 30;
+    public static final int PICKUP_RADIUS = 30;
+    public static final int POLICE_RADIUS = 30;
+    public static final int TAXI_RADIUS = 30;
     public static final int TRUCK_RADIUS = 30;
-    public static final int BIKE_MAX_VELOCITY = 250;
-    public static final int BIKE_RADIUS = 30;
+    public static final int VAN_RADIUS = 30;
 
     // World properties: Boundaries and initial player position
     public static final int SCROLL_BOUNDS = 600;
-    public static final double INITIAL_PLAYER_Y = 11000;
+    public static final double INITIAL_PLAYER_Y = 1_000_000;
+    public static final double INITIAL_PLAYER_X = 790;
     public static final double INITIAL_WORLD_PART_Y = INITIAL_PLAYER_Y - 100;
     public static final double MIN_X_COORDINATE = 540;
     public static final double MAX_X_COORDINATE = 1400;
@@ -47,20 +52,21 @@ public class GameConstants {
     public static final int FRAME_DELAY = 1000 / FPS;
 
     // File paths for vehicle images
-    public static final String CAR_BLUE_IMAGE = "/images/car/blue.png";
-    public static final String CAR_GREEN_IMAGE = "/images/car/green.png";
-    public static final String CAR_BLACK_IMAGE = "/images/car/black.png";
-    public static final String TRUCK_BLUE_IMAGE = "/images/truck/blue.png";
-    public static final String TRUCK_GREEN_IMAGE = "/images/truck/green.png";
-    public static final String TRUCK_BLACK_IMAGE = "/images/truck/black.png";
-    public static final String BIKE_BLUE_IMAGE = "/images/bike/blue.png";
-    public static final String BIKE_GREEN_IMAGE = "/images/bike/green.png";
-    public static final String BIKE_BLACK_IMAGE = "/images/bike/black.png";
+    public static final String AMBULANCE_IMAGE_PATH = "/images/vehicles/ambulance.png";
+    public static final String AUDI_IMAGE_PATH = "/images/vehicles/audi.png";
+    public static final String BLACK_VIPER_IMAGE_PATH = "/images/vehicles/black_viper_png";
+    public static final String MUSTANG_IMAGE_PATH = "/images/vehicles/mustang.png";
+    public static final String POLICE_IMAGE_PATH = "/images/vehicles/police.png";
+    public static final String TAXI_IMAGE_PATH = "/images/vehicles/taxi.png";
+    public static final String TRUCK_IMAGE_PATH = "/images/vehicles/truck.png";
+    public static final String PICKUP_IMAGE_PATH = "/images/vehicles/pickup.png";
+    public static final String VAN_IMAGE_PATH = "/images/vehicles/van.png";
 
-    // File path for game background image
-    public static final String BACKGROUND_IMAGE = "/images/street/road.png";
+    // File path for game background images
+    public static final String GAME_BACKGROUND_IMAGE_PATH = "/images/background/game_background.png";
+    public static final String MENU_BACKGROUND_IMAGE_PATH = "/images/background/menu_background.jpg";
 
     // Log messages
 
-
 }
+

@@ -5,91 +5,90 @@ import java.util.Objects;
 
 public class Vehicle {
 
-    public enum playerType { PLAYER, NPC};
-    public enum type { CAR, TRUCK, BIKE}
+    // TODO Lovro: Change radius to rectangle bounding box.
+
+    public enum PlayerType { PLAYER, NPC}
+    public enum VehicleType { AMBULANCE, AUDI, BLACK_VIPER, MUSTANG, PICKUP, VAN, POLICE, TAXI, TRUCK}
     public enum color { BLACK, BLUE, GREEN }
 
-    private final type vehicleType;
-    private final color vehicleColor;
+    private final VehicleType vehicleType;
+    private final PlayerType playerType;
+
+    private double alfa = GameConstants.ROTATION_270_RAD;
     private double x, y;
-    private double alfa = 3 * (Math.PI/2);
     private double radius;
 
     // Refers to a percentage value
     private float velocity;
-    private float maxVelocity;
     private String imagePath;
     private Image vehicleImage;
 
-    public Vehicle(double x, double y, type vehicleType, color vehicleColor, playerType playerType) {
+    public Vehicle(double x, double y, VehicleType vehicleType, PlayerType playerType) {
         this.x = x;
         this.y = y;
         this.vehicleType = vehicleType;
-        this.vehicleColor = vehicleColor;
+        this.playerType = playerType;
+
+        initializeVelocity();
         initializeAttributes();
-        bindVehicleToPng();
-        if (playerType == playerType.PLAYER) {
-            velocity = maxVelocity;
-        } else {
-            velocity = 100;
-        }
 
     }
 
+    public void initializeVelocity() {
+        if(playerType == PlayerType.PLAYER) {
+            velocity = GameConstants.PLAYER_CAR_START_VELOCITY;
+        }
+        else {
+            velocity = GameConstants.NPC_CAR_VELOCITY;
+        }
+    }
+
+    // Moves an object corresponding to alfa direction
+    public void move(double diffSeconds) {
+        x += Math.cos(alfa) * velocity * diffSeconds;
+        y += Math.sin(alfa) * velocity * diffSeconds;
+    }
+
+    // Sets the radius and image path, based off the vehicle type
     public void initializeAttributes() {
         switch(vehicleType) {
-            case CAR:
-                maxVelocity = GameConstants.CAR_MAX_VELOCITY;
-                radius = GameConstants.CAR_RADIUS;
+            case AMBULANCE:
+                radius = GameConstants.AMBULANCE_RADIUS;
+                imagePath = GameConstants.AMBULANCE_IMAGE_PATH;
+                break;
+            case AUDI:
+                radius = GameConstants.AUDI_RADIUS;
+                imagePath = GameConstants.AUDI_IMAGE_PATH;
+                break;
+            case BLACK_VIPER:
+                radius = GameConstants.BLACK_VIPER_RADIUS;
+                imagePath = GameConstants.BLACK_VIPER_IMAGE_PATH;
+                break;
+            case MUSTANG:
+                radius = GameConstants.MUSTANG_RADIUS;
+                imagePath = GameConstants.MUSTANG_IMAGE_PATH;
+                break;
+            case PICKUP:
+                radius = GameConstants.PICKUP_RADIUS;
+                imagePath = GameConstants.PICKUP_IMAGE_PATH;
+                break;
+            case POLICE:
+                radius = GameConstants.POLICE_RADIUS;
+                imagePath = GameConstants.POLICE_IMAGE_PATH;
+                break;
+            case TAXI:
+                radius = GameConstants.TAXI_RADIUS;
+                imagePath = GameConstants.TAXI_IMAGE_PATH;
                 break;
             case TRUCK:
-                maxVelocity = GameConstants.TRUCK_MAX_VELOCITY;
                 radius = GameConstants.TRUCK_RADIUS;
+                imagePath = GameConstants.TRUCK_IMAGE_PATH;
                 break;
-            case BIKE:
-                maxVelocity = GameConstants.BIKE_MAX_VELOCITY;
-                radius = GameConstants.BIKE_RADIUS;
+            case VAN:
+                radius = GameConstants.VAN_RADIUS;
+                imagePath = GameConstants.VAN_IMAGE_PATH;
                 break;
         }
-    }
-    public void bindVehicleToPng() {
-        if (vehicleType == type.CAR) {
-            switch (vehicleColor) {
-                case GREEN:
-                    imagePath = GameConstants.CAR_GREEN_IMAGE;
-                    break;
-                case BLUE:
-                    imagePath = GameConstants.CAR_BLUE_IMAGE;
-                    break;
-                case BLACK:
-                    imagePath = GameConstants.CAR_BLACK_IMAGE;
-            }
-        }
-        if (vehicleType == type.TRUCK) {
-            switch (vehicleColor) {
-                case GREEN:
-                    imagePath = GameConstants.TRUCK_GREEN_IMAGE;
-                    break;
-                case BLUE:
-                    imagePath = GameConstants.TRUCK_BLUE_IMAGE;
-                    break;
-                case BLACK:
-                    imagePath = GameConstants.TRUCK_BLACK_IMAGE;
-            }
-        }
-        if (vehicleType == type.BIKE) {
-            switch (vehicleColor) {
-                case GREEN:
-                    imagePath = GameConstants.BIKE_GREEN_IMAGE;
-                    break;
-                case BLUE:
-                    imagePath = GameConstants.BIKE_BLUE_IMAGE;
-                    break;
-                case BLACK:
-                    imagePath = GameConstants.BIKE_BLACK_IMAGE;
-            }
-        }
-        // Check if image path exists
         checkImagePath(imagePath);
     }
 
@@ -102,30 +101,8 @@ public class Vehicle {
         }
     }
 
-    // Moves an object corresponding to alfa direction
-    public void move(double diffSeconds) {
-        x += Math.cos(alfa) * velocity * diffSeconds;
-        y += Math.sin(alfa) * velocity * diffSeconds;
-    }
-
-    public String getImagePath() {
-        return imagePath;
-    }
-
     public Image getVehicleImage() {
         return vehicleImage;
-    }
-
-    public float getMaxVelocity() {
-        return maxVelocity;
-    }
-
-    public float getVelocity() {
-        return velocity;
-    }
-
-    public void setVelocity(float velocity) {
-        this.velocity = velocity;
     }
 
     public double getX() {
@@ -136,27 +113,12 @@ public class Vehicle {
         return y;
     }
 
-    public void setX(double x) {
-        this.x=x;
-    }
-
     public double getRadius() {
         return radius;
     }
 
-    public double getAlfa() {
-        return alfa;
-    }
-
     public void setAlfa(double alfa) {
         this.alfa = alfa;
-    }
-    public double getWidth() {
-        return radius * 2;  // Breite entspricht dem Durchmesser des Fahrzeugs
-    }
-
-    public double getHeight() {
-        return radius * 2;  // Höhe entspricht dem Durchmesser des Fahrzeugs
     }
 
 }

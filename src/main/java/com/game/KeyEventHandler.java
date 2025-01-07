@@ -16,6 +16,6 @@ public class KeyEventHandler {
     }
 
     public void onEscapePressed() {
-        // TODO: Pause
+        // TODO: Pause the Game
     }
 }

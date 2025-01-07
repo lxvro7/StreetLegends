@@ -2,13 +2,12 @@ package com.game;
 
 import java.util.ArrayList;
 import java.util.Random;
-import static com.game.Vehicle.type;
-import static com.game.Vehicle.color;
-import static com.game.Vehicle.playerType;
+import static com.game.Vehicle.VehicleType;
+import static com.game.Vehicle.PlayerType;
 
 /**
  * Represents the Game World, including the spawning of NPCs, vehicle movement,
- * and adjustments of the world, relative of the player's position
+ * and adjustments of the world, relative of the player's position.
  *
  * @author lxvro7
  * @author bekoal01
@@ -112,10 +111,9 @@ public class GameWorld {
             double randomXValue = LANES[random.nextInt(LANES.length)];
             double y = spawnTriggerY - SPAWN_OFFSET + random.nextDouble() * SPAWN_RANGE - SPAWN_OFFSET;
             // Create random type and color
-            type vehicleType   = type.values()[random.nextInt(type.values().length)];
-            color vehicleColor = color.values()[random.nextInt(color.values().length)];
+            VehicleType vehicleType  = VehicleType.values()[random.nextInt(VehicleType.values().length)];
 
-            Vehicle newVehicle = new Vehicle(randomXValue, y, vehicleType, vehicleColor, playerType.NPC);
+            Vehicle newVehicle = new Vehicle(randomXValue, y, vehicleType, PlayerType.NPC);
             if(!hasCollisionWithExistingNpcs(existingNpcs, newVehicle)) {
                 return new NPC(newVehicle);
             }

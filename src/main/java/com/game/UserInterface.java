@@ -11,7 +11,6 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
@@ -24,9 +23,7 @@ import javafx.util.Duration;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
 
-
-
-public class GameUI extends Application {
+public class UserInterface extends Application {
     private Scene scene;
     private StackPane root;
     private String difficulty = "Easy";
@@ -38,15 +35,17 @@ public class GameUI extends Application {
     private GraphicsContext vehicleGraphicsContext;
     private Stage primaryStage;
     private MediaPlayer menuMediaPlayer;
-    private MediaPlayer gameMediaPlayer;
-    public static void main(String[] args) {
-        launch(args);
-    }
-    public GameUI() {
+    private final MediaPlayer gameMediaPlayer;
+
+    public UserInterface() {
         Media gameMedia = new Media(getClass().getResource("/audio/car-engine-loop.wav").toExternalForm());
         gameMediaPlayer = new MediaPlayer(gameMedia);
         gameMediaPlayer.setCycleCount(MediaPlayer.INDEFINITE);
         gameMediaPlayer.setMute(true);
+    }
+
+    public static void main(String[] args) {
+        launch(args);
     }
 
     @Override
@@ -71,7 +70,7 @@ public class GameUI extends Application {
     public void background() {
         double screenWidth = Screen.getPrimary().getBounds().getWidth();
         double screenHeight = Screen.getPrimary().getBounds().getHeight();
-        String imagePath = Objects.requireNonNull(getClass().getResource("/images/banner.jpg")).toExternalForm();
+        String imagePath = Objects.requireNonNull(getClass().getResource(GameConstants.MENU_BACKGROUND_IMAGE_PATH).toExternalForm());
         BackgroundImage backgroundImage = new BackgroundImage(
                 new Image(imagePath, screenWidth, screenHeight, false, true),
                 BackgroundRepeat.NO_REPEAT,
@@ -293,7 +292,6 @@ public class GameUI extends Application {
         return difficultyBox;
     }
 
-
     public Node createGame(String playerName) {
         stopMenuSound();
         startGameSound();
@@ -334,6 +332,7 @@ public class GameUI extends Application {
 
         return gameLayout;
     }
+
     private Node createSoundSettingsMenu() {
         VBox soundSettingsLayout = new VBox(20);
         soundSettingsLayout.setAlignment(Pos.CENTER);
@@ -367,7 +366,9 @@ public class GameUI extends Application {
 
         return soundSettingsLayout;
     }
-    public static void showGameOverWindow(String playerName, GameUI gameUI, Stage primaryStage) {
+
+    // TODO Alton: Only 1 Stage
+    public static void showGameOverWindow(String playerName, UserInterface userInterface, Stage primaryStage) {
 
         Stage gameOverStage = new Stage();
         gameOverStage.setTitle("Game Over");
@@ -388,20 +389,20 @@ public class GameUI extends Application {
 
         restartButton.setOnAction(e -> {
             gameOverStage.close();
-            gameUI.restartGame();
+            userInterface.restartGame();
             primaryStage.requestFocus();
 
         });
         backToMenuButton.setOnAction(e -> {
             gameOverStage.close();
-            gameUI.stopGameSound();
-            gameUI.startMenuSound();
-            gameUI.switchScene(gameUI.createMenu(gameUI.playerName));
+            userInterface.stopGameSound();
+            userInterface.startMenuSound();
+            userInterface.switchScene(userInterface.createMenu(userInterface.playerName));
             primaryStage.requestFocus();
         });
 
         exitButton.setOnAction(e ->{
-            gameUI.stopGameSound();
+            userInterface.stopGameSound();
             Platform.exit();
         });
 
@@ -410,17 +411,20 @@ public class GameUI extends Application {
         layout.getStyleClass().add("game-over-box");
 
         Scene scene = new Scene(layout, 400, 300);
-        gameUI.readFromCss(scene);
+        userInterface.readFromCss(scene);
         gameOverStage.setScene(scene);
         gameOverStage.requestFocus();
         gameOverStage.show();
     }
 
     private void restartGame() {
-        GameEngine gameEngine = new GameEngine(playerName, selectedColor, difficulty, this, windowHeight, windowWidth);
         switchScene(createGame(playerName));
     }
 
+    // TODO: Create on the upper left a small output, that showcases the players score over the game
+    private void createScoreboardLayoutGame() {
+
+    }
 
     // Switches to a new scene by clearing the existing layout and adding the new layout.
     private void switchScene(Node newScene) {
@@ -438,7 +442,6 @@ public class GameUI extends Application {
         );
         root.setBackground(new Background(backgroundImage));
     }
-
 
     // Loads the CSS stylesheet to apply custom styling to the application.
     private void readFromCss(Scene scene) {
@@ -462,6 +465,7 @@ public class GameUI extends Application {
     public GraphicsContext getVehicleGraphicsContext() {
         return vehicleGraphicsContext;
     }
+
     public Stage getPrimaryStage() {
         return primaryStage;
     }

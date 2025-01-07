@@ -5,7 +5,6 @@ import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.input.KeyCode;
 
 import java.util.ArrayList;
-import java.util.Random;
 import java.util.function.Consumer;
 
 public class GameEngine {
@@ -17,15 +16,15 @@ public class GameEngine {
     private final KeyEventHandler keyEventHandler;
     private double canvasWidth;
     private double canvasHeight;
-    private final GameUI gameUI;
+    private final UserInterface userInterface;
 
-    public GameEngine(String playerName, Vehicle.color selectedColor, String difficulty, GameUI gameUI,
+    public GameEngine(String playerName, Vehicle.color selectedColor, String difficulty, UserInterface userInterface,
                       double canvasHeight, double canvasWidth) {
-        this.gameUI=gameUI;
+        this.userInterface = userInterface;
         this.player = createPlayerVehicle(playerName, selectedColor, difficulty);
         this.gameManager = new GameManager(player, difficulty, canvasHeight, canvasWidth,this);
         this.keyEventHandler = new KeyEventHandler(player);
-        gameManager.setCollisionListener(() -> stopGameSound());
+        gameManager.setCollisionListener(this::stopGameSound);
     }
 
     public void setUpdateCallback(Consumer<ArrayList<Vehicle>> callback) {
@@ -48,13 +47,12 @@ public class GameEngine {
                     }
                     System.out.println(player.getPlayerVehicle().getY());
                     if (gameManager.adjustWorld()) {
-                        gameManager.drawBackground(gameUI.getBackgroundGraphicsContext(),
+                        gameManager.drawBackground(userInterface.getBackgroundGraphicsContext(),
                                 canvasWidth, canvasHeight);
                     }
                     if(gameManager.isNewSpawnNeeded()) {
-                        System.out.println("CHANGE");
                         gameManager.addNewNpcs();
-                        gameManager.drawVehicles(gameManager.getAllVehicles(), gameUI.getVehicleGraphicsContext(),
+                        gameManager.drawVehicles(gameManager.getAllVehicles(), userInterface.getVehicleGraphicsContext(),
                                 canvasWidth, canvasHeight);
 
                     }
@@ -101,23 +99,17 @@ public class GameEngine {
     public void stopGame() {
         running = false;
         Platform.runLater(() -> {
-            GameUI.showGameOverWindow(player.getPlayerName(), gameUI, gameUI.getPrimaryStage());
+            UserInterface.showGameOverWindow(player.getPlayerName(), userInterface, userInterface.getPrimaryStage());
         });
     }
 
     // Creates a player vehicle for the specified color and difficulty
     private Player createPlayerVehicle(String playerName, Vehicle.color selectedColor, String difficulty) {
-        Vehicle.type vehicleType = switch (difficulty) {
-            case "Easy"   -> Vehicle.type.BIKE;
-            case "Medium" -> Vehicle.type.CAR;
-            case "Hard"   -> Vehicle.type.TRUCK;
-            default -> null;
-        };
-        Random random = new Random();
+        Vehicle.VehicleType vehicleType = Vehicle.VehicleType.MUSTANG;
         // Don't change these values
-        double x = random.nextDouble(1400 - 540) + 540;
+        double x = GameConstants.INITIAL_PLAYER_X;
         double y = GameConstants.INITIAL_PLAYER_Y;
-        player = new Player(playerName, new Vehicle(x, y, vehicleType, selectedColor, Vehicle.playerType.PLAYER));
+        player = new Player(playerName, new Vehicle(x, y, vehicleType, Vehicle.PlayerType.PLAYER));
         return player;
     }
 
@@ -137,9 +129,10 @@ public class GameEngine {
     public void setCanvasHeight(double canvasHeight) {
         this.canvasHeight = canvasHeight;
     }
+
     public void stopGameSound() {
-        if (gameUI != null) {
-            gameUI.stopGameSound();
+        if (userInterface != null) {
+            userInterface.stopGameSound();
         }
     }
 }

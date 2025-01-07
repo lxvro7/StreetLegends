@@ -15,6 +15,7 @@ public class Player {
         this.playerName = playerName;
         this.playerVehicle = playerVehicle;
     }
+
     public void driveLeft() {
         playerVehicle.setAlfa(5 * GameConstants.TURN_ANGLE);
         turningLeft = true;
@@ -24,6 +25,7 @@ public class Player {
         playerVehicle.setAlfa(7 * GameConstants.TURN_ANGLE);
         turningRight = true;
     }
+
     public boolean isTurningRight() {
         return turningRight;
     }

@@ -5,15 +5,11 @@ import java.util.ArrayList;
 
 public class GameLogic {
     private final GameManager gameManager;
-    private GameEngine.CollisionListener collisionListener;
-
 
     public GameLogic(GameManager gameManager) {
         this.gameManager = gameManager;
     }
-    public void setCollisionListener(GameEngine.CollisionListener listener) {
-        this.collisionListener = listener;
-    }
+
     public ArrayList<Vehicle> getCollision() {
         ArrayList<Vehicle> collisions = new ArrayList<>();
         Player player = gameManager.getPlayer();
@@ -39,10 +35,11 @@ public class GameLogic {
         // If the collision list is not empty, stop the game
         if(!collisions.isEmpty()) {
             gameManager.stopGame();
-            System.out.println("Game terminated");
-            if (collisionListener != null) {
-                collisionListener.onCollisionDetected();
-            }
         }
     }
+
+    // TODO: Calculate score in game, based off the players traveled distance
+
+
+    // TODO: Velocity should get bigger, if the player distance is f.e a specified point
 }
