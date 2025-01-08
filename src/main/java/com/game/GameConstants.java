@@ -14,15 +14,15 @@ public class GameConstants {
     public static final int NPC_CAR_VELOCITY = 100;
     public static final int PLAYER_CAR_START_VELOCITY = 300;
 
-    public static final int AMBULANCE_RADIUS = 30;
-    public static final int AUDI_RADIUS = 30;
-    public static final int BLACK_VIPER_RADIUS = 30;
-    public static final int MUSTANG_RADIUS = 30;
-    public static final int PICKUP_RADIUS = 30;
-    public static final int POLICE_RADIUS = 30;
-    public static final int TAXI_RADIUS = 30;
-    public static final int TRUCK_RADIUS = 30;
-    public static final int VAN_RADIUS = 30;
+    public static final int AMBULANCE_RADIUS = 100;
+    public static final int AUDI_RADIUS = 60;
+    public static final int BLACK_VIPER_RADIUS = 60;
+    public static final int MUSTANG_RADIUS = 60;
+    public static final int PICKUP_RADIUS = 60;
+    public static final int POLICE_RADIUS = 60;
+    public static final int TAXI_RADIUS = 60;
+    public static final int TRUCK_RADIUS = 150;
+    public static final int VAN_RADIUS = 60;
 
     // World properties: Boundaries and initial player position
     public static final int SCROLL_BOUNDS = 600;
@@ -41,7 +41,7 @@ public class GameConstants {
     public static final int EASY_DIFFICULTY_NPC_AMOUNT = 10;
     public static final int MIDDLE_DIFFICULTY_NPC_AMOUNT = 14;
     public static final int HARD_DIFFICULTY_NPC_AMOUNT = 20;
-    public static final double SPAWN_OFFSET = 200;
+    public static final double SPAWN_OFFSET = 300;
     public static final double SPAWN_RANGE = 700;
     public static final double NPC_COLLISION_PADDING = 100;
     public static final int MAX_NPC_QUANTITY = 5;
@@ -54,7 +54,7 @@ public class GameConstants {
     // File paths for vehicle images
     public static final String AMBULANCE_IMAGE_PATH = "/images/vehicles/ambulance.png";
     public static final String AUDI_IMAGE_PATH = "/images/vehicles/audi.png";
-    public static final String BLACK_VIPER_IMAGE_PATH = "/images/vehicles/black_viper_png";
+    public static final String BLACK_VIPER_IMAGE_PATH = "/images/vehicles/black_viper.png";
     public static final String MUSTANG_IMAGE_PATH = "/images/vehicles/mustang.png";
     public static final String POLICE_IMAGE_PATH = "/images/vehicles/police.png";
     public static final String TAXI_IMAGE_PATH = "/images/vehicles/taxi.png";

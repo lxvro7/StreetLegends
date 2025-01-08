@@ -41,24 +41,30 @@ public class GameEngine {
                 long currentTime = System.nanoTime();
                 double diffSeconds = (currentTime - lastTime) / 1_000_000_000.0;
                 lastTime = currentTime;
+
                 gameManager.updateWorld(diffSeconds);
                 if(gameManager.collisionDetected()) {
                     stopGame();
                 }
+
                 Platform.runLater(() -> {
                     if (updateCallback != null) {
                         updateCallback.accept(gameManager.getAllVehicles());
                     }
-                    System.out.println(player.getPlayerVehicle().getY());
+
                     if (gameManager.adjustWorld()) {
                         gameManager.drawBackground(userInterface.getBackgroundGraphicsContext(),
                                 canvasWidth, canvasHeight);
                     }
-                    if(gameManager.isNewSpawnNeeded()) {
-                        gameManager.addNewNpcs();
-                        gameManager.drawVehicles(gameManager.getAllVehicles(), userInterface.getVehicleGraphicsContext(),
-                                canvasWidth, canvasHeight);
 
+                    if(gameManager.isNewSpawnNeeded()) {
+                        Thread spawnThread = new Thread(() -> {
+                            gameManager.addNewNpcs();
+                            Platform.runLater(() -> gameManager.drawVehicles(gameManager.getAllVehicles(), userInterface.getVehicleGraphicsContext(),
+                                    canvasWidth, canvasHeight));
+                        });
+                        spawnThread.setDaemon(true);
+                        spawnThread.start();
                     }
                 });
                 // 60 FPS
@@ -71,6 +77,7 @@ public class GameEngine {
         });
         // Runs in background
         gameLoopThread.setDaemon(true);
+        gameLoopThread.setPriority(Thread.MAX_PRIORITY);
         gameLoopThread.start();
     }
 
@@ -137,8 +144,9 @@ public class GameEngine {
     public void setCanvasHeight(double canvasHeight) {
         this.canvasHeight = canvasHeight;
     }
+
     public int getDistanceTraveled() {
-        return gameManager.getDistanceTraveled(); // gameHandler ist die Instanz des GameHandler
+        return gameManager.getDistanceTraveled();
     }
 
 }

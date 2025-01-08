@@ -25,8 +25,7 @@ public class GameWorld {
         this.gameManager = gameManager;
         this.player = gameManager.getPlayer();
         this.npcs = new ArrayList<>();
-        addNewNpcs();
-        spawnTriggerY = GameConstants.INITIAL_PLAYER_Y - gameManager.getCanvasHeight()/3;
+        spawnTriggerY = GameConstants.INITIAL_PLAYER_Y - gameManager.getCanvasHeight() - gameManager.getCanvasHeight()/3;
     }
 
     public void update(double diffSeconds) {
@@ -50,10 +49,8 @@ public class GameWorld {
 
     public boolean adjustWorld() {
         boolean worldHasChanged = false;
-
         if (player.getPlayerVehicle().getY() < worldPartY + GameConstants.SCROLL_BOUNDS) {
             worldPartY = player.getPlayerVehicle().getY() - GameConstants.SCROLL_BOUNDS;
-
             if (worldPartY <= 0) {
                 worldPartY = 0;
             }
@@ -111,9 +108,10 @@ public class GameWorld {
         while(attempts < MAX_ATTEMPTS) {
             // Create random coordinates
             double randomXValue = LANES[random.nextInt(LANES.length)];
-            double y = spawnTriggerY - SPAWN_OFFSET + random.nextDouble() * SPAWN_RANGE - SPAWN_OFFSET;
+            double y = spawnTriggerY + random.nextDouble() * SPAWN_RANGE - SPAWN_OFFSET;
             // Create random type and color
             VehicleType vehicleType  = VehicleType.values()[random.nextInt(VehicleType.values().length)];
+            System.out.println("Vehicle " + vehicleType.toString() + " Spawned at coordinates: " + y + randomXValue);
 
             Vehicle newVehicle = new Vehicle(randomXValue, y, vehicleType, PlayerType.NPC);
             if(!hasCollisionWithExistingNpcs(existingNpcs, newVehicle)) {

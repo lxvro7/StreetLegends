@@ -58,7 +58,8 @@ public class UserInterface extends Application {
     public void background() {
         double screenWidth = Screen.getPrimary().getBounds().getWidth();
         double screenHeight = Screen.getPrimary().getBounds().getHeight();
-        String imagePath = Objects.requireNonNull(getClass().getResource(GameConstants.MENU_BACKGROUND_IMAGE_PATH).toExternalForm());
+        String imagePath = Objects.requireNonNull(Objects.requireNonNull(getClass().
+                getResource(GameConstants.MENU_BACKGROUND_IMAGE_PATH)).toExternalForm());
 
         BackgroundImage backgroundImage = new BackgroundImage(
                 new Image(imagePath, screenWidth, screenHeight, false, true),
@@ -267,7 +268,6 @@ public class UserInterface extends Application {
             public void handle(long now) {
                 int meters = gameEngine.getDistanceTraveled();
                 meterLabel.setText("Meter: " + meters);
-                System.out.println("Aktuelle Meter: " + meters);
 
             }
         };
@@ -360,11 +360,6 @@ public class UserInterface extends Application {
 
     private void restartGame() {
         switchScene(createGame(playerName));
-    }
-
-    // TODO: Create on the upper left a small output, that showcases the players score over the game
-    private void createScoreboardLayoutGame() {
-
     }
 
     // Switches to a new scene by clearing the existing layout and adding the new layout.

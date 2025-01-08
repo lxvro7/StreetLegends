@@ -98,9 +98,11 @@ public class GameManager {
     public double getCanvasHeight() {
         return canvasHeight;
     }
+
     public int getDistanceTraveled() {
         return gameLogic.getDistanceTraveled();
     }
+
     public GameLogic getGameLogic() {
         return gameLogic;
     }

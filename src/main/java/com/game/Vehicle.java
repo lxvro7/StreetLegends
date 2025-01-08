@@ -49,6 +49,10 @@ public class Vehicle {
         y += Math.sin(alfa) * velocity * diffSeconds;
     }
 
+    public VehicleType getVehicleType() {
+        return vehicleType;
+    }
+
     // Sets the radius and image path, based off the vehicle type
     public void initializeAttributes() {
         switch(vehicleType) {
