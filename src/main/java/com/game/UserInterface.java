@@ -48,23 +48,24 @@ public class UserInterface extends Application {
         background();
         Node entryLayout = createEntry();
         root.getChildren().add(entryLayout);
-        fadeIn(entryLayout);
+        scene = new Scene(root, Screen.getPrimary().getBounds().getWidth(), Screen.getPrimary().getBounds().getHeight());
         readFromCss(scene);
         primaryStage.setTitle("Street Legends");
         primaryStage.setScene(scene);
         primaryStage.setMaximized(true);
         primaryStage.show();
+
         windowHeight = primaryStage.getHeight();
         windowWidth = primaryStage.getWidth();
         System.out.println(windowWidth);
     }
 
+
     // Sets the background image and overlay for the application, adjusting it to the screen size.
     public void background() {
         double screenWidth = Screen.getPrimary().getBounds().getWidth();
         double screenHeight = Screen.getPrimary().getBounds().getHeight();
-        String imagePath = Objects.requireNonNull(Objects.requireNonNull(getClass().
-                getResource(GameConstants.MENU_BACKGROUND_IMAGE_PATH)).toExternalForm());
+        String imagePath = Objects.requireNonNull(getClass().getResource(GameConstants.MENU_BACKGROUND_IMAGE_PATH)).toExternalForm();
 
         BackgroundImage backgroundImage = new BackgroundImage(
                 new Image(imagePath, screenWidth, screenHeight, false, true),
@@ -73,13 +74,8 @@ public class UserInterface extends Application {
                 BackgroundPosition.DEFAULT,
                 BackgroundSize.DEFAULT
         );
-        Rectangle overlay = new Rectangle(screenWidth, screenHeight, Color.BLACK);
-        overlay.setOpacity(0.4);
         root.setBackground(new Background(backgroundImage));
-        root.getChildren().add(overlay);
-        scene = new Scene(root, screenWidth, screenHeight);
     }
-
 
     // Creates the layout for the player's name entry screen, including labels, text fields, and a button.
     public Node createEntry() {
@@ -125,6 +121,7 @@ public class UserInterface extends Application {
 
     // Creates the main menu layout with buttons for playing the game, changing difficulty, getting help, and exiting.
     public BorderPane createMenu(String playerName) {
+        background();
         Label title = new Label("Street Legends");
         title.getStyleClass().add("title");
 
@@ -236,9 +233,6 @@ public class UserInterface extends Application {
                 break;
         }
     }
-
-    // TODO Alton: Add a Counter 3, 2, 1, that counts down, before the Game starts
-
     public Node createGame(String playerName) {
         soundManager.stopMenuSound();
         soundManager.startGameSound();
@@ -375,6 +369,9 @@ public class UserInterface extends Application {
     }
 
     public void showGameOverWindow(int finalDistance) {
+        Rectangle overlay = new Rectangle(windowWidth, windowHeight, Color.GRAY);
+        overlay.setOpacity(0.7);
+        root.getChildren().add(overlay);
 
         Label gameOverLabel = new Label("GAME OVER, " + playerName + "!");
         gameOverLabel.getStyleClass().add("game-over-label");
@@ -385,21 +382,19 @@ public class UserInterface extends Application {
         Label menuInstruction = new Label("Press 'Q' to go back to Menu");
         menuInstruction.getStyleClass().add("game-over-instruction");
 
-        Label quitGame=new Label("Press ESC to Quit the Game");
+        Label quitGame = new Label("Press ESC to Quit the Game");
         quitGame.getStyleClass().add("game-over-instruction");
 
         Label meterLabel = new Label("Klasse, Sie sind " + finalDistance + " Meter gefahren!");
         meterLabel.getStyleClass().add("meter-display");
 
-        VBox layout = new VBox(30, gameOverLabel,meterLabel, restartInstruction, menuInstruction,quitGame);
+        VBox layout = new VBox(30, gameOverLabel, meterLabel, restartInstruction, menuInstruction, quitGame);
         layout.setAlignment(Pos.CENTER);
         layout.setPadding(new Insets(50));
-        if (root.getChildren().size() > 1) {
-            root.getChildren().remove(1);
-        }
 
         root.getChildren().add(layout);
 
+        // Tasteneingaben für Aktionen
         scene.setOnKeyPressed(keyEvent -> {
             switch (keyEvent.getCode()) {
                 case R -> restartGame();
@@ -409,18 +404,17 @@ public class UserInterface extends Application {
         });
     }
 
+
     private void restartGame() {
         switchScene(createGame(playerName));
     }
 
     // Switches to a new scene by clearing the existing layout and adding the new layout.
     private void switchScene(Node newScene) {
-
-        if (root.getChildren().size() > 1) {
-            root.getChildren().remove(1);
-        }
+        root.getChildren().clear();
         root.getChildren().add(newScene);
     }
+
 
 
     // Loads the CSS stylesheet to apply custom styling to the application.
