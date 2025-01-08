@@ -178,5 +178,11 @@ public class Vehicle {
     public double getRight() {
         return right;
     }
+    public float getVelocity() {
+        return velocity;
+    }
+    public void setVelocity(float velocity) {
+        this.velocity = velocity;
+    }
 
 }

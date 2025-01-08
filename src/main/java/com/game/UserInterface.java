@@ -385,7 +385,7 @@ public class UserInterface extends Application {
         Label quitGame = new Label("Press ESC to Quit the Game");
         quitGame.getStyleClass().add("game-over-instruction");
 
-        Label meterLabel = new Label("Klasse, Sie sind " + finalDistance + " Meter gefahren!");
+        Label meterLabel = new Label("Congrats,you have reached " + finalDistance + " Meter!");
         meterLabel.getStyleClass().add("meter-display");
 
         VBox layout = new VBox(30, gameOverLabel, meterLabel, restartInstruction, menuInstruction, quitGame);
@@ -394,7 +394,6 @@ public class UserInterface extends Application {
 
         root.getChildren().add(layout);
 
-        // Tasteneingaben für Aktionen
         scene.setOnKeyPressed(keyEvent -> {
             switch (keyEvent.getCode()) {
                 case R -> restartGame();

@@ -13,6 +13,12 @@ public class GameConstants {
     // Vehicle properties: Maximum velocity and radius for different vehicle types
     public static final int NPC_CAR_VELOCITY = 200;
     public static final int PLAYER_CAR_START_VELOCITY = 700;
+
+    // Game mechanics constants:
+    public static final float PLAYER_CAR_MAX_VELOCITY = 1750.0f;
+    public static final float EASY_DIFFICULTY_SPEED_INCREASE = 3.0f;
+    public static final float MEDIUM_DIFFICULTY_SPEED_INCREASE = 15.0f;
+    public static final float HARD_DIFFICULTY_SPEED_INCREASE = 25.0f;
     public static final int AMBULANCE_HEIGHT = 200;
     public static final int AMBULANCE_WIDTH = 90;
     public static final int AUDI_HEIGHT = 200;

@@ -168,12 +168,12 @@
     -fx-font-size: 55px;
     -fx-text-fill: #ff4b2b;
     -fx-background-color: rgba(0, 0, 0, 0.5);
-    -fx-padding: 5px;
+    -fx-padding: 15px;
     -fx-border-radius: 5px;
     -fx-background-radius: 5px;
 }
 .meter-display {
-    -fx-font-size: 24px;
+    -fx-font-size: 36px;
     -fx-font-weight: bold;
     -fx-text-fill: linear-gradient(from 0% 0% to 100% 100%, #ff7e5f, #feb47b);
     -fx-background-color: rgba(0, 0, 0, 0.8);
