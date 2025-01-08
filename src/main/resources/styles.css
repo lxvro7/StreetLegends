@@ -186,6 +186,26 @@
     -fx-alignment: center;
     -fx-text-alignment: center;
 }
+/*------------------------------------*/
+/* Countdown-Label Styling */
+.countdown-label {
+    -fx-font-size: 150px;
+    -fx-text-fill: yellow;
+    -fx-font-weight: bold;
+    -fx-alignment: center;
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.75), 10, 0.5, 0, 0);
+}
+
+/* GO! Label Styling */
+.go-label {
+    -fx-font-size: 180px;
+    -fx-text-fill: green;
+    -fx-font-weight: bold;
+    -fx-alignment: center;
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.9), 15, 0.8, 0, 0);
+}
+
+
 
 
 

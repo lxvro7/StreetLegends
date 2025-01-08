@@ -1,5 +1,7 @@
 package com.game;
 import javafx.animation.AnimationTimer;
+import javafx.animation.KeyFrame;
+import javafx.animation.Timeline;
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.geometry.Insets;
@@ -19,6 +21,8 @@ import javafx.stage.Screen;
 import javafx.stage.Stage;
 import java.net.URL;
 import java.util.Objects;
+import java.util.concurrent.atomic.AtomicReference;
+
 import javafx.animation.FadeTransition;
 import javafx.util.Duration;
 
@@ -265,7 +269,8 @@ public class UserInterface extends Application {
         gameEngine.renderBackground(backgroundGraphicsContext);
         gameEngine.setUpdateCallback(vehicles -> gameEngine.renderVehicles(vehicleGraphicsContext, vehicles));
 
-        gameEngine.startGameLoop();
+        root.getChildren().clear();
+        startCountdown(() -> gameEngine.startGameLoop());
 
         AnimationTimer meterUpdater = new AnimationTimer() {
             @Override
@@ -276,7 +281,6 @@ public class UserInterface extends Application {
             }
         };
         meterUpdater.start();
-
 
         // Check if any key is pressed
         scene.setOnKeyPressed(keyEvent -> {
@@ -325,6 +329,49 @@ public class UserInterface extends Application {
         soundSettingsLayout.getChildren().addAll(soundSettingsTitle, menuSoundToggleButton, gameSoundToggleButton, backButton);
 
         return soundSettingsLayout;
+    }
+
+    private void startCountdown(Runnable onCountdownFinished) {
+        Label countdownLabel = new Label();
+        countdownLabel.getStyleClass().add("countdown-label");
+        Platform.runLater(() -> root.getChildren().add(countdownLabel));
+        StackPane.setAlignment(countdownLabel, Pos.CENTER);
+
+        int[] countdownValues = {3, 2, 1};
+        Timeline countdownTimeline = new Timeline();
+
+        for (int i = 0; i < countdownValues.length; i++) {
+            int count = countdownValues[i];
+            countdownTimeline.getKeyFrames().add(new KeyFrame(Duration.seconds(i), event -> {
+                countdownLabel.setText(String.valueOf(count));
+                countdownLabel.setScaleX(1.0);
+                countdownLabel.setScaleY(1.0);
+                countdownLabel.setOpacity(1.0);
+
+                FadeTransition fade = new FadeTransition(Duration.seconds(1), countdownLabel);
+                fade.setFromValue(1.0);
+                fade.setToValue(0.0);
+                fade.play();
+            }));
+        }
+
+        countdownTimeline.getKeyFrames().add(new KeyFrame(Duration.seconds(countdownValues.length), event -> {
+            countdownLabel.setText("GO!");
+            countdownLabel.getStyleClass().remove("countdown-label");
+            countdownLabel.getStyleClass().add("go-label");
+
+            FadeTransition fade = new FadeTransition(Duration.seconds(1), countdownLabel);
+            fade.setFromValue(1.0);
+            fade.setToValue(0.0);
+            fade.play();
+        }));
+
+        countdownTimeline.getKeyFrames().add(new KeyFrame(Duration.seconds(countdownValues.length + 1), event -> {
+            root.getChildren().remove(countdownLabel);
+            onCountdownFinished.run();
+        }));
+
+        countdownTimeline.play();
     }
 
     public void showGameOverWindow(int finalDistance) {
