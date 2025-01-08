@@ -104,6 +104,7 @@ public class GameEngine {
         }
         if(!player.isTurningLeft() && !player.isTurningRight()) {
             player.getPlayerVehicle().setAlfa(GameConstants.ROTATION_270_RAD);
+            player.getPlayerVehicle().setVehicleImage(player.getDefaultImage());
         }
     }
 

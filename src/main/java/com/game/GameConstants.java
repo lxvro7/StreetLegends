@@ -11,8 +11,8 @@ package com.game;
 public class GameConstants {
 
     // Vehicle properties: Maximum velocity and radius for different vehicle types
-    public static final int NPC_CAR_VELOCITY = 100;
-    public static final int PLAYER_CAR_START_VELOCITY = 300;
+    public static final int NPC_CAR_VELOCITY = 200;
+    public static final int PLAYER_CAR_START_VELOCITY = 700;
     public static final int AMBULANCE_HEIGHT = 200;
     public static final int AMBULANCE_WIDTH = 90;
     public static final int AUDI_HEIGHT = 200;
@@ -32,16 +32,6 @@ public class GameConstants {
     public static final int VAN_HEIGHT = 200;
     public static final int VAN_WIDTH = 90;
 
-    public static final int AMBULANCE_RADIUS = 100;
-    public static final int AUDI_RADIUS = 60;
-    public static final int BLACK_VIPER_RADIUS = 60;
-    public static final int MUSTANG_RADIUS = 60;
-    public static final int PICKUP_RADIUS = 60;
-    public static final int POLICE_RADIUS = 60;
-    public static final int TAXI_RADIUS = 60;
-    public static final int TRUCK_RADIUS = 150;
-    public static final int VAN_RADIUS = 60;
-
     // World properties: Boundaries and initial player position
     public static final int SCROLL_BOUNDS = 600;
     public static final double INITIAL_PLAYER_Y = 1_000_000;
@@ -56,9 +46,9 @@ public class GameConstants {
     // Game mechanics constants: NPC spawning limits and turning angles
     public static final int MAX_NPC_ATTEMPTS = 100;
     public static final int MIN_NPC_QUANTITY = 2;
-    public static final int EASY_DIFFICULTY_NPC_AMOUNT = 10;
-    public static final int MIDDLE_DIFFICULTY_NPC_AMOUNT = 14;
-    public static final int HARD_DIFFICULTY_NPC_AMOUNT = 20;
+    public static final int EASY_DIFFICULTY_NPC_AMOUNT = 3;
+    public static final int MIDDLE_DIFFICULTY_NPC_AMOUNT = 4;
+    public static final int HARD_DIFFICULTY_NPC_AMOUNT = 5;
     public static final double SPAWN_OFFSET = 300;
     public static final double SPAWN_RANGE = 1000;
     public static final double NPC_COLLISION_PADDING = 100;
@@ -79,6 +69,8 @@ public class GameConstants {
     public static final String TRUCK_IMAGE_PATH = "/images/vehicles/truck.png";
     public static final String PICKUP_IMAGE_PATH = "/images/vehicles/pickup.png";
     public static final String VAN_IMAGE_PATH = "/images/vehicles/van.png";
+    public static final String MUSTANG_RIGHT_IMAGE_PATH = "/images/vehicles/mustang_right.png";
+    public static final String MUSTANG_LEFT_IMAGE_PATH = "/images/vehicles/mustang_left.png";
 
     // File path for game background images
     public static final String GAME_BACKGROUND_IMAGE_PATH = "/images/background/game_background.jpg";
@@ -86,7 +78,7 @@ public class GameConstants {
 
     // File path for audios
     public static final String MENU_AUDIO = "/audio/menu.mp3";
-    public static final String GAME_AUDIO = "/audio/car-engine-loop.wav";
+    public static final String GAME_AUDIO = "/audio/menu.mp3";
 
     // Log messages
 

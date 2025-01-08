@@ -18,11 +18,13 @@ public class GameManager {
     private final Player player;
 
     private final double canvasHeight;
+    private final double canvasWidth;
 
     public GameManager(Player player, String difficulty, double canvasHeight, double canvasWidth, GameEngine gameEngine) {
         this.player = player;
         this.difficulty = difficulty;
         this.canvasHeight = canvasHeight;
+        this.canvasWidth = canvasWidth;
 
         // Initialize game components
         this.gameLogic = new GameLogic(this);
@@ -98,6 +100,10 @@ public class GameManager {
     /**
      * Helper methods
      * */
+
+    public double getCanvasWidth() {
+        return canvasWidth;
+    }
 
     public double getCanvasHeight() {
         return canvasHeight;

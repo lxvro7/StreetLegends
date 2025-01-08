@@ -84,6 +84,8 @@ public class GameWorld {
         return false;
     }
 
+    // TODO: Refactor spawning mechanism, so it gets more fun to play!
+
     public ArrayList<NPC> spawnTheNpcVehicles() {
         ArrayList<NPC> newNpcs = new ArrayList<>();
         int quantity = calculateNpcSpawningAmount();

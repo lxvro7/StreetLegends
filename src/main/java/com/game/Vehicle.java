@@ -3,6 +3,8 @@ package com.game;
 import javafx.geometry.BoundingBox;
 import javafx.geometry.Bounds;
 import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
+
 import java.util.Objects;
 
 public class Vehicle {
@@ -17,7 +19,6 @@ public class Vehicle {
 
     private double alfa = GameConstants.ROTATION_270_RAD;
     private double x, y;
-    private double radius;
     private double height;
     private double width;
     private double top;
@@ -110,6 +111,10 @@ public class Vehicle {
         checkImagePath(imagePath);
     }
 
+    public double getAlfa() {
+        return alfa;
+    }
+
     public double getHeight() {
         return height;
     }
@@ -138,6 +143,10 @@ public class Vehicle {
         }
     }
 
+    public void setVehicleImage(Image vehicleImage) {
+        this.vehicleImage = vehicleImage;
+    }
+
     public Image getVehicleImage() {
         return vehicleImage;
     }
@@ -148,10 +157,6 @@ public class Vehicle {
 
     public double getY() {
         return y;
-    }
-
-    public double getRadius() {
-        return radius;
     }
 
     public void setAlfa(double alfa) {

@@ -52,6 +52,7 @@ public class UserInterface extends Application {
         primaryStage.show();
         windowHeight = primaryStage.getHeight();
         windowWidth = primaryStage.getWidth();
+        System.out.println(windowWidth);
     }
 
     // Sets the background image and overlay for the application, adjusting it to the screen size.
@@ -213,6 +214,7 @@ public class UserInterface extends Application {
         difficultyBox.getStyleClass().add("difficulty-box");
         return difficultyBox;
     }
+
     private void highlightSelectedDifficulty(Button easy, Button medium, Button hard) {
         easy.getStyleClass().remove("selected-difficulty");
         medium.getStyleClass().remove("selected-difficulty");

@@ -12,6 +12,7 @@ public class GameLogic {
         this.gameManager = gameManager;
     }
 
+    // TODO Lovro: Check bounding box for angle
     // Checks the collision between two vehicles
     public boolean isCollisionDetected(Vehicle vehicle, Vehicle vehicle2) {
         BoundingBox vehicleBounds = createBoundingBox(vehicle);
@@ -38,7 +39,14 @@ public class GameLogic {
     }
 
     public void update() {
-        distanceTraveled += 1;
+        final double startPointY = GameConstants.INITIAL_PLAYER_Y;
+        final double startPointX = GameConstants.INITIAL_PLAYER_X;
+        double relativePlayerY = gameManager.getPlayer().getPlayerVehicle().getY();
+        double relativePlayerX = gameManager.getPlayer().getPlayerVehicle().getX();
+        double distanceInPixels = (Math.sqrt(Math.pow(startPointX - relativePlayerX, 2)
+                + Math.pow(relativePlayerY - startPointY, 2)));
+        double pixelsPerMeter = 10;
+        distanceTraveled = (int) (distanceInPixels/pixelsPerMeter);
     }
 
     public int getDistanceTraveled() {
