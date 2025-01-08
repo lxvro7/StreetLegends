@@ -13,6 +13,5 @@ public class NPC {
 
     public void move(double diffSeconds) {
         npcVehicle.move(diffSeconds);
-        // KI in the Future
     }
 }

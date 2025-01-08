@@ -1,4 +1,5 @@
 package com.game;
+import javafx.geometry.BoundingBox;
 
 import java.util.ArrayList;
 
@@ -11,28 +12,35 @@ public class GameLogic {
         this.gameManager = gameManager;
     }
 
-    public boolean collisionDetected() {
-        ArrayList<Vehicle> collisions = new ArrayList<>();
+    // Checks the collision between two vehicles
+    public boolean isCollisionDetected(Vehicle vehicle, Vehicle vehicle2) {
+        BoundingBox vehicleBounds = createBoundingBox(vehicle);
+        BoundingBox vehicle2Bounds = createBoundingBox(vehicle2);
+        return vehicleBounds.intersects(vehicle2Bounds);
+    }
+
+    // Game is over, if the player collides with a npc
+    public boolean checkIfGameOver() {
         Player player = gameManager.getPlayer();
-        for(NPC npc : gameManager.getAllNpcs()) {
+        Vehicle playerVehicle = player.getPlayerVehicle();
+        ArrayList<NPC> npcs = gameManager.getAllNpcs();
+        for(NPC npc : npcs) {
             Vehicle npcVehicle = npc.getNpcVehicle();
-
-            // Check if the vehicles touch each other
-            double dist = player.getPlayerVehicle().getRadius() + npcVehicle.getRadius();
-            double dx = Math.abs(player.getPlayerVehicle().getX() - npcVehicle.getX());
-            double dy = Math.abs(player.getPlayerVehicle().getY() - npcVehicle.getY());
-
-            if(dx<dist && dy<dist) {
-                if(dx*dx+dy*dy < dist*dist) {
-                    collisions.add(npcVehicle);
-                }
+            if(isCollisionDetected(playerVehicle, npcVehicle)) {
+                return true;
             }
         }
-        return !collisions.isEmpty();
+        return false;
     }
+
+    private BoundingBox createBoundingBox(Vehicle vehicle) {
+        return new BoundingBox(vehicle.getLeft(), vehicle.getTop(), vehicle.getWidth(), vehicle.getHeight());
+    }
+
     public void update() {
         distanceTraveled += 1;
     }
+
     public int getDistanceTraveled() {
         return distanceTraveled;
     }

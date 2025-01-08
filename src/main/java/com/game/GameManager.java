@@ -59,8 +59,12 @@ public class GameManager {
      * Delegates the GameLogic methods
      */
 
-    public boolean collisionDetected() {
-        return gameLogic.collisionDetected();
+    public boolean isCollisionDetected(Vehicle vehicle, Vehicle vehicle2) {
+        return gameLogic.isCollisionDetected(vehicle, vehicle2);
+    }
+
+    public boolean checkIfGameOver() {
+        return gameLogic.checkIfGameOver();
     }
 
     public Player getPlayer() {
@@ -106,7 +110,5 @@ public class GameManager {
     public GameLogic getGameLogic() {
         return gameLogic;
     }
-
-
 
 }

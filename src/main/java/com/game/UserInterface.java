@@ -231,6 +231,8 @@ public class UserInterface extends Application {
         }
     }
 
+    // TODO Alton: Add a Counter 3, 2, 1, that counts down, before the Game starts
+
     public Node createGame(String playerName) {
         soundManager.stopMenuSound();
         soundManager.startGameSound();

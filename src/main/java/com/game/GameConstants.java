@@ -13,6 +13,24 @@ public class GameConstants {
     // Vehicle properties: Maximum velocity and radius for different vehicle types
     public static final int NPC_CAR_VELOCITY = 100;
     public static final int PLAYER_CAR_START_VELOCITY = 300;
+    public static final int AMBULANCE_HEIGHT = 200;
+    public static final int AMBULANCE_WIDTH = 90;
+    public static final int AUDI_HEIGHT = 200;
+    public static final int AUDI_WIDTH = 90;
+    public static final int BLACK_VIPER_HEIGHT = 200;
+    public static final int BLACK_VIPER_WIDTH = 90;
+    public static final int MUSTANG_HEIGHT = 200;
+    public static final int MUSTANG_WIDTH = 90;
+    public static final int PICKUP_HEIGHT = 200;
+    public static final int PICKUP_WIDTH = 90;
+    public static final int POLICE_HEIGHT = 200;
+    public static final int POLICE_WIDTH = 90;
+    public static final int TAXI_HEIGHT = 200;
+    public static final int TAXI_WIDTH = 90;
+    public static final int TRUCK_HEIGHT = 200;
+    public static final int TRUCK_WIDTH = 90;
+    public static final int VAN_HEIGHT = 200;
+    public static final int VAN_WIDTH = 90;
 
     public static final int AMBULANCE_RADIUS = 100;
     public static final int AUDI_RADIUS = 60;
@@ -42,7 +60,7 @@ public class GameConstants {
     public static final int MIDDLE_DIFFICULTY_NPC_AMOUNT = 14;
     public static final int HARD_DIFFICULTY_NPC_AMOUNT = 20;
     public static final double SPAWN_OFFSET = 300;
-    public static final double SPAWN_RANGE = 700;
+    public static final double SPAWN_RANGE = 1000;
     public static final double NPC_COLLISION_PADDING = 100;
     public static final int MAX_NPC_QUANTITY = 5;
     public static final double TURN_ANGLE = Math.PI / 4;
@@ -63,7 +81,7 @@ public class GameConstants {
     public static final String VAN_IMAGE_PATH = "/images/vehicles/van.png";
 
     // File path for game background images
-    public static final String GAME_BACKGROUND_IMAGE_PATH = "/images/background/game_background.png";
+    public static final String GAME_BACKGROUND_IMAGE_PATH = "/images/background/game_background.jpg";
     public static final String MENU_BACKGROUND_IMAGE_PATH = "/images/background/menu_background.jpg";
 
     // File path for audios

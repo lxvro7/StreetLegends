@@ -18,11 +18,13 @@ public class Player {
 
     public void driveLeft() {
         playerVehicle.setAlfa(5 * GameConstants.TURN_ANGLE);
+        playerVehicle.createBoundingBox();
         turningLeft = true;
     }
 
     public void driveRight() {
         playerVehicle.setAlfa(7 * GameConstants.TURN_ANGLE);
+        playerVehicle.createBoundingBox();
         turningRight = true;
     }
 

@@ -20,6 +20,7 @@ public class GameWorld {
     private final ArrayList<NPC> npcs;
     private final Random random = new Random();
     private double spawnTriggerY;
+    private double counter = 0;
 
     public GameWorld(GameManager gameManager) {
         this.gameManager = gameManager;
@@ -87,32 +88,29 @@ public class GameWorld {
         ArrayList<NPC> newNpcs = new ArrayList<>();
         int quantity = calculateNpcSpawningAmount();
         while(newNpcs.size() < quantity) {
-            NPC npc = generateUniqueNpc(newNpcs);
-            if (npc != null) {
-                newNpcs.add(npc);
-            } else {
+            NPC generatedNpc = generateUniqueNpc(newNpcs);
+            if(generatedNpc != null) {
+                newNpcs.add(generatedNpc);
+            }
+            else {
                 System.err.println("FAILED TO PLACE NPC AFTER MAXIMAL ATTEMPTS");
                 break;
             }
-        }
+         }
         return newNpcs;
     }
 
-    // TODO: Radius berücksichtigen beim spawnen für Koordinate x!
     private NPC generateUniqueNpc(ArrayList<NPC> existingNpcs) {
-        final int MAX_ATTEMPTS    = GameConstants.MAX_NPC_ATTEMPTS;
         final double SPAWN_OFFSET = GameConstants.SPAWN_OFFSET;
         final double SPAWN_RANGE  = GameConstants.SPAWN_RANGE;
         final double [] LANES     = GameConstants.LANES;
         int attempts = 0;
-        while(attempts < MAX_ATTEMPTS) {
+        while(attempts < GameConstants.MAX_NPC_ATTEMPTS) {
             // Create random coordinates
             double randomXValue = LANES[random.nextInt(LANES.length)];
             double y = spawnTriggerY + random.nextDouble() * SPAWN_RANGE - SPAWN_OFFSET;
             // Create random type and color
             VehicleType vehicleType  = VehicleType.values()[random.nextInt(VehicleType.values().length)];
-            System.out.println("Vehicle " + vehicleType.toString() + " Spawned at coordinates: " + y + randomXValue);
-
             Vehicle newVehicle = new Vehicle(randomXValue, y, vehicleType, PlayerType.NPC);
             if(!hasCollisionWithExistingNpcs(existingNpcs, newVehicle)) {
                 return new NPC(newVehicle);
@@ -120,6 +118,16 @@ public class GameWorld {
             attempts++;
         }
         return null;
+    }
+
+    private boolean hasCollisionWithExistingNpcs(ArrayList<NPC> existingNpcs, Vehicle newVehicle) {
+        for (NPC existingNpc : existingNpcs) {
+            if (gameManager.isCollisionDetected(newVehicle, existingNpc.getNpcVehicle())) {
+                System.out.println(counter++);
+                return true;
+            }
+        }
+        return false;
     }
 
     private int calculateNpcSpawningAmount() {
@@ -130,19 +138,6 @@ public class GameWorld {
             case "Hard"   -> GameConstants.HARD_DIFFICULTY_NPC_AMOUNT;
             default       -> GameConstants.MIN_NPC_QUANTITY;
         };
-    }
-
-    private boolean hasCollisionWithExistingNpcs(ArrayList<NPC> newNpcs, Vehicle newVehicle) {
-        final double NPC_PADDING  = GameConstants.NPC_COLLISION_PADDING;
-        for (NPC existingNpc : newNpcs) {
-            Vehicle existingVehicle = existingNpc.getNpcVehicle();
-            double dy = Math.abs(existingVehicle.getY() - newVehicle.getY());
-            double minYDistance = existingVehicle.getRadius() + newVehicle.getRadius() + NPC_PADDING;
-            if (dy < minYDistance) {
-                return true;
-            }
-        }
-        return false;
     }
 
     public double getWorldPartY() {

@@ -43,7 +43,7 @@ public class GameEngine {
                 lastTime = currentTime;
 
                 gameManager.updateWorld(diffSeconds);
-                if(gameManager.collisionDetected()) {
+                if(gameManager.checkIfGameOver()) {
                     stopGame();
                 }
 
@@ -118,7 +118,6 @@ public class GameEngine {
             });
         }
     }
-
 
     // Creates a player vehicle for the specified color and difficulty
     private Player createPlayerVehicle(String playerName) {

@@ -1,5 +1,7 @@
 package com.game;
 
+import javafx.geometry.BoundingBox;
+import javafx.geometry.Bounds;
 import javafx.scene.image.Image;
 import java.util.Objects;
 
@@ -9,7 +11,6 @@ public class Vehicle {
 
     public enum PlayerType { PLAYER, NPC}
     public enum VehicleType { AMBULANCE, AUDI, BLACK_VIPER, MUSTANG, PICKUP, VAN, POLICE, TAXI, TRUCK}
-    public enum color { BLACK, BLUE, GREEN }
 
     private final VehicleType vehicleType;
     private final PlayerType playerType;
@@ -17,6 +18,12 @@ public class Vehicle {
     private double alfa = GameConstants.ROTATION_270_RAD;
     private double x, y;
     private double radius;
+    private double height;
+    private double width;
+    private double top;
+    private double bottom;
+    private double left;
+    private double right;
 
     // Refers to a percentage value
     private float velocity;
@@ -31,6 +38,7 @@ public class Vehicle {
 
         initializeVelocity();
         initializeAttributes();
+        createBoundingBox();
 
     }
 
@@ -47,53 +55,78 @@ public class Vehicle {
     public void move(double diffSeconds) {
         x += Math.cos(alfa) * velocity * diffSeconds;
         y += Math.sin(alfa) * velocity * diffSeconds;
-    }
-
-    public VehicleType getVehicleType() {
-        return vehicleType;
+        createBoundingBox();
     }
 
     // Sets the radius and image path, based off the vehicle type
     public void initializeAttributes() {
         switch(vehicleType) {
             case AMBULANCE:
-                radius = GameConstants.AMBULANCE_RADIUS;
+                height = GameConstants.AMBULANCE_HEIGHT;
+                width = GameConstants.AMBULANCE_WIDTH;
                 imagePath = GameConstants.AMBULANCE_IMAGE_PATH;
                 break;
             case AUDI:
-                radius = GameConstants.AUDI_RADIUS;
+                height = GameConstants.AUDI_HEIGHT;
+                width = GameConstants.AUDI_WIDTH;
                 imagePath = GameConstants.AUDI_IMAGE_PATH;
                 break;
             case BLACK_VIPER:
-                radius = GameConstants.BLACK_VIPER_RADIUS;
+                height = GameConstants.BLACK_VIPER_HEIGHT;
+                width = GameConstants.BLACK_VIPER_WIDTH;
                 imagePath = GameConstants.BLACK_VIPER_IMAGE_PATH;
                 break;
             case MUSTANG:
-                radius = GameConstants.MUSTANG_RADIUS;
+                height = GameConstants.MUSTANG_HEIGHT;
+                width = GameConstants.MUSTANG_WIDTH;
                 imagePath = GameConstants.MUSTANG_IMAGE_PATH;
                 break;
             case PICKUP:
-                radius = GameConstants.PICKUP_RADIUS;
+                height = GameConstants.PICKUP_HEIGHT;
+                width = GameConstants.PICKUP_WIDTH;
                 imagePath = GameConstants.PICKUP_IMAGE_PATH;
                 break;
             case POLICE:
-                radius = GameConstants.POLICE_RADIUS;
+                height = GameConstants.POLICE_HEIGHT;
+                width = GameConstants.POLICE_WIDTH;
                 imagePath = GameConstants.POLICE_IMAGE_PATH;
                 break;
             case TAXI:
-                radius = GameConstants.TAXI_RADIUS;
+                height = GameConstants.TAXI_HEIGHT;
+                width = GameConstants.TAXI_WIDTH;
                 imagePath = GameConstants.TAXI_IMAGE_PATH;
                 break;
             case TRUCK:
-                radius = GameConstants.TRUCK_RADIUS;
+                height = GameConstants.TRUCK_HEIGHT;
+                width = GameConstants.TRUCK_WIDTH;
                 imagePath = GameConstants.TRUCK_IMAGE_PATH;
                 break;
             case VAN:
-                radius = GameConstants.VAN_RADIUS;
+                height = GameConstants.VAN_HEIGHT;
+                width = GameConstants.VAN_WIDTH;
                 imagePath = GameConstants.VAN_IMAGE_PATH;
                 break;
         }
         checkImagePath(imagePath);
+    }
+
+    public double getHeight() {
+        return height;
+    }
+
+    public double getWidth() {
+        return width;
+    }
+
+    public PlayerType getPlayerType() {
+        return playerType;
+    }
+
+    public void createBoundingBox() {
+        top = y - height/2;
+        bottom = y + height/2;
+        left = x - width/2;
+        right = x + width/2;
     }
 
     private void checkImagePath(String imagePath) {
@@ -123,6 +156,22 @@ public class Vehicle {
 
     public void setAlfa(double alfa) {
         this.alfa = alfa;
+    }
+
+    public double getTop() {
+        return top;
+    }
+
+    public double getBottom() {
+        return bottom;
+    }
+
+    public double getLeft() {
+        return left;
+    }
+
+    public double getRight() {
+        return right;
     }
 
 }
