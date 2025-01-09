@@ -1,5 +1,7 @@
 package com.game;
 
+import javafx.scene.shape.Circle;
+
 import java.util.ArrayList;
 import java.util.Random;
 import static com.game.Vehicle.VehicleType;
@@ -26,7 +28,8 @@ public class GameWorld {
         this.gameManager = gameManager;
         this.player = gameManager.getPlayer();
         this.npcs = new ArrayList<>();
-        spawnTriggerY = GameConstants.INITIAL_PLAYER_Y - gameManager.getCanvasHeight() - gameManager.getCanvasHeight()/3;
+        spawnTriggerY = GameConstants.INITIAL_PLAYER_Y -
+                gameManager.getCanvasHeight() - gameManager.getCanvasHeight()/3;
     }
 
     public void update(double diffSeconds) {
@@ -63,8 +66,6 @@ public class GameWorld {
     public ArrayList<NPC> getAllNpcs() {
         return npcs;
     }
-
-    public void reset() {}
 
     public void moveAllVehicles(double diffSeconds) {
         player.getPlayerVehicle().move(diffSeconds);
@@ -123,10 +124,17 @@ public class GameWorld {
     }
 
     private boolean hasCollisionWithExistingNpcs(ArrayList<NPC> existingNpcs, Vehicle newVehicle) {
+        final double COLLISION_SCALING_FACTOR = 4;
         for (NPC existingNpc : existingNpcs) {
-            if (gameManager.isCollisionDetected(newVehicle, existingNpc.getNpcVehicle())) {
-                System.out.println(counter++);
-                return true;
+            for (Circle circle1 : existingNpc.getNpcVehicle().getCollisionCircles()) {
+                for (Circle circle2 : newVehicle.getCollisionCircles()) {
+                    double dx = circle1.getCenterX() - circle2.getCenterX();
+                    double dy = circle1.getCenterY() - circle2.getCenterY();
+                    double distance = circle1.getRadius() + circle2.getRadius() * COLLISION_SCALING_FACTOR;
+                    if (dx * dx + dy * dy < distance * distance) {
+                        return true;
+                    }
+                }
             }
         }
         return false;

@@ -21,11 +21,10 @@ public class GameEngine {
     private enum GameState {RUNNING, GAME_OVER}
     private GameState currentState = GameState.RUNNING;
 
-    public GameEngine(String playerName, String difficulty, UserInterface userInterface,
-                      double canvasHeight, double canvasWidth) {
+    public GameEngine(String playerName, String difficulty, UserInterface userInterface, double canvasHeight) {
         this.userInterface = userInterface;
         this.player = createPlayerVehicle(playerName);
-        this.gameManager = new GameManager(player, difficulty, canvasHeight, canvasWidth,this);
+        this.gameManager = new GameManager(player, difficulty, canvasHeight);
         this.keyEventHandler = new KeyEventHandler(player);
     }
 
@@ -41,7 +40,6 @@ public class GameEngine {
                 long currentTime = System.nanoTime();
                 double diffSeconds = (currentTime - lastTime) / 1_000_000_000.0;
                 lastTime = currentTime;
-
                 gameManager.updateWorld(diffSeconds);
                 if(gameManager.checkIfGameOver()) {
                     stopGame();
@@ -114,7 +112,6 @@ public class GameEngine {
             running = false;
             Platform.runLater(() -> {
                 int finalDistance = getDistanceTraveled();
-                Label meterLabel = new Label("Klasse, Sie sind " + finalDistance + " Meter gefahren!");
                 userInterface.showGameOverWindow(finalDistance);
             });
         }

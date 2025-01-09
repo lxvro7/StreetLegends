@@ -1,15 +1,13 @@
 package com.game;
 
-import javafx.geometry.BoundingBox;
-import javafx.geometry.Bounds;
 import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
+import javafx.scene.shape.Circle;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 
 public class Vehicle {
-
-    // TODO Lovro: Change radius to rectangle bounding box.
 
     public enum PlayerType { PLAYER, NPC}
     public enum VehicleType { AMBULANCE, AUDI, BLACK_VIPER, MUSTANG, PICKUP, VAN, POLICE, TAXI, TRUCK}
@@ -19,17 +17,18 @@ public class Vehicle {
 
     private double alfa = GameConstants.ROTATION_270_RAD;
     private double x, y;
-    private double height;
-    private double width;
-    private double top;
-    private double bottom;
-    private double left;
-    private double right;
+    private double radius;
 
     // Refers to a percentage value
     private float velocity;
     private String imagePath;
     private Image vehicleImage;
+
+    private final List<Circle> collisionCircles = new ArrayList<>();
+
+    public double getRadius() {
+        return radius;
+    }
 
     public Vehicle(double x, double y, VehicleType vehicleType, PlayerType playerType) {
         this.x = x;
@@ -39,8 +38,22 @@ public class Vehicle {
 
         initializeVelocity();
         initializeAttributes();
-        createBoundingBox();
+        initializeCollisionCircles();
 
+    }
+
+    private void initializeCollisionCircles() {
+        double offset = radius / 2;
+        collisionCircles.add(new Circle(x, y - offset, radius));
+        collisionCircles.add(new Circle(x, y + offset, radius));
+    }
+
+    public void updateCollisionCircles() {
+        double offset = radius / 2;
+        collisionCircles.get(0).setCenterX(x);
+        collisionCircles.get(0).setCenterY(y - offset);
+        collisionCircles.get(1).setCenterX(x);
+        collisionCircles.get(1).setCenterY(y + offset);
     }
 
     public void initializeVelocity() {
@@ -56,82 +69,50 @@ public class Vehicle {
     public void move(double diffSeconds) {
         x += Math.cos(alfa) * velocity * diffSeconds;
         y += Math.sin(alfa) * velocity * diffSeconds;
-        createBoundingBox();
+        updateCollisionCircles();
     }
 
     // Sets the radius and image path, based off the vehicle type
     public void initializeAttributes() {
         switch(vehicleType) {
             case AMBULANCE:
-                height = GameConstants.AMBULANCE_HEIGHT;
-                width = GameConstants.AMBULANCE_WIDTH;
+                radius = GameConstants.AMBULANCE_RADIUS;
                 imagePath = GameConstants.AMBULANCE_IMAGE_PATH;
                 break;
             case AUDI:
-                height = GameConstants.AUDI_HEIGHT;
-                width = GameConstants.AUDI_WIDTH;
+                radius = GameConstants.AUDI_RADIUS;
                 imagePath = GameConstants.AUDI_IMAGE_PATH;
                 break;
             case BLACK_VIPER:
-                height = GameConstants.BLACK_VIPER_HEIGHT;
-                width = GameConstants.BLACK_VIPER_WIDTH;
+                radius = GameConstants.BLACK_VIPER_RADIUS;
                 imagePath = GameConstants.BLACK_VIPER_IMAGE_PATH;
                 break;
             case MUSTANG:
-                height = GameConstants.MUSTANG_HEIGHT;
-                width = GameConstants.MUSTANG_WIDTH;
+                radius = GameConstants.MUSTANG_RADIUS;
                 imagePath = GameConstants.MUSTANG_IMAGE_PATH;
                 break;
             case PICKUP:
-                height = GameConstants.PICKUP_HEIGHT;
-                width = GameConstants.PICKUP_WIDTH;
+                radius = GameConstants.PICKUP_RADIUS;
                 imagePath = GameConstants.PICKUP_IMAGE_PATH;
                 break;
             case POLICE:
-                height = GameConstants.POLICE_HEIGHT;
-                width = GameConstants.POLICE_WIDTH;
+                radius = GameConstants.POLICE_RADIUS;
                 imagePath = GameConstants.POLICE_IMAGE_PATH;
                 break;
             case TAXI:
-                height = GameConstants.TAXI_HEIGHT;
-                width = GameConstants.TAXI_WIDTH;
+                radius = GameConstants.TAXI_RADIUS;
                 imagePath = GameConstants.TAXI_IMAGE_PATH;
                 break;
             case TRUCK:
-                height = GameConstants.TRUCK_HEIGHT;
-                width = GameConstants.TRUCK_WIDTH;
+                radius = GameConstants.TRUCK_RADIUS;
                 imagePath = GameConstants.TRUCK_IMAGE_PATH;
                 break;
             case VAN:
-                height = GameConstants.VAN_HEIGHT;
-                width = GameConstants.VAN_WIDTH;
+                radius = GameConstants.VAN_RADIUS;
                 imagePath = GameConstants.VAN_IMAGE_PATH;
                 break;
         }
         checkImagePath(imagePath);
-    }
-
-    public double getAlfa() {
-        return alfa;
-    }
-
-    public double getHeight() {
-        return height;
-    }
-
-    public double getWidth() {
-        return width;
-    }
-
-    public PlayerType getPlayerType() {
-        return playerType;
-    }
-
-    public void createBoundingBox() {
-        top = y - height/2;
-        bottom = y + height/2;
-        left = x - width/2;
-        right = x + width/2;
     }
 
     private void checkImagePath(String imagePath) {
@@ -163,26 +144,19 @@ public class Vehicle {
         this.alfa = alfa;
     }
 
-    public double getTop() {
-        return top;
-    }
-
-    public double getBottom() {
-        return bottom;
-    }
-
-    public double getLeft() {
-        return left;
-    }
-
-    public double getRight() {
-        return right;
-    }
     public float getVelocity() {
         return velocity;
     }
+
     public void setVelocity(float velocity) {
         this.velocity = velocity;
     }
 
+    public List<Circle> getCollisionCircles() {
+        return collisionCircles;
+    }
+
+    public PlayerType getPlayerType() {
+        return playerType;
+    }
 }

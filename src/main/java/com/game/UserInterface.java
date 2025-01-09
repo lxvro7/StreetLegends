@@ -21,7 +21,6 @@ import javafx.stage.Screen;
 import javafx.stage.Stage;
 import java.net.URL;
 import java.util.Objects;
-import java.util.concurrent.atomic.AtomicReference;
 
 import javafx.animation.FadeTransition;
 import javafx.util.Duration;
@@ -121,6 +120,11 @@ public class UserInterface extends Application {
 
     // Creates the main menu layout with buttons for playing the game, changing difficulty, getting help, and exiting.
     public BorderPane createMenu(String playerName) {
+        soundManager.stopGameSound();
+        if(!soundManager.isMenuSoundMuted()) {
+            soundManager.startMenuSound();
+        }
+
         background();
         Label title = new Label("Street Legends");
         title.getStyleClass().add("title");
@@ -238,7 +242,7 @@ public class UserInterface extends Application {
         soundManager.startGameSound();
         double canvasWidth = windowWidth;
         double canvasHeight = windowHeight;
-        GameEngine gameEngine = new GameEngine(playerName, difficulty,this, canvasHeight, canvasWidth);
+        GameEngine gameEngine = new GameEngine(playerName, difficulty,this, canvasHeight);
 
         Canvas backgroundCanvas = new Canvas(canvasWidth, canvasHeight);
         Canvas vehicleCanvas = new Canvas(canvasWidth, canvasHeight);

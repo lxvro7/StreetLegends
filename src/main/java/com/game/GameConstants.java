@@ -12,31 +12,22 @@ public class GameConstants {
 
     // Vehicle properties: Maximum velocity and radius for different vehicle types
     public static final int NPC_CAR_VELOCITY = 200;
-    public static final int PLAYER_CAR_START_VELOCITY = 700;
+    public static final int PLAYER_CAR_START_VELOCITY = 1000;
+    public static final int AMBULANCE_RADIUS = 50;
+    public static final int AUDI_RADIUS = 50;
+    public static final int BLACK_VIPER_RADIUS = 50;
+    public static final int MUSTANG_RADIUS = 50;
+    public static final int PICKUP_RADIUS = 50;
+    public static final int POLICE_RADIUS = 50;
+    public static final int TAXI_RADIUS = 50;
+    public static final int TRUCK_RADIUS = 50;
+    public static final int VAN_RADIUS = 50;
 
     // Game mechanics constants:
-    public static final float PLAYER_CAR_MAX_VELOCITY = 1750.0f;
-    public static final float EASY_DIFFICULTY_SPEED_INCREASE = 3.0f;
-    public static final float MEDIUM_DIFFICULTY_SPEED_INCREASE = 15.0f;
-    public static final float HARD_DIFFICULTY_SPEED_INCREASE = 25.0f;
-    public static final int AMBULANCE_HEIGHT = 200;
-    public static final int AMBULANCE_WIDTH = 90;
-    public static final int AUDI_HEIGHT = 200;
-    public static final int AUDI_WIDTH = 90;
-    public static final int BLACK_VIPER_HEIGHT = 200;
-    public static final int BLACK_VIPER_WIDTH = 90;
-    public static final int MUSTANG_HEIGHT = 200;
-    public static final int MUSTANG_WIDTH = 90;
-    public static final int PICKUP_HEIGHT = 200;
-    public static final int PICKUP_WIDTH = 90;
-    public static final int POLICE_HEIGHT = 200;
-    public static final int POLICE_WIDTH = 90;
-    public static final int TAXI_HEIGHT = 200;
-    public static final int TAXI_WIDTH = 90;
-    public static final int TRUCK_HEIGHT = 200;
-    public static final int TRUCK_WIDTH = 90;
-    public static final int VAN_HEIGHT = 200;
-    public static final int VAN_WIDTH = 90;
+    public static final int PLAYER_CAR_MAX_VELOCITY = 1750;
+    public static final int EASY_DIFFICULTY_SPEED_INCREASE = 3;
+    public static final int MEDIUM_DIFFICULTY_SPEED_INCREASE = 15;
+    public static final int HARD_DIFFICULTY_SPEED_INCREASE = 25;
 
     // World properties: Boundaries and initial player position
     public static final int SCROLL_BOUNDS = 600;
@@ -55,8 +46,8 @@ public class GameConstants {
     public static final int EASY_DIFFICULTY_NPC_AMOUNT = 3;
     public static final int MIDDLE_DIFFICULTY_NPC_AMOUNT = 4;
     public static final int HARD_DIFFICULTY_NPC_AMOUNT = 5;
-    public static final double SPAWN_OFFSET = 300;
-    public static final double SPAWN_RANGE = 1000;
+    public static final double SPAWN_OFFSET = 700;
+    public static final double SPAWN_RANGE = 600;
     public static final double NPC_COLLISION_PADDING = 100;
     public static final int MAX_NPC_QUANTITY = 5;
     public static final double TURN_ANGLE = Math.PI / 4;

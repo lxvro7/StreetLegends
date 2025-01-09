@@ -32,14 +32,12 @@ public class Player {
 
     public void driveLeft() {
         playerVehicle.setAlfa(5 * GameConstants.TURN_ANGLE);
-        playerVehicle.createBoundingBox();
         playerVehicle.setVehicleImage(turnLeftImage);
         turningLeft = true;
     }
 
     public void driveRight() {
         playerVehicle.setAlfa(7 * GameConstants.TURN_ANGLE);
-        playerVehicle.createBoundingBox();
         playerVehicle.setVehicleImage(turnRightImage);
         turningRight = true;
     }
@@ -58,14 +56,6 @@ public class Player {
 
     public void setTurningLeft(boolean turningLeft) {
         this.turningLeft = turningLeft;
-    }
-
-    public Image getTurnRightImage() {
-        return turnRightImage;
-    }
-
-    public Image getTurnLeftImage() {
-        return turnLeftImage;
     }
 
     public String getPlayerName() {
