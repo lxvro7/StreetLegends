@@ -16,13 +16,15 @@ public class GameManager {
     private final GameRenderer gameRenderer;
     private final String difficulty;
     private final Player player;
+    private final GameEngine gameEngine;
 
     private final double canvasHeight;
 
-    public GameManager(Player player, String difficulty, double canvasHeight) {
+    public GameManager(Player player, String difficulty, double canvasHeight, GameEngine gameEngine) {
         this.player = player;
         this.difficulty = difficulty;
         this.canvasHeight = canvasHeight;
+        this.gameEngine=gameEngine;
 
         // Initialize game components
         this.gameLogic = new GameLogic(this);
@@ -109,5 +111,10 @@ public class GameManager {
     public GameLogic getGameLogic() {
         return gameLogic;
     }
+    public void stopGameDueToOutOfBounds() {
+        gameEngine.stopGame();
+    }
+
+
 
 }

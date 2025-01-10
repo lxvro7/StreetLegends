@@ -74,6 +74,10 @@ public class GameLogic {
             increaseVelocity(gameManager.getDifficulty());
             lastDistanceCheckpoint += 100;
         }
+        if (relativePlayerX < GameConstants.MIN_X_COORDINATE || relativePlayerX > GameConstants.MAX_X_COORDINATE) {
+            System.out.println("Spieler hat die Fahrbahn verlassen!");//testAlton
+            gameManager.stopGameDueToOutOfBounds();
+        }
     }
 
     public int getDistanceTraveled() {

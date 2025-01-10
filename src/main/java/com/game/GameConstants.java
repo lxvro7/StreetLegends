@@ -34,8 +34,8 @@ public class GameConstants {
     public static final double INITIAL_PLAYER_Y = 1_000_000;
     public static final double INITIAL_PLAYER_X = 790;
     public static final double INITIAL_WORLD_PART_Y = INITIAL_PLAYER_Y - 100;
-    public static final double MIN_X_COORDINATE = 540;
-    public static final double MAX_X_COORDINATE = 1400;
+    public static final double MIN_X_COORDINATE = 306;
+    public static final double MAX_X_COORDINATE = 900;
     public static final double SPAWN_TRIGGER_TOLERANCE = 10;
     public static final double ROTATION_270_RAD = 3 * Math.PI / 2;
     public static final double[] LANES = {600, 720, 840, 960};
@@ -76,6 +76,12 @@ public class GameConstants {
     // File path for audios
     public static final String MENU_AUDIO = "/audio/menu.mp3";
     public static final String GAME_AUDIO = "/audio/menu.mp3";
+    public static final String CRASH_AUDIO = "/audio/crash.mp3";
+
+    // Images to gain coin or poisen, maybe future?
+    public static final String COIN_IMAGE_PATH = "/images/icon/coin.jpg";
+    public static final String POISEN_IMAGE_PATH = "/images/icon/poisen.jpg";
+
 
     // Log messages
 

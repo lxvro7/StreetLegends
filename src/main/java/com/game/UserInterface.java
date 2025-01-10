@@ -391,6 +391,9 @@ public class UserInterface extends Application {
     }
 
     public void showGameOverWindow(int finalDistance) {
+        soundManager.stopGameSound();
+        soundManager.playCollisionSound();
+
         Rectangle overlay = new Rectangle(windowWidth, windowHeight, Color.GRAY);
         overlay.setOpacity(0.7);
         root.getChildren().add(overlay);
@@ -468,11 +471,13 @@ public class UserInterface extends Application {
 
 
     private void restartGame() {
+        soundManager.stopCollisionSound();
         switchScene(createGame(playerName));
     }
 
     // Switches to a new scene by clearing the existing layout and adding the new layout.
     private void switchScene(Node newScene) {
+        soundManager.stopCollisionSound();
         root.getChildren().clear();
         root.getChildren().add(newScene);
     }

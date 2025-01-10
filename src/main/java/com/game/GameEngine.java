@@ -24,7 +24,7 @@ public class GameEngine {
     public GameEngine(String playerName, String difficulty, UserInterface userInterface, double canvasHeight) {
         this.userInterface = userInterface;
         this.player = createPlayerVehicle(playerName);
-        this.gameManager = new GameManager(player, difficulty, canvasHeight);
+        this.gameManager = new GameManager(player, difficulty, canvasHeight,this);
         this.keyEventHandler = new KeyEventHandler(player);
     }
 
@@ -110,12 +110,14 @@ public class GameEngine {
         if (currentState != GameState.GAME_OVER) {
             currentState = GameState.GAME_OVER;
             running = false;
+            System.out.println("Spiel gestoppt. Game Over!");
             Platform.runLater(() -> {
                 int finalDistance = getDistanceTraveled();
                 userInterface.showGameOverWindow(finalDistance);
             });
         }
     }
+
 
     // Creates a player vehicle for the specified color and difficulty
     private Player createPlayerVehicle(String playerName) {

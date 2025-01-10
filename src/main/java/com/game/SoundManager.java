@@ -9,10 +9,13 @@ import java.util.Objects;
 public class SoundManager {
     private MediaPlayer menuMediaPlayer;
     private MediaPlayer gameMediaPlayer;
+    private MediaPlayer collisionMediaPlayer; // Neuer MediaPlayer für Kollisionssound
+
 
     public SoundManager() {
         initializeMenuMediaPlayer();
         initializeGameMediaPlayer();
+        initializeCollisionMediaPlayer();
     }
 
     private void initializeMenuMediaPlayer() {
@@ -28,6 +31,11 @@ public class SoundManager {
                 getResource(gameSoundPath)).toExternalForm()));
         gameMediaPlayer.setCycleCount(MediaPlayer.INDEFINITE);
     }
+    private void initializeCollisionMediaPlayer() {
+        String collisionSoundPath = GameConstants.CRASH_AUDIO;
+        collisionMediaPlayer = new MediaPlayer(new Media(Objects.requireNonNull(getClass().
+                getResource(collisionSoundPath)).toExternalForm()));
+    }
 
     public void startGameSound() {
         if (!gameMediaPlayer.isMute()) {
@@ -40,6 +48,22 @@ public class SoundManager {
             gameMediaPlayer.pause();
         }
     }
+    public void playCollisionSound() {
+        if (collisionMediaPlayer != null) {
+            collisionMediaPlayer.stop();
+            collisionMediaPlayer.seek(Duration.ZERO);
+
+            collisionMediaPlayer.setOnEndOfMedia(() -> collisionMediaPlayer.stop());
+
+            collisionMediaPlayer.play();
+        }
+    }
+    public void stopCollisionSound() {
+        if (collisionMediaPlayer != null && collisionMediaPlayer.getStatus() == MediaPlayer.Status.PLAYING) {
+            collisionMediaPlayer.stop();
+        }
+    }
+
 
     public void startMenuSound() {
         if (!menuMediaPlayer.isMute()) {
