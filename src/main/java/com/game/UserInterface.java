@@ -1,7 +1,5 @@
 package com.game;
-import javafx.animation.AnimationTimer;
-import javafx.animation.KeyFrame;
-import javafx.animation.Timeline;
+import javafx.animation.*;
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.geometry.Insets;
@@ -22,7 +20,6 @@ import javafx.stage.Stage;
 import java.net.URL;
 import java.util.Objects;
 
-import javafx.animation.FadeTransition;
 import javafx.util.Duration;
 
 public class UserInterface extends Application {
@@ -107,6 +104,11 @@ public class UserInterface extends Application {
         VBox entryLayout = new VBox(40);
         entryLayout.getStyleClass().add("vbox-layout");
         entryLayout.getChildren().addAll(welcomeLabel, nameField,errorLabel ,startButton );
+        entryLayout.setTranslateX(800);
+        Timeline slideIn = new Timeline(
+                new KeyFrame(Duration.seconds(0.5), new KeyValue(entryLayout.translateXProperty(), 0))
+        );
+        slideIn.play();
         return entryLayout;
     }
 
@@ -161,6 +163,7 @@ public class UserInterface extends Application {
         exitButton.setOnAction(e -> {
             Platform.exit();
         });
+        helpButton.setOnAction(e -> switchScene(createHelpMenu()));
         backButton.setOnAction(e -> {switchScene(createEntry());});
         soundButton.setOnAction(e -> switchScene(createSoundSettingsMenu()));
 
@@ -183,7 +186,7 @@ public class UserInterface extends Application {
         return menuLayout;
     }
 
-    // Creates a menu layout for selecting the difficulty level (Easy, Medium, Hard).
+    // Creates a menu layout for selecting the difficulty level (Easy, Medium, Hard) with animations.
     public Node DifficultyMenu(Label difficultyLabel) {
         Label Diff = new Label("Please select:");
         Diff.getStyleClass().add("Diff");
@@ -215,8 +218,17 @@ public class UserInterface extends Application {
             switchScene(createMenu(playerName));
         });
 
-        VBox difficultyBox = new VBox(10, Diff,easyButton, mediumButton, hardButton);
+        VBox difficultyBox = new VBox(20, Diff, easyButton, mediumButton, hardButton);
         difficultyBox.getStyleClass().add("difficulty-box");
+        difficultyBox.setAlignment(Pos.CENTER);
+        difficultyBox.setPadding(new Insets(20));
+
+        difficultyBox.setTranslateX(800); // Start position outside the screen
+        Timeline slideIn = new Timeline(
+                new KeyFrame(Duration.seconds(0.5), new KeyValue(difficultyBox.translateXProperty(), 0))
+        );
+        slideIn.play();
+
         return difficultyBox;
     }
 
@@ -295,6 +307,7 @@ public class UserInterface extends Application {
 
     private Node createSoundSettingsMenu() {
         VBox soundSettingsLayout = new VBox(20);
+        soundSettingsLayout.getStyleClass().add("sound-settings-layout");
         soundSettingsLayout.setAlignment(Pos.CENTER);
         soundSettingsLayout.setPadding(new Insets(20));
 
@@ -326,6 +339,11 @@ public class UserInterface extends Application {
 
         soundSettingsLayout.getChildren().addAll(soundSettingsTitle, menuSoundToggleButton, gameSoundToggleButton, backButton);
 
+        soundSettingsLayout.setTranslateX(800);
+        Timeline slideIn = new Timeline(
+                new KeyFrame(Duration.seconds(0.5), new KeyValue(soundSettingsLayout.translateXProperty(), 0))
+        );
+        slideIn.play();
         return soundSettingsLayout;
     }
 
@@ -405,6 +423,47 @@ public class UserInterface extends Application {
                 case ESCAPE -> Platform.exit();
             }
         });
+    }
+    public Node createHelpMenu() {
+        Label helpTitle = new Label("HOW TO PLAY STREET LEGENDS");
+        helpTitle.getStyleClass().add("title");
+
+        Label controlsInfo = new Label("🕹 Controls:\n" +
+                "- Arrow Left: Steer the car to the left\n" +
+                "- Arrow Right: Steer the car to the right");
+        controlsInfo.getStyleClass().add("help-text");
+
+        Label difficultyInfo = new Label("🎮 Difficulty Levels:\n" +
+                "- Easy: Fewer cars, slower speed – perfect for practice!\n" +
+                "- Medium: More cars, medium speed – for advanced players.\n" +
+                "- Hard: Many cars, fast speed – only for real legends!");
+        difficultyInfo.getStyleClass().add("help-text");
+
+        Label tipsInfo = new Label("💡 Pro Tips:\n" +
+                "- Stay focused and avoid obstacles.\n" +
+                "- Collect power-ups to improve your car (if available).\n" +
+                "- Can you beat Hard mode? Become a true Street Legend!");
+        tipsInfo.getStyleClass().add("help-text");
+
+        Label soundInfo = new Label("🔊 Sound Options:\n" +
+                "- You can toggle menu and in-game sounds in the sound settings.");
+        soundInfo.getStyleClass().add("help-text");
+
+        Button backButton = new Button("Back");
+        backButton.getStyleClass().add("gradient-button");
+        backButton.setOnAction(e -> switchScene(createMenu(playerName)));
+
+        VBox helpLayout = new VBox(20, helpTitle, controlsInfo, difficultyInfo, tipsInfo, soundInfo, backButton);
+        helpLayout.setAlignment(Pos.CENTER);
+        helpLayout.setPadding(new Insets(20));
+        helpLayout.getStyleClass().add("help-layout");
+
+        helpLayout.setTranslateX(800);
+        Timeline slideIn = new Timeline(
+                new KeyFrame(Duration.seconds(0.5), new KeyValue(helpLayout.translateXProperty(), 0))
+        );
+        slideIn.play();
+        return helpLayout;
     }
 
 

@@ -4,34 +4,37 @@
 }
 /*Main title and title to select Difficulty*/
 .title, .Diff {
-    -fx-font-size: 52px;
+    -fx-font-size: 64px; /* Titel größer gemacht */
     -fx-font-weight: bold;
-    -fx-padding: 0 0 100px 0;
+    -fx-padding: 0 0 50px 0;
     -fx-alignment: center;
     -fx-text-fill: linear-gradient(to right, #ff416c, #ff4b2b);
-    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.75), 10, 0.5, 0, 2);
+    -fx-effect: dropshadow(gaussian, rgba(255, 255, 255, 0.8), 15, 0.5, 0, 2);
+    animation: shimmer 3s infinite; /* Schimmer-Effekt hinzugefügt */
 }
 /*------------------------------------*/
 
 
-/* Button style for main menu and for Difficulty*/
+/* Button style for main menu and for Difficulty */
 .menu-button, .button {
-    -fx-font-size: 20px;
-    -fx-font-weight: bold;
-    -fx-font-family: 'Verdana';
-    -fx-pref-width: 320px;
-    -fx-pref-height: 60px;
-    -fx-background-color: #ff416c;
-    -fx-text-fill: white;
-    -fx-border-radius: 10px;
-    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.5), 10, 0.5, 0, 2);
+     -fx-font-size: 24px; /* Größerer Button */
+     -fx-font-weight: bold;
+     -fx-pref-width: 320px;
+     -fx-pref-height: 60px;
+     -fx-background-color: linear-gradient(to right, #ff416c, #ff4b2b);
+     -fx-text-fill: white;
+     -fx-border-radius: 15px;
+     -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.5), 10, 0.5, 0, 2);
+     -fx-cursor: hand;
+     animation: pulse 1.5s infinite; /* Pulsierender Effekt */
 }
-.menu-button:hover {
-        -fx-background-color: #ff4b2b;
-        -fx-text-fill: white;
-        -fx-scale-x: 1.1;
-        -fx-scale-y: 1.1;
-        -fx-cursor: hand;
+.menu-button:hover, .button:hover {
+         -fx-background-color: linear-gradient(to right, #ff4b2b, #ff416c);
+         -fx-text-fill: white;
+         -fx-scale-x: 1.05;
+         -fx-scale-y: 1.05;
+         -fx-cursor: hand;
+
 }
 /*------------------------------------*/
 /* Difficulty:... */
@@ -61,13 +64,15 @@
        -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.75), 10, 0.5, 0, 2);
 }
 /*when you select Difficulty:*/
-.difficulty-box {
-    -fx-font-size: 20px;
-    -fx-font-weight: bold;
-    -fx-text-fill: white;
+.difficulty-box, .sound-settings-layout {
+    -fx-background-color: rgba(0, 0, 0, 0.4);
+    -fx-border-radius: 20px;
+    -fx-padding: 30px;
+    -fx-spacing: 20px;
     -fx-alignment: center;
-    -fx-padding: 20px;
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.75), 15, 0.5, 0, 5);
 }
+
 /*------------------------------------*/
 /*First site for the button and title: */
 .button-box {
@@ -85,23 +90,23 @@
 .vbox-layout {
     -fx-alignment: top-center;
     -fx-spacing: 10;
-    -fx-padding: 50px 20px 20px 20px; /* Oben, rechts, unten, links */
+    -fx-padding: 50px 20px 20px 20px;
 }
 
 
 /*------------------------------------*/
 /*Input name*/
 .name-field {
-       -fx-font-size: 18px;
-        -fx-font-family: 'Verdana';
-        -fx-padding: 10px;
-        -fx-min-width: 250px;
-        -fx-pref-width: 300px;
-        -fx-max-width: 350px;
-        -fx-background-color: grey;
-        -fx-border-color: #888;
-        -fx-border-radius: 8px;
-        -fx-focus-color: #ff4b2b;
+    -fx-font-size: 20px;
+    -fx-font-family: 'Verdana';
+    -fx-padding: 10px;
+    -fx-min-width: 250px;
+    -fx-pref-width: 300px;
+    -fx-max-width: 350px;
+    -fx-background-color: rgba(255, 255, 255, 0.8);
+    -fx-border-color: #ff4b2b;
+    -fx-border-radius: 15px;
+    -fx-focus-color: #ff4b2b;
 }
 /*------------------------------------*/
 /* If field for name is empty: */
@@ -118,17 +123,22 @@
 /*Sound menu*/
 
 .sound-button{
+    -fx-font-size: 20px;
+    -fx-font-weight: bold;
+    -fx-pref-width: 320px;
+    -fx-pref-height: 60px;
+    -fx-background-color: linear-gradient(to right, #ff416c, #ff4b2b);
+    -fx-text-fill: white;
+    -fx-border-radius: 15px;
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.5), 10, 0.5, 0, 2);
     -fx-cursor: hand;
-    -fx-scale-x: 1.1;
-    -fx-scale-y: 1.1;
 }
-
 /* Hover-Effekt für Sound-Buttons */
 .sound-button:hover {
-    -fx-background-color: #ff4b2b;  /* Orange Hover-Farbe */
+    -fx-background-color: linear-gradient(to right, #ff4b2b, #ff416c); /* Gradient color swap on hover */
     -fx-text-fill: white;
-    -fx-scale-x: 1.1;
-    -fx-scale-y: 1.1;
+    -fx-scale-x: 1.05;
+    -fx-scale-y: 1.05;
     -fx-cursor: hand;
 }
 /*------------------------------------*/
@@ -205,10 +215,48 @@
     -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.9), 15, 0.8, 0, 0);
 }
 
+/*------------------------------------*/
+/*Click help-button..*/
+/* Help text box with better styling */
+.help-text {
+    -fx-font-size: 20px;
+    -fx-text-fill: white;
+    -fx-text-alignment: left;
+    -fx-background-color: rgba(0, 0, 0, 0.6); /* Dark transparent background */
+    -fx-padding: 15px;
+    -fx-border-radius: 10px;
+    -fx-background-radius: 10px;
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.75), 10, 0.5, 0, 2);
+    -fx-pref-width: 580px;
+}
 
+/* Help layout container */
+.help-layout {
+    -fx-background-color: rgba(0, 0, 0, 0.8);
+    -fx-border-radius: 20px;
+    -fx-padding: 30px;
+    -fx-spacing: 20px;
+    -fx-alignment: center;
+}
 
+/* Back button with gradient and hover effect */
+.gradient-button {
+    -fx-font-size: 20px;
+    -fx-font-weight: bold;
+    -fx-pref-width: 200px;
+    -fx-pref-height: 50px;
+    -fx-background-color: linear-gradient(to right, #ff416c, #ff4b2b);
+    -fx-text-fill: white;
+    -fx-border-radius: 15px;
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.5), 10, 0.5, 0, 2);
+}
 
-
-
+.gradient-button:hover {
+    -fx-background-color: linear-gradient(to right, #ff4b2b, #ff416c); /* Gradient color swap */
+    -fx-scale-x: 1.05;
+    -fx-scale-y: 1.05;
+    -fx-cursor: hand;
+}
+/*------------------------------------*/
 
 
