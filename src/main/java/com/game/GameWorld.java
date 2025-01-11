@@ -133,15 +133,18 @@ public class GameWorld {
     }
 
     private boolean hasCollisionWithExistingNpcs(ArrayList<NPC> existingNpcs, Vehicle newVehicle) {
-        // TODO: Change scaling factor based off the difficulty, care: if collision scaling factor is less than 3,
-        //  some vehicles overlap, so let even for hard 3 as the minimum
-        final double COLLISION_SCALING_FACTOR = 3;
+        double collisionScalingFactor = switch (gameManager.getDifficulty()) {
+            case "Easy" -> GameConstants.EASY_COLLISION_SCALING_FACTOR;
+            case "Medium" -> GameConstants.MEDIUM_COLLISION_SCALING_FACTOR;
+            case "Hard" -> GameConstants.HARD_COLLISION_SCALING_FACTOR;
+            default -> GameConstants.FALLBACK_COLLISION_SCALING_FACTOR;
+        };
         for (NPC existingNpc : existingNpcs) {
             for (Circle circle1 : existingNpc.getNpcVehicle().getCollisionCircles()) {
                 for (Circle circle2 : newVehicle.getCollisionCircles()) {
                     double dx = circle1.getCenterX() - circle2.getCenterX();
                     double dy = circle1.getCenterY() - circle2.getCenterY();
-                    double distance = circle1.getRadius() + circle2.getRadius() * COLLISION_SCALING_FACTOR;
+                    double distance = circle1.getRadius() + circle2.getRadius() * collisionScalingFactor;
                     if (dx * dx + dy * dy < distance * distance) {
                         return true;
                     }
@@ -160,6 +163,7 @@ public class GameWorld {
             default       -> GameConstants.MIN_NPC_QUANTITY;
         };
     }
+
 
     public double getWorldPartY() {
         return worldPartY;

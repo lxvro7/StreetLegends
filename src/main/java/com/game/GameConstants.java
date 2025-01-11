@@ -12,7 +12,7 @@ public class GameConstants {
 
     // Vehicle properties: Maximum velocity and radius for different vehicle types
     public static final int NPC_CAR_VELOCITY = 200;
-    public static final int PLAYER_CAR_START_VELOCITY = 1000;
+    public static final int PLAYER_CAR_START_VELOCITY = 900;
     public static final int AMBULANCE_RADIUS = 40;
     public static final int AUDI_RADIUS = 40;
     public static final int BLACK_VIPER_RADIUS = 40;
@@ -24,7 +24,7 @@ public class GameConstants {
     public static final int VAN_RADIUS = 40;
 
     // Game mechanics constants:
-    public static final int PLAYER_CAR_MAX_VELOCITY = 1750;
+    public static final int PLAYER_CAR_MAX_VELOCITY = 1050;
     public static final int EASY_DIFFICULTY_SPEED_INCREASE = 3;
     public static final int MEDIUM_DIFFICULTY_SPEED_INCREASE = 15;
     public static final int HARD_DIFFICULTY_SPEED_INCREASE = 25;
@@ -81,7 +81,16 @@ public class GameConstants {
     public static final String COIN_IMAGE_PATH = "/images/icon/coin.jpg";
     public static final String POISEN_IMAGE_PATH = "/images/icon/poisen.jpg";
 
+    // Scaling Factor for easy-medium and hard
+    public static final double EASY_COLLISION_SCALING_FACTOR = 8.0;
+    public static final double MEDIUM_COLLISION_SCALING_FACTOR = 7.0;
+    public static final double HARD_COLLISION_SCALING_FACTOR = 5.5;
+    public static final double FALLBACK_COLLISION_SCALING_FACTOR = 7.5;
+
+
+
     // Log messages
+
 
 }
 

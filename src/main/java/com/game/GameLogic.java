@@ -58,6 +58,7 @@ public class GameLogic {
             newVelocity = GameConstants.PLAYER_CAR_MAX_VELOCITY;
         }
         gameManager.getPlayer().getPlayerVehicle().setVelocity(newVelocity);
+        System.out.println("Current velocity: " + newVelocity);
     }
 
     public void update() {
@@ -70,9 +71,10 @@ public class GameLogic {
         double pixelsPerMeter = 10;
         distanceTraveled = (int) (distanceInPixels / pixelsPerMeter);
 
-        if (distanceTraveled >= lastDistanceCheckpoint + 100) {
-            //increaseVelocity(gameManager.getDifficulty());
-            lastDistanceCheckpoint += 100;
+        if (distanceTraveled >= lastDistanceCheckpoint + 200) {
+            lastDistanceCheckpoint += 200;
+            increaseVelocity(gameManager.getDifficulty());
+            System.out.println("Distance: " + distanceTraveled + " meters, increasing velocity...");
         }
     }
 
