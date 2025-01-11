@@ -21,10 +21,20 @@ public class GameRenderer {
         vehicleGraphicsContext.clearRect(0, 0, canvasWidth, canvasHeight);
 
         double worldPartY = gameManager.getWorldPartY();
+
         for (Vehicle vehicle : vehicles) {
             double canvasY = vehicle.getY() - worldPartY;
             if (canvasY >= 0 && canvasY <= canvasHeight) {
-                vehicleGraphicsContext.drawImage(vehicle.getVehicleImage(), vehicle.getX(), canvasY);
+                double imageWidth = vehicle.getVehicleImage().getWidth();
+                double imageHeight = vehicle.getVehicleImage().getHeight();
+
+                double scaleFactorX = canvasWidth * 0.25 / imageWidth;
+                double scaleFactorY = scaleFactorX;
+
+                double scaledWidth = imageWidth * scaleFactorX;
+                double scaledHeight = imageHeight * scaleFactorY;
+
+                vehicleGraphicsContext.drawImage(vehicle.getVehicleImage(), vehicle.getX(), canvasY, scaledWidth, scaledHeight);
             }
         }
     }

@@ -128,12 +128,16 @@ public class GameWorld {
         final double secondLaneX = STREET_WIDTH * 0.275;
         final double thirdLaneX = STREET_WIDTH * 0.475;
         final double fourthLaneX = STREET_WIDTH * 0.675;
+        System.out.println("1: " + firstLaneX);
+        System.out.println("2: " + secondLaneX);
+        System.out.println("3: " + thirdLaneX);
+        System.out.println("4: " + fourthLaneX);
 
         return new double[]{ firstLaneX, secondLaneX, thirdLaneX, fourthLaneX };
     }
 
     private boolean hasCollisionWithExistingNpcs(ArrayList<NPC> existingNpcs, Vehicle newVehicle) {
-        final double COLLISION_SCALING_FACTOR = 4;
+        final double COLLISION_SCALING_FACTOR = 8;
         for (NPC existingNpc : existingNpcs) {
             for (Circle circle1 : existingNpc.getNpcVehicle().getCollisionCircles()) {
                 for (Circle circle2 : newVehicle.getCollisionCircles()) {
