@@ -13,15 +13,15 @@ public class GameConstants {
     // Vehicle properties: Maximum velocity and radius for different vehicle types
     public static final int NPC_CAR_VELOCITY = 200;
     public static final int PLAYER_CAR_START_VELOCITY = 1000;
-    public static final int AMBULANCE_RADIUS = 50;
-    public static final int AUDI_RADIUS = 50;
-    public static final int BLACK_VIPER_RADIUS = 50;
-    public static final int MUSTANG_RADIUS = 50;
-    public static final int PICKUP_RADIUS = 50;
-    public static final int POLICE_RADIUS = 50;
-    public static final int TAXI_RADIUS = 50;
-    public static final int TRUCK_RADIUS = 50;
-    public static final int VAN_RADIUS = 50;
+    public static final int AMBULANCE_RADIUS = 40;
+    public static final int AUDI_RADIUS = 40;
+    public static final int BLACK_VIPER_RADIUS = 40;
+    public static final int MUSTANG_RADIUS = 40;
+    public static final int PICKUP_RADIUS = 40;
+    public static final int POLICE_RADIUS = 40;
+    public static final int TAXI_RADIUS = 40;
+    public static final int TRUCK_RADIUS = 40;
+    public static final int VAN_RADIUS = 40;
 
     // Game mechanics constants:
     public static final int PLAYER_CAR_MAX_VELOCITY = 1750;
@@ -30,7 +30,7 @@ public class GameConstants {
     public static final int HARD_DIFFICULTY_SPEED_INCREASE = 25;
 
     // World properties: Boundaries and initial player position
-    public static final int SCROLL_BOUNDS = 600;
+    public static final int SCROLL_BOUNDS = 700;
     public static final double INITIAL_PLAYER_Y = 1_000_000;
     public static final double INITIAL_PLAYER_X = 790;
     public static final double INITIAL_WORLD_PART_Y = INITIAL_PLAYER_Y - 100;

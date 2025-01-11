@@ -53,7 +53,6 @@ public class UserInterface extends Application {
 
         windowHeight = primaryStage.getHeight();
         windowWidth = primaryStage.getWidth();
-        System.out.println(windowWidth);
     }
 
 
@@ -72,7 +71,6 @@ public class UserInterface extends Application {
         );
         root.setBackground(new Background(backgroundImage));
     }
-
     // Creates the layout for the player's name entry screen, including labels, text fields, and a button.
     public Node createEntry() {
 

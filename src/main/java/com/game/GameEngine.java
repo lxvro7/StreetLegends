@@ -2,7 +2,6 @@ package com.game;
 
 import javafx.application.Platform;
 import javafx.scene.canvas.GraphicsContext;
-import javafx.scene.control.Label;
 import javafx.scene.input.KeyCode;
 
 import java.util.ArrayList;
@@ -117,7 +116,6 @@ public class GameEngine {
             });
         }
     }
-
 
     // Creates a player vehicle for the specified color and difficulty
     private Player createPlayerVehicle(String playerName) {

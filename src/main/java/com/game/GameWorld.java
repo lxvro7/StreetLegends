@@ -22,7 +22,6 @@ public class GameWorld {
     private final ArrayList<NPC> npcs;
     private final Random random = new Random();
     private double spawnTriggerY;
-    private double counter = 0;
 
     public GameWorld(GameManager gameManager) {
         this.gameManager = gameManager;
