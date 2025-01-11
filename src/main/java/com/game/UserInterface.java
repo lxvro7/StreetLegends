@@ -271,6 +271,11 @@ public class UserInterface extends Application {
         canvasContainer.getChildren().addAll(streetCanvas, vehicleCanvas);
         canvasContainer.setAlignment(Pos.CENTER);
 
+        streetCanvas.widthProperty().bind(scene.widthProperty());
+        streetCanvas.heightProperty().bind(scene.heightProperty());
+        vehicleCanvas.widthProperty().bind(scene.widthProperty());
+        vehicleCanvas.heightProperty().bind(scene.heightProperty());
+
         Label meterLabel = new Label("Meter: 0");
         meterLabel.getStyleClass().add("meter-label");
         meterLabel.setPadding(new Insets(10));
