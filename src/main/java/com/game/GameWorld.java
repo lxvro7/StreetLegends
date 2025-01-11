@@ -105,11 +105,11 @@ public class GameWorld {
     private NPC generateUniqueNpc(ArrayList<NPC> existingNpcs) {
         final double SPAWN_OFFSET = GameConstants.SPAWN_OFFSET;
         final double SPAWN_RANGE  = GameConstants.SPAWN_RANGE;
-        final double [] LANES     = GameConstants.LANES;
+        double[] streetLanes = calculateStreetLanes();
         int attempts = 0;
         while(attempts < GameConstants.MAX_NPC_ATTEMPTS) {
             // Create random coordinates
-            double randomXValue = LANES[random.nextInt(LANES.length)];
+            double randomXValue = streetLanes[random.nextInt(streetLanes.length)];
             double y = spawnTriggerY + random.nextDouble() * SPAWN_RANGE - SPAWN_OFFSET;
             // Create random type and color
             VehicleType vehicleType  = VehicleType.values()[random.nextInt(VehicleType.values().length)];
@@ -120,6 +120,16 @@ public class GameWorld {
             attempts++;
         }
         return null;
+    }
+
+    private double [] calculateStreetLanes() {
+        final double STREET_WIDTH = gameManager.getCanvasWidth();
+        final double firstLaneX = STREET_WIDTH * 0.075;
+        final double secondLaneX = STREET_WIDTH * 0.275;
+        final double thirdLaneX = STREET_WIDTH * 0.475;
+        final double fourthLaneX = STREET_WIDTH * 0.675;
+
+        return new double[]{ firstLaneX, secondLaneX, thirdLaneX, fourthLaneX };
     }
 
     private boolean hasCollisionWithExistingNpcs(ArrayList<NPC> existingNpcs, Vehicle newVehicle) {

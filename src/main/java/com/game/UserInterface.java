@@ -29,8 +29,8 @@ public class UserInterface extends Application {
     private String playerName = "";
     private double windowWidth;
     private double windowHeight;
-    private GraphicsContext backgroundGraphicsContext;
     private GraphicsContext vehicleGraphicsContext;
+    private GraphicsContext streetGraphicsContext;
     private final SoundManager soundManager = new SoundManager();
 
     public static void main(String[] args) {
@@ -184,6 +184,19 @@ public class UserInterface extends Application {
         return menuLayout;
     }
 
+    public Canvas createStreetCanvas()  {
+        double streetWidthRatio = 0.5;
+        double streetHeightRatio = 1.0;
+
+        double screenWidth = Screen.getPrimary().getBounds().getWidth();
+        double screenHeight = Screen.getPrimary().getBounds().getHeight();
+
+        double streetWidth = screenWidth * streetWidthRatio;
+        double streetHeight = screenHeight * streetHeightRatio;
+
+        return new Canvas(streetWidth, streetHeight);
+    }
+
     // Creates a menu layout for selecting the difficulty level (Easy, Medium, Hard) with animations.
     public Node DifficultyMenu(Label difficultyLabel) {
         Label Diff = new Label("Please select:");
@@ -247,21 +260,20 @@ public class UserInterface extends Application {
                 break;
         }
     }
+
     public Node createGame(String playerName) {
         soundManager.stopMenuSound();
         soundManager.startGameSound();
-        double canvasWidth = windowWidth;
-        double canvasHeight = windowHeight;
-        GameEngine gameEngine = new GameEngine(playerName, difficulty,this, canvasHeight);
 
-        Canvas backgroundCanvas = new Canvas(canvasWidth, canvasHeight);
-        Canvas vehicleCanvas = new Canvas(canvasWidth, canvasHeight);
+        Canvas streetCanvas = createStreetCanvas();
+        Canvas vehicleCanvas = new Canvas(streetCanvas.getWidth(), streetCanvas.getHeight());
 
-        backgroundGraphicsContext = backgroundCanvas.getGraphicsContext2D();
         vehicleGraphicsContext = vehicleCanvas.getGraphicsContext2D();
+        streetGraphicsContext = streetCanvas.getGraphicsContext2D();
+
 
         StackPane canvasContainer = new StackPane();
-        canvasContainer.getChildren().addAll(backgroundCanvas, vehicleCanvas);
+        canvasContainer.getChildren().addAll(streetCanvas, vehicleCanvas);
         canvasContainer.setAlignment(Pos.CENTER);
 
         Label meterLabel = new Label("Meter: 0");
@@ -271,10 +283,12 @@ public class UserInterface extends Application {
         canvasContainer.getChildren().add(meterLabel);
         StackPane.setAlignment(meterLabel, Pos.TOP_LEFT);
 
+        GameEngine gameEngine = new GameEngine(playerName, difficulty,this, streetCanvas.getHeight(), streetCanvas.getWidth());
 
-        gameEngine.setCanvasHeight(canvasHeight);
-        gameEngine.setCanvasWidth(canvasWidth);
-        gameEngine.renderBackground(backgroundGraphicsContext);
+
+        gameEngine.setCanvasHeight(streetCanvas.getHeight());
+        gameEngine.setCanvasWidth(streetCanvas.getWidth());
+        gameEngine.renderBackground(streetGraphicsContext);
         gameEngine.setUpdateCallback(vehicles -> gameEngine.renderVehicles(vehicleGraphicsContext, vehicles));
 
         root.getChildren().clear();
@@ -497,7 +511,7 @@ public class UserInterface extends Application {
         }
     }
     public GraphicsContext getBackgroundGraphicsContext() {
-        return backgroundGraphicsContext;
+        return streetGraphicsContext;
     }
 
     public GraphicsContext getVehicleGraphicsContext() {

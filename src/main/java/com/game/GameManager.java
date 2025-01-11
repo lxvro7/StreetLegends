@@ -19,11 +19,13 @@ public class GameManager {
     private final GameEngine gameEngine;
 
     private final double canvasHeight;
+    private final double canvasWidth;
 
-    public GameManager(Player player, String difficulty, double canvasHeight, GameEngine gameEngine) {
+    public GameManager(Player player, String difficulty, double canvasHeight, double canvasWidth, GameEngine gameEngine) {
         this.player = player;
         this.difficulty = difficulty;
         this.canvasHeight = canvasHeight;
+        this.canvasWidth = canvasWidth;
         this.gameEngine=gameEngine;
 
         // Initialize game components
@@ -115,6 +117,7 @@ public class GameManager {
         gameEngine.stopGame();
     }
 
-
-
+    public double getCanvasWidth() {
+        return canvasWidth;
+    }
 }

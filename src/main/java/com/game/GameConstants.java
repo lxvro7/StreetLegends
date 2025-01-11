@@ -38,7 +38,6 @@ public class GameConstants {
     public static final double MAX_X_COORDINATE = 900;
     public static final double SPAWN_TRIGGER_TOLERANCE = 10;
     public static final double ROTATION_270_RAD = 3 * Math.PI / 2;
-    public static final double[] LANES = {600, 720, 840, 960};
 
     // Game mechanics constants: NPC spawning limits and turning angles
     public static final int MAX_NPC_ATTEMPTS = 100;
@@ -70,7 +69,7 @@ public class GameConstants {
     public static final String MUSTANG_LEFT_IMAGE_PATH = "/images/vehicles/mustang_left.png";
 
     // File path for game background images
-    public static final String GAME_BACKGROUND_IMAGE_PATH = "/images/background/game_background.jpg";
+    public static final String GAME_BACKGROUND_IMAGE_PATH = "/images/background/road_0.png";
     public static final String MENU_BACKGROUND_IMAGE_PATH = "/images/background/menu_background.jpg";
 
     // File path for audios

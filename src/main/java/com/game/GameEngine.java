@@ -20,10 +20,10 @@ public class GameEngine {
     private enum GameState {RUNNING, GAME_OVER}
     private GameState currentState = GameState.RUNNING;
 
-    public GameEngine(String playerName, String difficulty, UserInterface userInterface, double canvasHeight) {
+    public GameEngine(String playerName, String difficulty, UserInterface userInterface, double canvasHeight, double canvasWidth) {
         this.userInterface = userInterface;
         this.player = createPlayerVehicle(playerName);
-        this.gameManager = new GameManager(player, difficulty, canvasHeight,this);
+        this.gameManager = new GameManager(player, difficulty, canvasHeight,canvasWidth,this);
         this.keyEventHandler = new KeyEventHandler(player);
     }
 
