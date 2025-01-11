@@ -124,20 +124,18 @@ public class GameWorld {
 
     private double [] calculateStreetLanes() {
         final double STREET_WIDTH = gameManager.getCanvasWidth();
-        final double firstLaneX = STREET_WIDTH * 0.075;
-        final double secondLaneX = STREET_WIDTH * 0.275;
-        final double thirdLaneX = STREET_WIDTH * 0.475;
-        final double fourthLaneX = STREET_WIDTH * 0.675;
-        System.out.println("1: " + firstLaneX);
-        System.out.println("2: " + secondLaneX);
-        System.out.println("3: " + thirdLaneX);
-        System.out.println("4: " + fourthLaneX);
+        final double firstLaneX = STREET_WIDTH * 0.275;
+        final double secondLaneX = STREET_WIDTH * 0.38;
+        final double thirdLaneX = STREET_WIDTH * 0.495;
+        final double fourthLaneX = STREET_WIDTH * 0.61;
 
         return new double[]{ firstLaneX, secondLaneX, thirdLaneX, fourthLaneX };
     }
 
     private boolean hasCollisionWithExistingNpcs(ArrayList<NPC> existingNpcs, Vehicle newVehicle) {
-        final double COLLISION_SCALING_FACTOR = 8;
+        // TODO: Change scaling factor based off the difficulty, care: if collision scaling factor is less than 3,
+        //  some vehicles overlap, so let even for hard 3 as the minimum
+        final double COLLISION_SCALING_FACTOR = 3;
         for (NPC existingNpc : existingNpcs) {
             for (Circle circle1 : existingNpc.getNpcVehicle().getCollisionCircles()) {
                 for (Circle circle2 : newVehicle.getCollisionCircles()) {

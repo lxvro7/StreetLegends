@@ -69,7 +69,7 @@ public class GameConstants {
     public static final String MUSTANG_LEFT_IMAGE_PATH = "/images/vehicles/mustang_left.png";
 
     // File path for game background images
-    public static final String GAME_BACKGROUND_IMAGE_PATH = "/images/background/road_0.png";
+    public static final String GAME_BACKGROUND_IMAGE_PATH = "/images/background/game_background.jpg";
     public static final String MENU_BACKGROUND_IMAGE_PATH = "/images/background/menu_background.jpg";
 
     // File path for audios
@@ -80,7 +80,6 @@ public class GameConstants {
     // Images to gain coin or poisen, maybe future?
     public static final String COIN_IMAGE_PATH = "/images/icon/coin.jpg";
     public static final String POISEN_IMAGE_PATH = "/images/icon/poisen.jpg";
-
 
     // Log messages
 

@@ -71,7 +71,7 @@ public class GameLogic {
         distanceTraveled = (int) (distanceInPixels / pixelsPerMeter);
 
         if (distanceTraveled >= lastDistanceCheckpoint + 100) {
-            increaseVelocity(gameManager.getDifficulty());
+            //increaseVelocity(gameManager.getDifficulty());
             lastDistanceCheckpoint += 100;
         }
     }

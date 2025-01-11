@@ -28,7 +28,7 @@ public class GameRenderer {
                 double imageWidth = vehicle.getVehicleImage().getWidth();
                 double imageHeight = vehicle.getVehicleImage().getHeight();
 
-                double scaleFactorX = canvasWidth * 0.25 / imageWidth;
+                double scaleFactorX = canvasWidth * 0.125 / imageWidth;
                 double scaleFactorY = scaleFactorX;
 
                 double scaledWidth = imageWidth * scaleFactorX;

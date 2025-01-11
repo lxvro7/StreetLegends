@@ -109,7 +109,6 @@ public class GameEngine {
         if (currentState != GameState.GAME_OVER) {
             currentState = GameState.GAME_OVER;
             running = false;
-            System.out.println("Spiel gestoppt. Game Over!");
             Platform.runLater(() -> {
                 int finalDistance = getDistanceTraveled();
                 userInterface.showGameOverWindow(finalDistance);

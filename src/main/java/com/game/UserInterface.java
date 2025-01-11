@@ -185,16 +185,11 @@ public class UserInterface extends Application {
     }
 
     public Canvas createStreetCanvas()  {
-        double streetWidthRatio = 0.5;
-        double streetHeightRatio = 1.0;
 
         double screenWidth = Screen.getPrimary().getBounds().getWidth();
         double screenHeight = Screen.getPrimary().getBounds().getHeight();
 
-        double streetWidth = screenWidth * streetWidthRatio;
-        double streetHeight = screenHeight * streetHeightRatio;
-
-        return new Canvas(streetWidth, streetHeight);
+        return new Canvas(screenWidth, screenHeight);
     }
 
     // Creates a menu layout for selecting the difficulty level (Easy, Medium, Hard) with animations.
