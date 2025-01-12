@@ -11,8 +11,6 @@ public class GameRenderer {
     private final Image image;
     private final GameManager gameManager;
 
-    // TODO Lovro: Add double buffering
-
     public GameRenderer(GameManager gameManager) {
         this.gameManager = gameManager;
         image = createImage(GameConstants.GAME_BACKGROUND_IMAGE_PATH);
@@ -63,4 +61,3 @@ public class GameRenderer {
         return new Image(Objects.requireNonNull(getClass().getResource(backgroundImagePath)).toExternalForm());
     }
 }
-

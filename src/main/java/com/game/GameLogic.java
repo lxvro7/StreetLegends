@@ -30,7 +30,7 @@ public class GameLogic {
     }
 
     // Game is over, if the player collides with a npc
-    public boolean checkIfGameOver() {
+    public synchronized boolean checkIfGameOver() {
         Player player = gameManager.getPlayer();
         Vehicle playerVehicle = player.getPlayerVehicle();
         ArrayList<NPC> npcs = gameManager.getAllNpcs();

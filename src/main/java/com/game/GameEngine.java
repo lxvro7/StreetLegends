@@ -1,5 +1,6 @@
 package com.game;
 
+import javafx.animation.AnimationTimer;
 import javafx.application.Platform;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.input.KeyCode;
@@ -36,21 +37,33 @@ public class GameEngine {
 
     public void startGameLoop() {
         running = true;
-        Thread gameLoopThread = new Thread(() -> {
-            long lastTime = System.nanoTime();
-            while(running) {
-                long currentTime = System.nanoTime();
-                double diffSeconds = (currentTime - lastTime) / 1_000_000_000.0;
-                lastTime = currentTime;
+        AnimationTimer gameLoop = new AnimationTimer() {
+            private long lastTime = 0;
 
-                executorService.submit(() -> {
-                    gameManager.updateWorld(diffSeconds);
-                });
-
-                if(gameManager.checkIfGameOver()) {
-                    stopGame();
+            @Override
+            public void handle(long now) {
+                if (lastTime == 0) {
+                    lastTime = now;
+                    return;
                 }
 
+                double diffSeconds = (now - lastTime) / 1_000_000_000.0;
+                lastTime = now;
+
+                // Game logic in separate thread
+                executorService.submit(() -> {
+                    gameManager.updateWorld(diffSeconds);
+
+                    if (gameManager.isNewSpawnNeeded()) {
+                        gameManager.addNewNpcs();
+                    }
+                    if (gameManager.checkIfGameOver()) {
+                        stopGame();
+                        stop();
+                    }
+                });
+
+                // Rendering on the UI thread
                 Platform.runLater(() -> {
                     if (updateCallback != null) {
                         updateCallback.accept(gameManager.getAllVehicles());
@@ -60,26 +73,12 @@ public class GameEngine {
                         gameManager.drawBackground(userInterface.getBackgroundGraphicsContext(),
                                 canvasWidth, canvasHeight);
                     }
-
-                    if(gameManager.isNewSpawnNeeded()) {
-                        executorService.submit(gameManager::addNewNpcs);
-                    }
-                    gameManager.drawVehicles(gameManager.getAllVehicles(), userInterface.getVehicleGraphicsContext(),
-                            canvasWidth, canvasHeight);
+                    gameManager.drawVehicles(gameManager.getAllVehicles(),
+                            userInterface.getVehicleGraphicsContext(), canvasWidth, canvasHeight);
                 });
-                System.out.println("NPCS SIZE " + gameManager.getAllNpcs().size());
-                // 60 FPS
-                try {
-                    Thread.sleep(GameConstants.FRAME_DELAY);
-                } catch (InterruptedException e) {
-                    Thread.currentThread().interrupt();
-                }
             }
-        });
-        // Runs in background
-        gameLoopThread.setDaemon(true);
-        gameLoopThread.setPriority(Thread.MAX_PRIORITY);
-        gameLoopThread.start();
+        };
+        gameLoop.start();
     }
 
     // Handles the events, that occurred during the game
