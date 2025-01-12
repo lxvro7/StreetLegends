@@ -2,6 +2,8 @@ package com.game;
 
 import javafx.scene.canvas.GraphicsContext;
 import java.util.ArrayList;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 /**
  * This class serves as the mediator between the game's core components.
@@ -17,6 +19,7 @@ public class GameManager {
     private final String difficulty;
     private final Player player;
     private final GameEngine gameEngine;
+    private final ExecutorService executorService;
 
     private final double canvasHeight;
     private final double canvasWidth;
@@ -32,6 +35,8 @@ public class GameManager {
         this.gameLogic = new GameLogic(this);
         this.gameWorld = new GameWorld(this);
         this.gameRenderer = new GameRenderer(this);
+
+        executorService = Executors.newFixedThreadPool(4);
     }
 
     /**

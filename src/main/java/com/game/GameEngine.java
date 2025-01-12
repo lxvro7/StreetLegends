@@ -21,7 +21,7 @@ public class GameEngine {
     private final UserInterface userInterface;
     private enum GameState {RUNNING, GAME_OVER}
     private GameState currentState = GameState.RUNNING;
-    private final ExecutorService executor = Executors.newFixedThreadPool(4);
+    private final ExecutorService executorService = Executors.newFixedThreadPool(2);
 
     public GameEngine(String playerName, String difficulty, UserInterface userInterface, double canvasHeight, double canvasWidth) {
         this.userInterface = userInterface;
@@ -43,7 +43,10 @@ public class GameEngine {
                 double diffSeconds = (currentTime - lastTime) / 1_000_000_000.0;
                 lastTime = currentTime;
 
-                gameManager.updateWorld(diffSeconds);
+                executorService.submit(() -> {
+                    gameManager.updateWorld(diffSeconds);
+                });
+
                 if(gameManager.checkIfGameOver()) {
                     stopGame();
                 }
@@ -59,11 +62,14 @@ public class GameEngine {
                     }
 
                     if(gameManager.isNewSpawnNeeded()) {
-                        executor.submit(gameManager::addNewNpcs);
-                        Platform.runLater(() -> gameManager.drawVehicles(gameManager.getAllVehicles(), userInterface.getVehicleGraphicsContext(),
-                                canvasWidth, canvasHeight));
+                        executorService.submit(() -> {
+                            gameManager.addNewNpcs();
+                            Platform.runLater(() -> gameManager.drawVehicles(gameManager.getAllVehicles(), userInterface.getVehicleGraphicsContext(),
+                                    canvasWidth, canvasHeight));
+                        });
                     }
                 });
+                System.out.println("NPCS SIZE " + gameManager.getAllNpcs().size());
                 // 60 FPS
                 try {
                     Thread.sleep(GameConstants.FRAME_DELAY);
@@ -74,6 +80,7 @@ public class GameEngine {
         });
         // Runs in background
         gameLoopThread.setDaemon(true);
+        gameLoopThread.setPriority(Thread.MAX_PRIORITY);
         gameLoopThread.start();
     }
 
@@ -112,6 +119,7 @@ public class GameEngine {
                 int finalDistance = getDistanceTraveled();
                 userInterface.showGameOverWindow(finalDistance);
             });
+            executorService.shutdown();
         }
     }
 

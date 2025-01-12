@@ -11,7 +11,7 @@ package com.game;
 public class GameConstants {
 
     // Vehicle properties: Maximum velocity and radius for different vehicle types
-    public static final int NPC_CAR_VELOCITY = 50;
+    public static final int NPC_CAR_VELOCITY = 100;
     public static final int PLAYER_CAR_START_VELOCITY = 900;
     public static final int AMBULANCE_RADIUS = 40;
     public static final int AUDI_RADIUS = 40;

@@ -32,10 +32,10 @@ public class GameWorld {
                 gameManager.getCanvasHeight() - gameManager.getCanvasHeight()/3;
     }
 
-    public void update(double diffSeconds) {
-        moveAllVehicles(diffSeconds);
-        deleteVehicles();
-        gameManager.getGameLogic().update();
+    public synchronized void update(double diffSeconds) {
+            moveAllVehicles(diffSeconds);
+            deleteVehicles();
+            gameManager.getGameLogic().update();
     }
 
     public void addNewNpcs() {

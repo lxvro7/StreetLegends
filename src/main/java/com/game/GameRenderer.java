@@ -1,5 +1,6 @@
 package com.game;
 
+import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
 
@@ -10,10 +11,13 @@ public class GameRenderer {
     private final Image image;
     private final GameManager gameManager;
 
+    // TODO Lovro: Add double buffering
+
     public GameRenderer(GameManager gameManager) {
         this.gameManager = gameManager;
         image = createImage(GameConstants.GAME_BACKGROUND_IMAGE_PATH);
     }
+
 
     public void drawVehicles(ArrayList<Vehicle> vehicles,
                              GraphicsContext vehicleGraphicsContext, double canvasWidth, double canvasHeight) {
