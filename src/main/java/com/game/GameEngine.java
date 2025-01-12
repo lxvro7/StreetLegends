@@ -62,12 +62,10 @@ public class GameEngine {
                     }
 
                     if(gameManager.isNewSpawnNeeded()) {
-                        executorService.submit(() -> {
-                            gameManager.addNewNpcs();
-                            Platform.runLater(() -> gameManager.drawVehicles(gameManager.getAllVehicles(), userInterface.getVehicleGraphicsContext(),
-                                    canvasWidth, canvasHeight));
-                        });
+                        executorService.submit(gameManager::addNewNpcs);
                     }
+                    gameManager.drawVehicles(gameManager.getAllVehicles(), userInterface.getVehicleGraphicsContext(),
+                            canvasWidth, canvasHeight);
                 });
                 System.out.println("NPCS SIZE " + gameManager.getAllNpcs().size());
                 // 60 FPS
