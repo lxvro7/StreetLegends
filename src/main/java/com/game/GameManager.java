@@ -38,11 +38,11 @@ public class GameManager {
      * Delegates the GameWorld methods
      * */
 
-    public void updateWorld(double diffSeconds) {
+    public synchronized void updateWorld(double diffSeconds) {
         gameWorld.update(diffSeconds);
     }
 
-    public ArrayList<Vehicle> getAllVehicles() {
+    public synchronized ArrayList<Vehicle> getAllVehicles() {
         return gameWorld.getAllVehicles();
     }
 
@@ -50,7 +50,7 @@ public class GameManager {
         return gameWorld.getAllNpcs();
     }
 
-    public void addNewNpcs() {
+    public synchronized void addNewNpcs() {
         gameWorld.addNewNpcs();
     }
 

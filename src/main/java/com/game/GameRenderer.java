@@ -30,10 +30,9 @@ public class GameRenderer {
 
                 double scaleFactorX = canvasWidth * 0.125 / imageWidth;
                 double scaleFactorY = scaleFactorX;
-
+                // if(gameManager.IsHütchenSpawnNeeded) vehicleGraphicsContext.drawImage()
                 double scaledWidth = imageWidth * scaleFactorX;
                 double scaledHeight = imageHeight * scaleFactorY;
-
                 vehicleGraphicsContext.drawImage(vehicle.getVehicleImage(), vehicle.getX(), canvasY, scaledWidth, scaledHeight);
             }
         }

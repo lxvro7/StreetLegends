@@ -3,6 +3,7 @@ package com.game;
 import javafx.scene.shape.Circle;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.Random;
 import static com.game.Vehicle.VehicleType;
 import static com.game.Vehicle.PlayerType;
@@ -33,6 +34,7 @@ public class GameWorld {
 
     public void update(double diffSeconds) {
         moveAllVehicles(diffSeconds);
+        deleteVehicles();
         gameManager.getGameLogic().update();
     }
 
@@ -73,15 +75,30 @@ public class GameWorld {
         }
     }
 
+    // TODO Lovro: Fix this, based off the players velocity
     public boolean isNewSpawnNeeded() {
         double canvasHeight = gameManager.getCanvasHeight();
         double playerY = player.getPlayerVehicle().getY();
+        double playerVelocity = player.getPlayerVehicle().getVelocity();
         boolean withinTolerance = Math.abs(playerY - spawnTriggerY) < GameConstants.SPAWN_TRIGGER_TOLERANCE;
         if(withinTolerance) {
-            spawnTriggerY = playerY - canvasHeight - canvasHeight/2;
+            spawnTriggerY = playerY - canvasHeight - canvasHeight/2 - (playerVelocity * 0.1);
             return true;
         }
         return false;
+    }
+
+    // Delete all vehicles, that are below the player's canvas
+    public void deleteVehicles() {
+        double deleteTriggerY = player.getPlayerVehicle().getY()
+                + gameManager.getCanvasHeight() + gameManager.getCanvasHeight()/2;
+        Iterator<NPC> iterator = npcs.iterator();
+        while(iterator.hasNext()) {
+            NPC npc = iterator.next();
+            if(Math.abs(npc.getNpcVehicle().getY() - deleteTriggerY) < GameConstants.SPAWN_TRIGGER_TOLERANCE) {
+                iterator.remove();
+            }
+        }
     }
 
     // TODO: Refactor spawning mechanism, so it gets more fun to play!

@@ -5,6 +5,8 @@ import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.input.KeyCode;
 
 import java.util.ArrayList;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 import java.util.function.Consumer;
 
 public class GameEngine {
@@ -19,6 +21,7 @@ public class GameEngine {
     private final UserInterface userInterface;
     private enum GameState {RUNNING, GAME_OVER}
     private GameState currentState = GameState.RUNNING;
+    private final ExecutorService executor = Executors.newFixedThreadPool(4);
 
     public GameEngine(String playerName, String difficulty, UserInterface userInterface, double canvasHeight, double canvasWidth) {
         this.userInterface = userInterface;
@@ -39,6 +42,7 @@ public class GameEngine {
                 long currentTime = System.nanoTime();
                 double diffSeconds = (currentTime - lastTime) / 1_000_000_000.0;
                 lastTime = currentTime;
+
                 gameManager.updateWorld(diffSeconds);
                 if(gameManager.checkIfGameOver()) {
                     stopGame();
@@ -55,13 +59,9 @@ public class GameEngine {
                     }
 
                     if(gameManager.isNewSpawnNeeded()) {
-                        Thread spawnThread = new Thread(() -> {
-                            gameManager.addNewNpcs();
-                            Platform.runLater(() -> gameManager.drawVehicles(gameManager.getAllVehicles(), userInterface.getVehicleGraphicsContext(),
-                                    canvasWidth, canvasHeight));
-                        });
-                        spawnThread.setDaemon(true);
-                        spawnThread.start();
+                        executor.submit(gameManager::addNewNpcs);
+                        Platform.runLater(() -> gameManager.drawVehicles(gameManager.getAllVehicles(), userInterface.getVehicleGraphicsContext(),
+                                canvasWidth, canvasHeight));
                     }
                 });
                 // 60 FPS
@@ -74,7 +74,6 @@ public class GameEngine {
         });
         // Runs in background
         gameLoopThread.setDaemon(true);
-        gameLoopThread.setPriority(Thread.MAX_PRIORITY);
         gameLoopThread.start();
     }
 
