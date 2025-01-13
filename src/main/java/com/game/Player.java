@@ -11,11 +11,11 @@ public class Player {
     private boolean turningLeft = false;
     private boolean turningRight = false;
     private final Image turnRightImage = new Image(Objects.requireNonNull(getClass().
-            getResource(GameConstants.MUSTANG_RIGHT_IMAGE_PATH)).toExternalForm());
+            getResource(GameConstants.PLAYER_RIGHT_IMAGE_PATH)).toExternalForm());
     private final Image turnLeftImage = new Image(Objects.requireNonNull(getClass().
-            getResource(GameConstants.MUSTANG_LEFT_IMAGE_PATH)).toExternalForm());
+            getResource(GameConstants.PLAYER_LEFT_IMAGE_PATH)).toExternalForm());
     private final Image defaultImage = new Image(Objects.requireNonNull(getClass().
-    getResource(GameConstants.MUSTANG_IMAGE_PATH)).toExternalForm());
+    getResource(GameConstants.PLAYER_IMAGE_PATH)).toExternalForm());
 
     public Image getDefaultImage() {
         return defaultImage;

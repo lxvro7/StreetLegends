@@ -2,8 +2,6 @@ package com.game;
 
 import javafx.scene.canvas.GraphicsContext;
 import java.util.ArrayList;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 
 /**
  * This class serves as the mediator between the game's core components.
@@ -19,7 +17,6 @@ public class GameManager {
     private final String difficulty;
     private final Player player;
     private final GameEngine gameEngine;
-    private final ExecutorService executorService;
 
     private final double canvasHeight;
     private final double canvasWidth;
@@ -36,7 +33,6 @@ public class GameManager {
         this.gameWorld = new GameWorld(this);
         this.gameRenderer = new GameRenderer(this);
 
-        executorService = Executors.newFixedThreadPool(4);
     }
 
     /**
@@ -66,10 +62,6 @@ public class GameManager {
     /**
      * Delegates the GameLogic methods
      */
-
-    public boolean isCollisionDetected(Vehicle vehicle, Vehicle vehicle2) {
-        return gameLogic.isCollisionDetected(vehicle, vehicle2);
-    }
 
     public boolean checkIfGameOver() {
         return gameLogic.checkIfGameOver();
@@ -118,6 +110,7 @@ public class GameManager {
     public GameLogic getGameLogic() {
         return gameLogic;
     }
+
     public void stopGameDueToOutOfBounds() {
         gameEngine.stopGame();
     }

@@ -82,6 +82,7 @@ public class GameWorld {
         double playerVelocity = player.getPlayerVehicle().getVelocity();
         boolean withinTolerance = Math.abs(playerY - spawnTriggerY) < GameConstants.SPAWN_TRIGGER_TOLERANCE;
         if(withinTolerance) {
+            System.out.println("SPAWN NEEDED");
             spawnTriggerY = playerY - canvasHeight - canvasHeight/2 - (playerVelocity * 0.1);
             return true;
         }
@@ -101,37 +102,84 @@ public class GameWorld {
         }
     }
 
-    // TODO: Refactor spawning mechanism, so it gets more fun to play!
+    // TODO Lovro:
+    private boolean isConesSpawnNeeded() {
+        return true;
+    }
+
+    // TODO Alton: Coin spawned auf einen der 4 lanes zufällig, calculateStreetLanes() benutzen
+    private boolean isCoinSpawnNeeded() {
+        return true;
+    }
 
     public ArrayList<NPC> spawnTheNpcVehicles() {
-        ArrayList<NPC> newNpcs = new ArrayList<>();
-        int quantity = calculateNpcSpawningAmount();
-        while(newNpcs.size() < quantity) {
-            NPC generatedNpc = generateUniqueNpc(newNpcs);
-            if(generatedNpc != null) {
-                newNpcs.add(generatedNpc);
+        // Create north npcs
+        ArrayList<NPC> newNorthNpcs = new ArrayList<>();
+        int quantityNorth = calculateNpcNorthSpawningAmount();
+        while(newNorthNpcs.size() < quantityNorth) {
+            NPC generatedNorthNpc = generateUniqueNorthNpc(newNorthNpcs);
+            if(generatedNorthNpc != null) {
+                newNorthNpcs.add(generatedNorthNpc);
             }
             else {
-                System.err.println("FAILED TO PLACE NPC AFTER MAXIMAL ATTEMPTS");
+                System.err.println("FAILED TO PLACE NORTH NPC AFTER MAXIMAL ATTEMPTS");
                 break;
             }
          }
+        // Create south npcs
+        ArrayList<NPC> newSouthNpcs = new ArrayList<>();
+        int quantitySouth = calculateNpcSouthSpawningAmount();
+        while(newSouthNpcs.size() < quantitySouth) {
+            NPC generatedSouthNpc = generateUniqueSouthNpc(newSouthNpcs);
+            if(generatedSouthNpc != null) {
+                newSouthNpcs.add(generatedSouthNpc);
+            }
+            else {
+                System.err.println("FAILED TO PLACE SOUTH NPC AFTER MAXIMAL ATTEMPTS");
+                break;
+            }
+        }
+        ArrayList<NPC> newNpcs = new ArrayList<>();
+        newNpcs.addAll(newNorthNpcs);
+        newNpcs.addAll(newSouthNpcs);
+
         return newNpcs;
     }
 
-    private NPC generateUniqueNpc(ArrayList<NPC> existingNpcs) {
+    private NPC generateUniqueNorthNpc(ArrayList<NPC> existingNpcs) {
         final double SPAWN_OFFSET = GameConstants.SPAWN_OFFSET;
         final double SPAWN_RANGE  = GameConstants.SPAWN_RANGE;
         double[] streetLanes = calculateStreetLanes();
         int attempts = 0;
         while(attempts < GameConstants.MAX_NPC_ATTEMPTS) {
-            // Create random coordinates
-            double randomXValue = streetLanes[random.nextInt(streetLanes.length)];
+            // Random 3rd or 4th lane
+            double randomXValue = streetLanes[random.nextInt(2) + 2];
             double y = spawnTriggerY + random.nextDouble() * SPAWN_RANGE - SPAWN_OFFSET;
             // Create random type and color
             VehicleType vehicleType  = VehicleType.values()[random.nextInt(VehicleType.values().length)];
-            Vehicle newVehicle = new Vehicle(randomXValue, y, vehicleType, PlayerType.NPC);
-            if(!hasCollisionWithExistingNpcs(existingNpcs, newVehicle)) {
+            Vehicle newVehicle = new Vehicle(randomXValue, y, vehicleType, PlayerType.NPC_NORTH);
+            if(hasNoCollisionWithExistingNpcs(existingNpcs, newVehicle)) {
+                System.out.println("NPC spawned at X Value: " + randomXValue + " and Y Value: " + y);
+                return new NPC(newVehicle);
+            }
+            attempts++;
+        }
+        return null;
+    }
+
+    private NPC generateUniqueSouthNpc(ArrayList<NPC> existingNpcs) {
+        final double SPAWN_OFFSET = GameConstants.SPAWN_OFFSET;
+        final double SPAWN_RANGE = GameConstants.SPAWN_RANGE;
+        double[] streetLanes = calculateStreetLanes();
+        int attempts = 0;
+        while(attempts < GameConstants.MAX_NPC_ATTEMPTS) {
+            // Random 1st or 2nd lane
+            double randomXValue = streetLanes[random.nextInt(2)];
+            double y = spawnTriggerY + random.nextDouble() * SPAWN_RANGE - SPAWN_OFFSET;
+
+            VehicleType vehicleType  = VehicleType.values()[random.nextInt(VehicleType.values().length)];
+            Vehicle newVehicle = new Vehicle(randomXValue, y, vehicleType, PlayerType.NPC_SOUTH);
+            if(hasNoCollisionWithExistingNpcs(existingNpcs, newVehicle)) {
                 return new NPC(newVehicle);
             }
             attempts++;
@@ -149,7 +197,7 @@ public class GameWorld {
         return new double[]{ firstLaneX, secondLaneX, thirdLaneX, fourthLaneX };
     }
 
-    private boolean hasCollisionWithExistingNpcs(ArrayList<NPC> existingNpcs, Vehicle newVehicle) {
+    private boolean hasNoCollisionWithExistingNpcs(ArrayList<NPC> existingNpcs, Vehicle newVehicle) {
         double collisionScalingFactor = switch (gameManager.getDifficulty()) {
             case "Easy" -> GameConstants.EASY_COLLISION_SCALING_FACTOR;
             case "Medium" -> GameConstants.MEDIUM_COLLISION_SCALING_FACTOR;
@@ -164,24 +212,33 @@ public class GameWorld {
                     double dy = circle1.getCenterY() - circle2.getCenterY();
                     double distance = circle1.getRadius() + circle2.getRadius() * collisionScalingFactor;
                     if (dx * dx + dy * dy < distance * distance) {
-                        return true;
+                        return false;
                     }
                 }
             }
         }
-        return false;
+        return true;
     }
 
-    private int calculateNpcSpawningAmount() {
+    private int calculateNpcNorthSpawningAmount() {
         String difficulty = gameManager.getDifficulty();
         return switch (difficulty) {
-            case "Easy"   -> GameConstants.EASY_DIFFICULTY_NPC_AMOUNT;
-            case "Middle" -> GameConstants.MIDDLE_DIFFICULTY_NPC_AMOUNT;
-            case "Hard"   -> GameConstants.HARD_DIFFICULTY_NPC_AMOUNT;
+            case "Easy"   -> GameConstants.EASY_DIFFICULTY_NPC_NORTH_AMOUNT;
+            case "Middle" -> GameConstants.MIDDLE_DIFFICULTY_NPC_NORTH_AMOUNT;
+            case "Hard"   -> GameConstants.HARD_DIFFICULTY_NPC_NORTH_AMOUNT;
             default       -> GameConstants.MIN_NPC_QUANTITY;
         };
     }
 
+    private int calculateNpcSouthSpawningAmount() {
+        String difficulty = gameManager.getDifficulty();
+        return switch (difficulty) {
+            case "Easy"   -> GameConstants.EASY_DIFFICULTY_NPC_SOUTH_AMOUNT;
+            case "Middle" -> GameConstants.MIDDLE_DIFFICULTY_NPC_SOUTH_AMOUNT;
+            case "Hard"   -> GameConstants.HARD_DIFFICULTY_NPC_SOUTH_AMOUNT;
+            default       -> GameConstants.MIN_NPC_QUANTITY;
+        };
+    }
 
     public double getWorldPartY() {
         return worldPartY;

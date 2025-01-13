@@ -135,10 +135,9 @@ public class GameEngine {
 
     // Creates a player vehicle for the specified color and difficulty
     private Player createPlayerVehicle(String playerName) {
-        Vehicle.VehicleType vehicleType = Vehicle.VehicleType.MUSTANG;
         double x = GameConstants.INITIAL_PLAYER_X;
         double y = GameConstants.INITIAL_PLAYER_Y;
-        player = new Player(playerName, new Vehicle(x, y, vehicleType, Vehicle.PlayerType.PLAYER));
+        player = new Player(playerName, new Vehicle(x, y, null, Vehicle.PlayerType.PLAYER));
         return player;
     }
 

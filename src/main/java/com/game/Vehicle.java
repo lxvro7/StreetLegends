@@ -9,8 +9,8 @@ import java.util.Objects;
 
 public class Vehicle {
 
-    public enum PlayerType { PLAYER, NPC}
-    public enum VehicleType { AMBULANCE, AUDI, BLACK_VIPER, MUSTANG, PICKUP, VAN, POLICE, TAXI, TRUCK}
+    public enum PlayerType { PLAYER, NPC_NORTH, NPC_SOUTH}
+    public enum VehicleType { AMBULANCE, AUDI, BLACK_VIPER, PICKUP, VAN, POLICE, TAXI, TRUCK}
 
     private final VehicleType vehicleType;
     private final PlayerType playerType;
@@ -25,10 +25,6 @@ public class Vehicle {
     private Image vehicleImage;
 
     private final List<Circle> collisionCircles = new ArrayList<>();
-
-    public double getRadius() {
-        return radius;
-    }
 
     public Vehicle(double x, double y, VehicleType vehicleType, PlayerType playerType) {
         this.x = x;
@@ -60,8 +56,12 @@ public class Vehicle {
         if(playerType == PlayerType.PLAYER) {
             velocity = GameConstants.PLAYER_CAR_START_VELOCITY;
         }
-        else {
-            velocity = GameConstants.NPC_CAR_VELOCITY;
+        if (playerType == PlayerType.NPC_NORTH) {
+            velocity = GameConstants.NPC_NORTH_CAR_VELOCITY;
+        }
+         if (playerType == PlayerType.NPC_SOUTH) {
+            velocity = GameConstants.NPC_SOUTH_CAR_VELOCITY;
+            alfa = GameConstants.ROTATION_90_RAD;
         }
     }
 
@@ -74,42 +74,81 @@ public class Vehicle {
 
     // Sets the radius and image path, based off the vehicle type
     public void initializeAttributes() {
-        switch(vehicleType) {
-            case AMBULANCE:
-                radius = GameConstants.AMBULANCE_RADIUS;
-                imagePath = GameConstants.AMBULANCE_IMAGE_PATH;
+        switch(playerType) {
+            case PLAYER:
+                imagePath = GameConstants.PLAYER_IMAGE_PATH;
                 break;
-            case AUDI:
-                radius = GameConstants.AUDI_RADIUS;
-                imagePath = GameConstants.AUDI_IMAGE_PATH;
+            case NPC_SOUTH:
+                switch (vehicleType) {
+                    case AMBULANCE:
+                        radius = GameConstants.AMBULANCE_RADIUS;
+                        imagePath = GameConstants.NPC_SOUTH_AMBULANCE_IMAGE_PATH;
+                        break;
+                    case AUDI:
+                        radius = GameConstants.AUDI_RADIUS;
+                        imagePath = GameConstants.NPC_SOUTH_AUDI_IMAGE_PATH;
+                        break;
+                    case BLACK_VIPER:
+                        radius = GameConstants.BLACK_VIPER_RADIUS;
+                        imagePath = GameConstants.NPC_SOUTH_BLACK_VIPER_IMAGE_PATH;
+                        break;
+                    case PICKUP:
+                        radius = GameConstants.PICKUP_RADIUS;
+                        imagePath = GameConstants.NPC_SOUTH_PICKUP_IMAGE_PATH;
+                        break;
+                    case POLICE:
+                        radius = GameConstants.POLICE_RADIUS;
+                        imagePath = GameConstants.NPC_SOUTH_POLICE_IMAGE_PATH;
+                        break;
+                    case TAXI:
+                        radius = GameConstants.TAXI_RADIUS;
+                        imagePath = GameConstants.NPC_SOUTH_TAXI_IMAGE_PATH;
+                        break;
+                    case TRUCK:
+                        radius = GameConstants.TRUCK_RADIUS;
+                        imagePath = GameConstants.NPC_SOUTH_TRUCK_IMAGE_PATH;
+                        break;
+                    case VAN:
+                        radius = GameConstants.VAN_RADIUS;
+                        imagePath = GameConstants.NPC_SOUTH_VAN_IMAGE_PATH;
+                        break;
+                }
                 break;
-            case BLACK_VIPER:
-                radius = GameConstants.BLACK_VIPER_RADIUS;
-                imagePath = GameConstants.BLACK_VIPER_IMAGE_PATH;
-                break;
-            case MUSTANG:
-                radius = GameConstants.MUSTANG_RADIUS;
-                imagePath = GameConstants.MUSTANG_IMAGE_PATH;
-                break;
-            case PICKUP:
-                radius = GameConstants.PICKUP_RADIUS;
-                imagePath = GameConstants.PICKUP_IMAGE_PATH;
-                break;
-            case POLICE:
-                radius = GameConstants.POLICE_RADIUS;
-                imagePath = GameConstants.POLICE_IMAGE_PATH;
-                break;
-            case TAXI:
-                radius = GameConstants.TAXI_RADIUS;
-                imagePath = GameConstants.TAXI_IMAGE_PATH;
-                break;
-            case TRUCK:
-                radius = GameConstants.TRUCK_RADIUS;
-                imagePath = GameConstants.TRUCK_IMAGE_PATH;
-                break;
-            case VAN:
-                radius = GameConstants.VAN_RADIUS;
-                imagePath = GameConstants.VAN_IMAGE_PATH;
+            case NPC_NORTH:
+                switch (vehicleType) {
+                    case AMBULANCE:
+                        radius = GameConstants.AMBULANCE_RADIUS;
+                        imagePath = GameConstants.NPC_NORTH_AMBULANCE_IMAGE_PATH;
+                        break;
+                    case AUDI:
+                        radius = GameConstants.AUDI_RADIUS;
+                        imagePath = GameConstants.NPC_NORTH_AUDI_IMAGE_PATH;
+                        break;
+                    case BLACK_VIPER:
+                        radius = GameConstants.BLACK_VIPER_RADIUS;
+                        imagePath = GameConstants.NPC_NORTH_BLACK_VIPER_IMAGE_PATH;
+                        break;
+                    case PICKUP:
+                        radius = GameConstants.PICKUP_RADIUS;
+                        imagePath = GameConstants.NPC_NORTH_PICKUP_IMAGE_PATH;
+                        break;
+                    case POLICE:
+                        radius = GameConstants.POLICE_RADIUS;
+                        imagePath = GameConstants.NPC_NORTH_POLICE_IMAGE_PATH;
+                        break;
+                    case TAXI:
+                        radius = GameConstants.TAXI_RADIUS;
+                        imagePath = GameConstants.NPC_NORTH_TAXI_IMAGE_PATH;
+                        break;
+                    case TRUCK:
+                        radius = GameConstants.TRUCK_RADIUS;
+                        imagePath = GameConstants.NPC_NORTH_TRUCK_IMAGE_PATH;
+                        break;
+                    case VAN:
+                        radius = GameConstants.VAN_RADIUS;
+                        imagePath = GameConstants.NPC_NORTH_VAN_IMAGE_PATH;
+                        break;
+                }
                 break;
         }
         checkImagePath(imagePath);
@@ -154,9 +193,5 @@ public class Vehicle {
 
     public List<Circle> getCollisionCircles() {
         return collisionCircles;
-    }
-
-    public PlayerType getPlayerType() {
-        return playerType;
     }
 }
