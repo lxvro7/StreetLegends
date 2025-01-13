@@ -1,6 +1,5 @@
 package com.game;
 
-import javafx.animation.AnimationTimer;
 import javafx.application.Platform;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.input.KeyCode;
@@ -22,8 +21,6 @@ public class GameEngine {
     private final UserInterface userInterface;
     private enum GameState {RUNNING, GAME_OVER}
     private GameState currentState = GameState.RUNNING;
-    private Thread gameThread;
-    private AnimationTimer gameLoop;
     private final ExecutorService executorService = Executors.newFixedThreadPool(4);
 
     public GameEngine(String playerName, String difficulty, UserInterface userInterface, double canvasHeight, double canvasWidth) {
@@ -39,12 +36,12 @@ public class GameEngine {
 
     public void startGameLoop() {
         running = true;
-        gameThread = new Thread(() -> {
+        Thread gameThread = new Thread(() -> {
             long lastTime = System.nanoTime();
             long fpsLastTime = System.nanoTime();
             int frameCount = 0;
 
-            while(running) {
+            while (running) {
                 long currentTime = System.nanoTime();
                 double diffSeconds = (currentTime - lastTime) / 1_000_000_000.0;
                 lastTime = currentTime;
@@ -85,10 +82,10 @@ public class GameEngine {
                             userInterface.getVehicleGraphicsContext(), canvasWidth, canvasHeight);
                 });
 
-                // Wait for 2 ms, to reduce overhead
+                // Sleep for 2 ms, to reduce overhead
                 try {
                     Thread.sleep(2);
-                }catch (InterruptedException e) {
+                } catch (InterruptedException e) {
                     Thread.currentThread().interrupt();
                 }
             }
@@ -133,7 +130,6 @@ public class GameEngine {
                 userInterface.showGameOverWindow(finalDistance);
             });
             executorService.shutdown();
-            gameLoop.stop();
         }
     }
 
