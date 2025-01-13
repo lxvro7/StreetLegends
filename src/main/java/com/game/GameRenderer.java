@@ -15,6 +15,8 @@ public class GameRenderer {
         image = createImage(GameConstants.GAME_BACKGROUND_IMAGE_PATH);
     }
 
+    // TODO Alton: Draw cones, coins etc, into drawVehicles or separate canvas? IDK
+
 
     public void drawVehicles(ArrayList<Vehicle> vehicles,
                              GraphicsContext vehicleGraphicsContext, double canvasWidth, double canvasHeight) {

@@ -102,7 +102,8 @@ public class GameWorld {
         }
     }
 
-    // TODO Lovro:
+    // TODO Alton: Z.B jede 200m einen Cone mittig platzieren.
+    //   Straßenmitte = gameManager.getCanvasWidth() * OFFSET
     private boolean isConesSpawnNeeded() {
         return true;
     }
