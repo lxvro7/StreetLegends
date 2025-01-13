@@ -22,7 +22,8 @@ public class GameEngine {
     private final UserInterface userInterface;
     private enum GameState {RUNNING, GAME_OVER}
     private GameState currentState = GameState.RUNNING;
-    private final ExecutorService executorService = Executors.newFixedThreadPool(2);
+    private AnimationTimer gameLoop;
+    private final ExecutorService executorService = Executors.newFixedThreadPool(4);
 
     public GameEngine(String playerName, String difficulty, UserInterface userInterface, double canvasHeight, double canvasWidth) {
         this.userInterface = userInterface;
@@ -37,18 +38,31 @@ public class GameEngine {
 
     public void startGameLoop() {
         running = true;
-        AnimationTimer gameLoop = new AnimationTimer() {
+        gameLoop = new AnimationTimer() {
             private long lastTime = 0;
+            private int frameCount = 0;
+            private long fpsLastTime = 0;
 
             @Override
             public void handle(long now) {
                 if (lastTime == 0) {
                     lastTime = now;
+                    fpsLastTime = now;
                     return;
                 }
 
                 double diffSeconds = (now - lastTime) / 1_000_000_000.0;
                 lastTime = now;
+
+                // Calculate FPS
+                frameCount++;
+                if (now - fpsLastTime >= 1_000_000_000L) {
+                    int currentFps = frameCount;
+                    frameCount = 0;
+                    fpsLastTime = now;
+
+                    System.out.println("FPS: " + currentFps);
+                }
 
                 // Game logic in separate thread
                 executorService.submit(() -> {
@@ -117,6 +131,7 @@ public class GameEngine {
                 userInterface.showGameOverWindow(finalDistance);
             });
             executorService.shutdown();
+            gameLoop.stop();
         }
     }
 

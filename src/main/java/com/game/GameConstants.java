@@ -52,8 +52,8 @@ public class GameConstants {
     public static final double TURN_ANGLE = Math.PI / 4;
 
     // Rendering parameters: Frames per second (FPS) and frame delay
-    public static final int FPS = 60;
-    public static final int FRAME_DELAY = 1000 / FPS;
+    public static final long TARGET_FPS = 60;
+    public static final long FRAME_TIME = 1_000_000_000L / TARGET_FPS;
 
     // File paths for vehicle images
     public static final String AMBULANCE_IMAGE_PATH = "/images/vehicles/ambulance.png";
