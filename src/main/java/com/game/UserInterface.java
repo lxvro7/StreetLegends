@@ -266,25 +266,18 @@ public class UserInterface extends Application {
         vehicleGraphicsContext = vehicleCanvas.getGraphicsContext2D();
         streetGraphicsContext = streetCanvas.getGraphicsContext2D();
 
-
-        StackPane canvasContainer = new StackPane();
+        Pane canvasContainer = new Pane();
         canvasContainer.getChildren().addAll(streetCanvas, vehicleCanvas);
-        canvasContainer.setAlignment(Pos.CENTER);
-        /*
-        streetCanvas.widthProperty().bind(scene.widthProperty());
-        streetCanvas.heightProperty().bind(scene.heightProperty());
-        vehicleCanvas.widthProperty().bind(scene.widthProperty());
-        vehicleCanvas.heightProperty().bind(scene.heightProperty());
-        */
+
         Label meterLabel = new Label("Meter: 0");
         meterLabel.getStyleClass().add("meter-label");
+        meterLabel.setLayoutX(20);
+        meterLabel.setLayoutY(20);
         meterLabel.setPadding(new Insets(10));
 
         canvasContainer.getChildren().add(meterLabel);
-        StackPane.setAlignment(meterLabel, Pos.TOP_LEFT);
 
-        GameEngine gameEngine = new GameEngine(playerName, difficulty,this, streetCanvas.getHeight(), streetCanvas.getWidth());
-
+        GameEngine gameEngine = new GameEngine(playerName, difficulty, this, streetCanvas.getHeight(), streetCanvas.getWidth());
 
         gameEngine.setCanvasHeight(streetCanvas.getHeight());
         gameEngine.setCanvasWidth(streetCanvas.getWidth());
@@ -292,6 +285,7 @@ public class UserInterface extends Application {
         gameEngine.setUpdateCallback(vehicles -> gameEngine.renderVehicles(vehicleGraphicsContext, vehicles));
 
         root.getChildren().clear();
+        root.getChildren().add(canvasContainer);
         startCountdown(() -> gameEngine.startGameLoop());
 
         AnimationTimer meterUpdater = new AnimationTimer() {
@@ -299,18 +293,15 @@ public class UserInterface extends Application {
             public void handle(long now) {
                 int meters = gameEngine.getDistanceTraveled();
                 meterLabel.setText("Meter: " + meters);
-
             }
         };
         meterUpdater.start();
 
-        // Check if any key is pressed
         scene.setOnKeyPressed(keyEvent -> {
             gameEngine.processUserInput(keyEvent.getCode());
         });
 
-        // Check if any key is released
-        scene.setOnKeyReleased(keyEvent ->  {
+        scene.setOnKeyReleased(keyEvent -> {
             gameEngine.processKeyRelease(keyEvent.getCode());
         });
 
@@ -406,7 +397,10 @@ public class UserInterface extends Application {
         soundManager.stopGameSound();
         soundManager.playCollisionSound();
 
-        Rectangle overlay = new Rectangle(windowWidth, windowHeight, Color.GRAY);
+        Rectangle overlay = new Rectangle();
+        overlay.widthProperty().bind(scene.widthProperty());
+        overlay.heightProperty().bind(scene.heightProperty());
+        overlay.setFill(Color.GRAY);
         overlay.setOpacity(0.7);
         root.getChildren().add(overlay);
 

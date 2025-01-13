@@ -1,5 +1,6 @@
 package com.game;
 
+import javafx.application.Platform;
 import javafx.scene.shape.Circle;
 
 import java.util.ArrayList;
@@ -53,15 +54,11 @@ public class GameWorld {
     }
 
     public boolean adjustWorld() {
-        boolean worldHasChanged = false;
-        if (player.getPlayerVehicle().getY() < worldPartY + GameConstants.SCROLL_BOUNDS) {
-            worldPartY = player.getPlayerVehicle().getY() - GameConstants.SCROLL_BOUNDS;
-            if (worldPartY <= 0) {
-                worldPartY = 0;
-            }
-            worldHasChanged = true;
+        worldPartY = player.getPlayerVehicle().getY() - GameConstants.SCROLL_BOUNDS;
+        if (worldPartY <= 0) {
+            worldPartY = 0;
         }
-        return worldHasChanged;
+        return true;
     }
 
     public ArrayList<NPC> getAllNpcs() {
@@ -104,14 +101,28 @@ public class GameWorld {
 
     // TODO Alton: Z.B jede 200m einen Cone mittig platzieren.
     //   Straßenmitte = gameManager.getCanvasWidth() * OFFSET
-    private boolean isConesSpawnNeeded() {
+    public void spawnCone(int distanceTraveled) {
+        // for lovro: i will use distanceTraveld later for the position
+        double roadCenterX = GameConstants.getRoadCenter(gameManager.getCanvasWidth());
+        double coneY = player.getPlayerVehicle().getY() - 800;
+        Vehicle cone = new Vehicle(roadCenterX, coneY, Vehicle.VehicleType.CONE, Vehicle.PlayerType.OBSTACLE);
+        System.out.println("Cone erstellt:");
+        System.out.println("VehicleType: " + cone.getVehicleType());
+        System.out.println("Radius: " + cone.getCollisionCircles().get(0).getRadius());
+        System.out.println("ImagePath: " + cone.getVehicleImage());
+        if (cone.getVehicleImage() == null) {
+            System.err.println("Fehler: Cone-Bild konnte nicht geladen werden!");
+        }
+        Platform.runLater(() -> {
+            gameManager.getAllNpcs().add(new NPC(cone));
+            System.out.println("Cone spawned at X: " + roadCenterX + ", Y: " + coneY);
+            System.out.println("Cone Y-Position: " + coneY + ", Canvas Height: " + gameManager.getCanvasHeight());
+        });
+    }
+    private boolean CoinSpawnNeeded(){
         return true;
     }
-
     // TODO Alton: Coin spawned auf einen der 4 lanes zufällig, calculateStreetLanes() benutzen
-    private boolean isCoinSpawnNeeded() {
-        return true;
-    }
 
     public ArrayList<NPC> spawnTheNpcVehicles() {
         // Create north npcs

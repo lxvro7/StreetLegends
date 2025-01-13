@@ -92,14 +92,22 @@ public class GameConstants {
     public static final String GAME_AUDIO = "/audio/menu.mp3";
     public static final String CRASH_AUDIO = "/audio/crash.mp3";
 
-    // Images to gain coin or poison, maybe future?
-    public static final String COIN_IMAGE_PATH = "/images/icon/coin.jpg";
-    public static final String POISON_IMAGE_PATH = "/images/icon/poison.jpg";
+    //Image for cone
+    public static final String CONE_IMAGE_PATH = "/images/icon/hut.png";
+
 
     // Scaling Factor for easy-medium and hard
     public static final double EASY_COLLISION_SCALING_FACTOR = 8.0;
     public static final double MEDIUM_COLLISION_SCALING_FACTOR = 7.0;
     public static final double HARD_COLLISION_SCALING_FACTOR = 5.5;
     public static final double FALLBACK_COLLISION_SCALING_FACTOR = 7.5;
+
+
+    // Static methods
+
+    // GameConstants.java--calculateCenter
+    public static double getRoadCenter(double canvasWidth) {
+        return canvasWidth * 0.46;
+    }
 }
 

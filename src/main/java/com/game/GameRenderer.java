@@ -27,16 +27,25 @@ public class GameRenderer {
 
         for (Vehicle vehicle : vehicles) {
             double canvasY = vehicle.getY() - worldPartY;
-            if (canvasY >= 0 && canvasY <= canvasHeight) {
+            if (canvasY >= 0 && canvasY <= canvasHeight && vehicle.getVehicleImage() != null) {
                 double imageWidth = vehicle.getVehicleImage().getWidth();
                 double imageHeight = vehicle.getVehicleImage().getHeight();
 
-                double scaleFactorX = canvasWidth * 0.125 / imageWidth;
-                double scaleFactorY = scaleFactorX;
-                // if(gameManager.IsHütchenSpawnNeeded) vehicleGraphicsContext.drawImage()
+                double scaleFactorX;
+                double scaleFactorY;
+                if (vehicle.getVehicleType() == Vehicle.VehicleType.CONE) {
+                    scaleFactorX = canvasWidth * 0.09 / imageWidth;
+                } else {
+                    scaleFactorX = canvasWidth * 0.125 / imageWidth;
+                }
+                scaleFactorY = scaleFactorX;
+
                 double scaledWidth = imageWidth * scaleFactorX;
                 double scaledHeight = imageHeight * scaleFactorY;
+
                 vehicleGraphicsContext.drawImage(vehicle.getVehicleImage(), vehicle.getX(), canvasY, scaledWidth, scaledHeight);
+            } else if (vehicle.getVehicleImage() == null) {
+                System.err.println("Warnung: Fahrzeug ohne Bild wird nicht gerendert. Fahrzeugtyp: " + vehicle.getVehicleType());
             }
         }
     }

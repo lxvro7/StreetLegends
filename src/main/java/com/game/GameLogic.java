@@ -16,12 +16,15 @@ public class GameLogic {
 
     // Checks the collision between two vehicles
     public boolean isCollisionDetected(Vehicle vehicle1, Vehicle vehicle2) {
+        System.out.println("Prüfe Kollision zwischen: " + vehicle1.getVehicleType() + " und " + vehicle2.getVehicleType());
         for (Circle circle1 : vehicle1.getCollisionCircles()) {
             for (Circle circle2 : vehicle2.getCollisionCircles()) {
                 double dx = circle1.getCenterX() - circle2.getCenterX();
                 double dy = circle1.getCenterY() - circle2.getCenterY();
-                double distance = circle1.getRadius() + circle2.getRadius();
-                if (dx * dx + dy * dy < distance * distance) {
+                double distance = Math.sqrt(dx * dx + dy * dy);
+                double requiredDistance = circle1.getRadius() + circle2.getRadius();
+                System.out.println("Abstand = " + distance + ", Erforderlicher Abstand = " + requiredDistance);
+                if (distance < requiredDistance) {
                     return true;
                 }
             }
@@ -74,7 +77,7 @@ public class GameLogic {
         if (distanceTraveled >= lastDistanceCheckpoint + 200) {
             lastDistanceCheckpoint += 200;
             increaseVelocity(gameManager.getDifficulty());
-            System.out.println("Distance: " + distanceTraveled + " meters, increasing velocity...");
+            gameManager.spawnCone(distanceTraveled);
         }
     }
 

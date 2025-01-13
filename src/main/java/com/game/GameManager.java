@@ -118,4 +118,7 @@ public class GameManager {
     public double getCanvasWidth() {
         return canvasWidth;
     }
+    public void spawnCone(int distanceTraveld) {
+        gameWorld.spawnCone(distanceTraveld);
+    }
 }

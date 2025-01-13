@@ -9,8 +9,8 @@ import java.util.Objects;
 
 public class Vehicle {
 
-    public enum PlayerType { PLAYER, NPC_NORTH, NPC_SOUTH}
-    public enum VehicleType { AMBULANCE, AUDI, BLACK_VIPER, PICKUP, VAN, POLICE, TAXI, TRUCK}
+    public enum PlayerType { PLAYER, NPC_NORTH, NPC_SOUTH,OBSTACLE}
+    public enum VehicleType { AMBULANCE, AUDI, BLACK_VIPER, PICKUP, VAN, POLICE, TAXI, TRUCK,CONE}
 
     private final VehicleType vehicleType;
     private final PlayerType playerType;
@@ -27,10 +27,15 @@ public class Vehicle {
     private final List<Circle> collisionCircles = new ArrayList<>();
 
     public Vehicle(double x, double y, VehicleType vehicleType, PlayerType playerType) {
+        if (vehicleType == null) {
+            System.err.println("Fehler: VehicleType ist null beim Erstellen eines Fahrzeugs!");
+        }
         this.x = x;
         this.y = y;
         this.vehicleType = vehicleType;
         this.playerType = playerType;
+
+        System.out.println("Erzeuge Fahrzeug: Typ = " + vehicleType + ", PlayerType = " + playerType);
 
         initializeVelocity();
         initializeAttributes();
@@ -50,6 +55,8 @@ public class Vehicle {
         collisionCircles.get(0).setCenterY(y - offset);
         collisionCircles.get(1).setCenterX(x);
         collisionCircles.get(1).setCenterY(y + offset);
+        System.out.println("Kollisionskreise aktualisiert für Fahrzeugtyp " + vehicleType +
+                ": [" + collisionCircles.get(0) + ", " + collisionCircles.get(1) + "]");
     }
 
     public void initializeVelocity() {
@@ -150,15 +157,30 @@ public class Vehicle {
                         break;
                 }
                 break;
+            case OBSTACLE:
+                radius = 15;
+                imagePath = GameConstants.CONE_IMAGE_PATH;
+                break;
+            default:
+                System.err.println("Fehler: Unbekannter PlayerType!");
+                break;
         }
+
+        if (radius == 0) {
+            System.err.println("Fehler: Radius wurde nicht gesetzt für Fahrzeugtyp: " + vehicleType);
+        } else {
+            System.out.println("Gesetzter Radius für Fahrzeugtyp " + vehicleType + ": " + radius);
+        }
+
         checkImagePath(imagePath);
     }
 
     private void checkImagePath(String imagePath) {
         try {
             vehicleImage = new Image(Objects.requireNonNull(getClass().getResource(imagePath)).toExternalForm());
-        }
-        catch (NullPointerException e) {
+            System.out.println("Bild erfolgreich geladen: " + imagePath);
+        } catch (NullPointerException e) {
+            System.err.println("Fehler: Bild konnte nicht geladen werden. Pfad: " + imagePath);
             e.printStackTrace();
         }
     }
@@ -193,5 +215,8 @@ public class Vehicle {
 
     public List<Circle> getCollisionCircles() {
         return collisionCircles;
+    }
+    public VehicleType getVehicleType() {
+        return vehicleType;
     }
 }
