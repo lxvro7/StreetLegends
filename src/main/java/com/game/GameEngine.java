@@ -22,6 +22,7 @@ public class GameEngine {
     private final UserInterface userInterface;
     private enum GameState {RUNNING, GAME_OVER}
     private GameState currentState = GameState.RUNNING;
+    private Thread gameThread;
     private AnimationTimer gameLoop;
     private final ExecutorService executorService = Executors.newFixedThreadPool(4);
 
@@ -38,28 +39,22 @@ public class GameEngine {
 
     public void startGameLoop() {
         running = true;
-        gameLoop = new AnimationTimer() {
-            private long lastTime = 0;
-            private int frameCount = 0;
-            private long fpsLastTime = 0;
+        gameThread = new Thread(() -> {
+            long lastTime = System.nanoTime();
+            long fpsLastTime = System.nanoTime();
+            int frameCount = 0;
 
-            @Override
-            public void handle(long now) {
-                if (lastTime == 0) {
-                    lastTime = now;
-                    fpsLastTime = now;
-                    return;
-                }
-
-                double diffSeconds = (now - lastTime) / 1_000_000_000.0;
-                lastTime = now;
+            while(running) {
+                long currentTime = System.nanoTime();
+                double diffSeconds = (currentTime - lastTime) / 1_000_000_000.0;
+                lastTime = currentTime;
 
                 // Calculate FPS
                 frameCount++;
-                if (now - fpsLastTime >= 1_000_000_000L) {
+                if (currentTime - fpsLastTime >= 1_000_000_000L) {
                     int currentFps = frameCount;
                     frameCount = 0;
-                    fpsLastTime = now;
+                    fpsLastTime = currentTime;
 
                     System.out.println("FPS: " + currentFps);
                 }
@@ -73,7 +68,6 @@ public class GameEngine {
                     }
                     if (gameManager.checkIfGameOver()) {
                         stopGame();
-                        stop();
                     }
                 });
 
@@ -90,9 +84,17 @@ public class GameEngine {
                     gameManager.drawVehicles(gameManager.getAllVehicles(),
                             userInterface.getVehicleGraphicsContext(), canvasWidth, canvasHeight);
                 });
+
+                // Wait for 2 ms, to reduce overhead
+                try {
+                    Thread.sleep(2);
+                }catch (InterruptedException e) {
+                    Thread.currentThread().interrupt();
+                }
             }
-        };
-        gameLoop.start();
+        });
+        gameThread.setDaemon(true);
+        gameThread.start();
     }
 
     // Handles the events, that occurred during the game

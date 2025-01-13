@@ -156,6 +156,7 @@ public class GameWorld {
             case "Hard" -> GameConstants.HARD_COLLISION_SCALING_FACTOR;
             default -> GameConstants.FALLBACK_COLLISION_SCALING_FACTOR;
         };
+
         for (NPC existingNpc : existingNpcs) {
             for (Circle circle1 : existingNpc.getNpcVehicle().getCollisionCircles()) {
                 for (Circle circle2 : newVehicle.getCollisionCircles()) {

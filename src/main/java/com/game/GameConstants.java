@@ -40,7 +40,7 @@ public class GameConstants {
     public static final double ROTATION_270_RAD = 3 * Math.PI / 2;
 
     // Game mechanics constants: NPC spawning limits and turning angles
-    public static final int MAX_NPC_ATTEMPTS = 20;
+    public static final int MAX_NPC_ATTEMPTS = 5;
     public static final int MIN_NPC_QUANTITY = 2;
     public static final int EASY_DIFFICULTY_NPC_AMOUNT = 3;
     public static final int MIDDLE_DIFFICULTY_NPC_AMOUNT = 4;
