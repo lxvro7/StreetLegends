@@ -47,6 +47,14 @@ public class GameManager {
         return gameWorld.getAllVehicles();
     }
 
+    public Obstacle spawnCone() {
+        return gameWorld.spawnCone();
+    }
+
+    public boolean isConeSpawnNeeded() {
+        return gameLogic.isConesSpawnNeeded();
+    }
+
     public ArrayList<NPC> getAllNpcs() {
         return gameWorld.getAllNpcs();
     }
@@ -117,8 +125,5 @@ public class GameManager {
 
     public double getCanvasWidth() {
         return canvasWidth;
-    }
-    public void spawnCone(int distanceTraveld) {
-        gameWorld.spawnCone(distanceTraveld);
     }
 }

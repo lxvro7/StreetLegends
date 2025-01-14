@@ -78,6 +78,15 @@ public class GameEngine {
                         gameManager.drawBackground(userInterface.getBackgroundGraphicsContext(),
                                 canvasWidth, canvasHeight);
                     }
+                    /*
+                    if (gameManager.isConeSpawnNeeded()) {
+                        Obstacle cone = gameManager.spawnCone();
+                        gameManager.drawVehicles(null, userInterface.getVehicleGraphicsContext(),
+                                cone, canvasWidth, canvasHeight);
+                    }
+
+                     */
+
                     gameManager.drawVehicles(gameManager.getAllVehicles(),
                             userInterface.getVehicleGraphicsContext(), canvasWidth, canvasHeight);
                 });
@@ -117,7 +126,7 @@ public class GameEngine {
         }
         if(!player.isTurningLeft() && !player.isTurningRight()) {
             player.getPlayerVehicle().setAlfa(GameConstants.ROTATION_270_RAD);
-            player.getPlayerVehicle().setVehicleImage(player.getDefaultImage());
+            player.getPlayerVehicle().setImage(player.getDefaultImage());
         }
     }
 
@@ -133,16 +142,15 @@ public class GameEngine {
         }
     }
 
-    // Creates a player vehicle for the specified color and difficulty
     private Player createPlayerVehicle(String playerName) {
         double x = GameConstants.INITIAL_PLAYER_X;
         double y = GameConstants.INITIAL_PLAYER_Y;
-        player = new Player(playerName, new Vehicle(x, y, null, Vehicle.PlayerType.PLAYER));
+        player = new Player(playerName, new Vehicle(x, y, Vehicle.VehicleType.AUDI, Vehicle.PlayerType.PLAYER));
         return player;
     }
 
     public void renderVehicles(GraphicsContext vgc, ArrayList<Vehicle> vehicles) {
-        gameManager.drawVehicles(vehicles, vgc, canvasWidth, canvasHeight);
+        gameManager.drawVehicles(vehicles, vgc,  canvasWidth, canvasHeight);
     }
 
     public void renderBackground(GraphicsContext bgc) {

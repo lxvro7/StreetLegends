@@ -1,6 +1,5 @@
 package com.game;
 
-import javafx.application.Platform;
 import javafx.scene.shape.Circle;
 
 import java.util.ArrayList;
@@ -22,7 +21,9 @@ public class GameWorld {
     private final GameManager gameManager;
     private double worldPartY = GameConstants.INITIAL_WORLD_PART_Y;
     private final ArrayList<NPC> npcs;
+    //private final ArrayList<Obstacle> obstacles;
     private final Random random = new Random();
+    private int lastMilestone = 0;
     private double spawnTriggerY;
 
     public GameWorld(GameManager gameManager) {
@@ -99,30 +100,15 @@ public class GameWorld {
         }
     }
 
-    // TODO Alton: Z.B jede 200m einen Cone mittig platzieren.
-    //   Straßenmitte = gameManager.getCanvasWidth() * OFFSET
-    public void spawnCone(int distanceTraveled) {
-        // for lovro: i will use distanceTraveld later for the position
+    public Obstacle spawnCone() {
         double roadCenterX = GameConstants.getRoadCenter(gameManager.getCanvasWidth());
         double coneY = player.getPlayerVehicle().getY() - 800;
-        Vehicle cone = new Vehicle(roadCenterX, coneY, Vehicle.VehicleType.CONE, Vehicle.PlayerType.OBSTACLE);
-        System.out.println("Cone erstellt:");
-        System.out.println("VehicleType: " + cone.getVehicleType());
-        System.out.println("Radius: " + cone.getCollisionCircles().get(0).getRadius());
-        System.out.println("ImagePath: " + cone.getVehicleImage());
-        if (cone.getVehicleImage() == null) {
-            System.err.println("Fehler: Cone-Bild konnte nicht geladen werden!");
-        }
-        Platform.runLater(() -> {
-            gameManager.getAllNpcs().add(new NPC(cone));
-            System.out.println("Cone spawned at X: " + roadCenterX + ", Y: " + coneY);
-            System.out.println("Cone Y-Position: " + coneY + ", Canvas Height: " + gameManager.getCanvasHeight());
-        });
+        return new Obstacle(roadCenterX, coneY, Obstacle.ObstacleType.CONE);
     }
+
     private boolean CoinSpawnNeeded(){
         return true;
     }
-    // TODO Alton: Coin spawned auf einen der 4 lanes zufällig, calculateStreetLanes() benutzen
 
     public ArrayList<NPC> spawnTheNpcVehicles() {
         // Create north npcs

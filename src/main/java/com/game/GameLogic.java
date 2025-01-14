@@ -8,7 +8,9 @@ import java.util.ArrayList;
 public class GameLogic {
     private final GameManager gameManager;
     private int distanceTraveled = 0;
-    private int lastDistanceCheckpoint = 0;
+    private int lastDistanceCheckpointVelocity = 0;
+    private boolean isConesSpawnNeeded = false;
+    private int lastDistanceCheckpointCone = 0;
 
     public GameLogic(GameManager gameManager) {
         this.gameManager = gameManager;
@@ -16,15 +18,12 @@ public class GameLogic {
 
     // Checks the collision between two vehicles
     public boolean isCollisionDetected(Vehicle vehicle1, Vehicle vehicle2) {
-        System.out.println("Prüfe Kollision zwischen: " + vehicle1.getVehicleType() + " und " + vehicle2.getVehicleType());
         for (Circle circle1 : vehicle1.getCollisionCircles()) {
             for (Circle circle2 : vehicle2.getCollisionCircles()) {
                 double dx = circle1.getCenterX() - circle2.getCenterX();
                 double dy = circle1.getCenterY() - circle2.getCenterY();
-                double distance = Math.sqrt(dx * dx + dy * dy);
-                double requiredDistance = circle1.getRadius() + circle2.getRadius();
-                System.out.println("Abstand = " + distance + ", Erforderlicher Abstand = " + requiredDistance);
-                if (distance < requiredDistance) {
+                double distance = circle1.getRadius() + circle2.getRadius();
+                if (dx * dx + dy * dy < distance * distance) {
                     return true;
                 }
             }
@@ -74,11 +73,23 @@ public class GameLogic {
         double pixelsPerMeter = 10;
         distanceTraveled = (int) (distanceInPixels / pixelsPerMeter);
 
-        if (distanceTraveled >= lastDistanceCheckpoint + 200) {
-            lastDistanceCheckpoint += 200;
+        // Increase velocity every 200m
+        if (distanceTraveled >= lastDistanceCheckpointVelocity + 200) {
+            lastDistanceCheckpointVelocity += 200;
             increaseVelocity(gameManager.getDifficulty());
-            gameManager.spawnCone(distanceTraveled);
         }
+        // Check if 300m passed
+        if (distanceTraveled >= lastDistanceCheckpointCone + 300) {
+            lastDistanceCheckpointCone += 300;
+            isConesSpawnNeeded = true;
+        }
+        else {
+            isConesSpawnNeeded = false;
+        }
+    }
+
+    public boolean isConesSpawnNeeded() {
+        return isConesSpawnNeeded;
     }
 
     public int getDistanceTraveled() {

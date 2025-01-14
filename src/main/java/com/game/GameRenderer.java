@@ -15,37 +15,26 @@ public class GameRenderer {
         image = createImage(GameConstants.GAME_BACKGROUND_IMAGE_PATH);
     }
 
-    // TODO Alton: Draw cones, coins etc, into drawVehicles or separate canvas? IDK
-
-
     public void drawVehicles(ArrayList<Vehicle> vehicles,
                              GraphicsContext vehicleGraphicsContext, double canvasWidth, double canvasHeight) {
 
         vehicleGraphicsContext.clearRect(0, 0, canvasWidth, canvasHeight);
-
         double worldPartY = gameManager.getWorldPartY();
-
         for (Vehicle vehicle : vehicles) {
             double canvasY = vehicle.getY() - worldPartY;
-            if (canvasY >= 0 && canvasY <= canvasHeight && vehicle.getVehicleImage() != null) {
-                double imageWidth = vehicle.getVehicleImage().getWidth();
-                double imageHeight = vehicle.getVehicleImage().getHeight();
+            if (canvasY >= 0 && canvasY <= canvasHeight && vehicle.getImage() != null) {
+                double imageWidth = vehicle.getImage().getWidth();
+                double imageHeight = vehicle.getImage().getHeight();
 
                 double scaleFactorX;
                 double scaleFactorY;
-                if (vehicle.getVehicleType() == Vehicle.VehicleType.CONE) {
-                    scaleFactorX = canvasWidth * 0.09 / imageWidth;
-                } else {
-                    scaleFactorX = canvasWidth * 0.125 / imageWidth;
-                }
+                scaleFactorX = canvasWidth * 0.125 / imageWidth;
                 scaleFactorY = scaleFactorX;
 
                 double scaledWidth = imageWidth * scaleFactorX;
                 double scaledHeight = imageHeight * scaleFactorY;
 
-                vehicleGraphicsContext.drawImage(vehicle.getVehicleImage(), vehicle.getX(), canvasY, scaledWidth, scaledHeight);
-            } else if (vehicle.getVehicleImage() == null) {
-                System.err.println("Warnung: Fahrzeug ohne Bild wird nicht gerendert. Fahrzeugtyp: " + vehicle.getVehicleType());
+                vehicleGraphicsContext.drawImage(vehicle.getImage(), vehicle.getX(), canvasY, scaledWidth, scaledHeight);
             }
         }
     }
