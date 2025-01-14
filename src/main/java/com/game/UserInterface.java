@@ -84,8 +84,6 @@ public class UserInterface extends Application {
         Button startButton = new Button("Start");
         startButton.getStyleClass().add("menu-button");
 
-        fadeIn(startButton);
-
         Label errorLabel = new Label();
         errorLabel.getStyleClass().add("error-label");
         errorLabel.setVisible(false);
@@ -96,7 +94,8 @@ public class UserInterface extends Application {
                 errorLabel.setText("Please enter your Username!");
                 errorLabel.setVisible(true);
             } else {
-                switchScene(createMenu(playerName));
+                switchSceneWithFade(createMenu(playerName));
+
             }
         });
         VBox entryLayout = new VBox(40);
@@ -111,11 +110,20 @@ public class UserInterface extends Application {
     }
 
     // Applies a fade-in transition effect to make the specified node gradually appear on the screen.
-    public void fadeIn(Node node) {
-        FadeTransition fadeTransition = new FadeTransition(Duration.seconds(1), node);
-        fadeTransition.setFromValue(0);
-        fadeTransition.setToValue(1);
-        fadeTransition.play();
+    private void switchSceneWithFade(Node newScene) {
+        soundManager.stopCollisionSound();
+        FadeTransition fadeOut = new FadeTransition(Duration.seconds(0.5), root);
+        fadeOut.setFromValue(1.0);
+        fadeOut.setToValue(0.0);
+        fadeOut.setOnFinished(event -> {
+            root.getChildren().clear();
+            root.getChildren().add(newScene);
+            FadeTransition fadeIn = new FadeTransition(Duration.seconds(0.5), root);
+            fadeIn.setFromValue(0.0);
+            fadeIn.setToValue(1.0);
+            fadeIn.play();
+        });
+        fadeOut.play();
     }
 
     // Creates the main menu layout with buttons for playing the game, changing difficulty, getting help, and exiting.
@@ -153,17 +161,17 @@ public class UserInterface extends Application {
         menuSoundButton.getStyleClass().add("sound-button");
         gameSoundButton.getStyleClass().add("sound-button");
 
-        difficultyButton.setOnAction(e -> switchScene(DifficultyMenu(difficultyLabel)));
+        difficultyButton.setOnAction(e -> switchSceneWithFade(DifficultyMenu(difficultyLabel)));
         playButton.setOnAction(e -> {
             root.setBackground(null);
-            switchScene((createGame(playerName)));
+            switchScene(createGame(playerName));
         });
         exitButton.setOnAction(e -> {
             Platform.exit();
         });
-        helpButton.setOnAction(e -> switchScene(createHelpMenu()));
-        backButton.setOnAction(e -> {switchScene(createEntry());});
-        soundButton.setOnAction(e -> switchScene(createSoundSettingsMenu()));
+        helpButton.setOnAction(e -> switchSceneWithFade(createHelpMenu()));
+        backButton.setOnAction(e -> {switchSceneWithFade(createEntry());});
+        soundButton.setOnAction(e -> switchSceneWithFade(createSoundSettingsMenu()));
 
         VBox titleBox = new VBox();
         titleBox.getChildren().add(title);
@@ -209,19 +217,19 @@ public class UserInterface extends Application {
         easyButton.setOnAction(e -> {
             difficulty = "Easy";
             difficultyLabel.setText("Difficulty: " + difficulty);
-            switchScene(createMenu(playerName));
+            switchSceneWithFade(createMenu(playerName));
         });
 
         mediumButton.setOnAction(e -> {
             difficulty = "Medium";
             difficultyLabel.setText("Difficulty: " + difficulty);
-            switchScene(createMenu(playerName));
+            switchSceneWithFade(createMenu(playerName));
         });
 
         hardButton.setOnAction(e -> {
             difficulty = "Hard";
             difficultyLabel.setText("Difficulty: " + difficulty);
-            switchScene(createMenu(playerName));
+            switchSceneWithFade(createMenu(playerName));
         });
 
         VBox difficultyBox = new VBox(20, Diff, easyButton, mediumButton, hardButton);
@@ -229,11 +237,6 @@ public class UserInterface extends Application {
         difficultyBox.setAlignment(Pos.CENTER);
         difficultyBox.setPadding(new Insets(20));
 
-        difficultyBox.setTranslateX(800); // Start position outside the screen
-        Timeline slideIn = new Timeline(
-                new KeyFrame(Duration.seconds(0.5), new KeyValue(difficultyBox.translateXProperty(), 0))
-        );
-        slideIn.play();
 
         return difficultyBox;
     }
@@ -467,14 +470,9 @@ public class UserInterface extends Application {
         helpLayout.setPadding(new Insets(20));
         helpLayout.getStyleClass().add("help-layout");
 
-        helpLayout.setTranslateX(800);
-        Timeline slideIn = new Timeline(
-                new KeyFrame(Duration.seconds(0.5), new KeyValue(helpLayout.translateXProperty(), 0))
-        );
-        slideIn.play();
+
         return helpLayout;
     }
-
 
     private void restartGame() {
         soundManager.stopCollisionSound();
@@ -484,11 +482,10 @@ public class UserInterface extends Application {
     // Switches to a new scene by clearing the existing layout and adding the new layout.
     private void switchScene(Node newScene) {
         soundManager.stopCollisionSound();
+
         root.getChildren().clear();
         root.getChildren().add(newScene);
     }
-
-
 
     // Loads the CSS stylesheet to apply custom styling to the application.
     private void readFromCss(Scene scene) {

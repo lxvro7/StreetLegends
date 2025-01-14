@@ -4,7 +4,7 @@
 }
 /*Main title and title to select Difficulty*/
 .title, .Diff {
-    -fx-font-size: 64px; /* Titel größer gemacht */
+    -fx-font-size: 64px;
     -fx-font-weight: bold;
     -fx-padding: 0 0 50px 0;
     -fx-alignment: center;
