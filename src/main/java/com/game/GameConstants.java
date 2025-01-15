@@ -66,6 +66,8 @@ public class GameConstants {
     public static final String MENU_AUDIO = "/audio/menu.mp3";
     public static final String GAME_AUDIO = "/audio/menu.mp3";
     public static final String CRASH_AUDIO = "/audio/crash.mp3";
+    public static final String COUNTDOWN_AUDIO = "/audio/mariostart.mp3";
+
 
     // Images for obstacles
     public static final String CONE_IMAGE_PATH = "/images/icon/hut.png";

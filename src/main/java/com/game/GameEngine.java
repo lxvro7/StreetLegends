@@ -136,7 +136,11 @@ public class GameEngine {
             running = false;
             Platform.runLater(() -> {
                 int finalDistance = getDistanceTraveled();
-                userInterface.showGameOverWindow(finalDistance);
+                userInterface.getGameUIManager().showGameOverWindow(
+                        finalDistance,
+                        userInterface::restartGame,
+                        () -> userInterface.switchScene(userInterface.getMainMenu().createMenu(userInterface.getPlayerName()))
+                );
             });
             executorService.shutdown();
         }
