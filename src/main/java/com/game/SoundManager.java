@@ -11,7 +11,7 @@ public class SoundManager {
     private MediaPlayer gameMediaPlayer;
     private MediaPlayer collisionMediaPlayer;
     private MediaPlayer countdownMediaPlayer;
-    private double volume = 0.5;
+    private double volume = 1.0;
 
     public SoundManager() {
         initializeMenuMediaPlayer();

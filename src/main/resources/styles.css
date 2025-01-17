@@ -147,25 +147,30 @@
     -fx-font-weight: bold;
 }
 .volume-slider {
-    -fx-pref-width: 400px; /* Breitere Spur */
-    -fx-pref-height: 20px; /* Erhöhte Höhe */
-    -fx-background-color: linear-gradient(to right, #ff416c, #ff4b2b); /* Farbverlauf der Spur */
+    -fx-pref-width: 400px;
+    -fx-pref-height: 20px;
+    -fx-background-color: linear-gradient(to right, #ff416c, #ff4b2b);
     -fx-border-radius: 10px;
     -fx-background-radius: 10px;
 }
 
 .volume-slider .track {
-    -fx-background-color: rgba(255, 255, 255, 0.3); /* Transparente Spur */
+    -fx-background-color: rgba(255, 255, 255, 0.3);
     -fx-background-radius: 10px;
 }
 
 .volume-slider .thumb {
-    -fx-background-color: #ff4b2b; /* Farbe des Schiebers */
+    -fx-background-color: #ff4b2b;
     -fx-border-color: white;
     -fx-border-width: 2px;
     -fx-border-radius: 50%;
-    -fx-pref-width: 18px; /* Größe des Schiebers */
+    -fx-pref-width: 18px;
     -fx-pref-height: 18px;
+}
+.volume-slider .tick-label {
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+    -fx-font-size: 12px;
 }
 /*------------------------------------*/
 /*Green*/
@@ -176,7 +181,7 @@
 }
 
 .difficulty-box .button:hover {
-    -fx-background-color: #80e27e;  /* Hellgrün beim Hover */
+    -fx-background-color: #80e27e;
     -fx-text-fill: white;
     -fx-border-radius: 10px;
     -fx-scale-x: 1.05;

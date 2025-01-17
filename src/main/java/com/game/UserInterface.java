@@ -35,6 +35,7 @@ public class UserInterface extends Application {
     private EntryScreen entryScreen;
     private GameUIManager gameUIManager;
     private HelpMenu helpMenu;
+    private GameEngine gameEngine;
     private GraphicsContext vehicleGraphicsContext;
     private GraphicsContext streetGraphicsContext;
     public boolean isGameOver = false;
@@ -56,6 +57,12 @@ public class UserInterface extends Application {
         entryScreen = new EntryScreen(this);
         gameUIManager = new GameUIManager(this, root, soundManager);
         helpMenu = new HelpMenu(this, mainMenu);
+
+        this.gameEngine = new GameEngine(playerName, difficulty, this,
+                Screen.getPrimary().getBounds().getHeight(),
+                Screen.getPrimary().getBounds().getWidth()
+        );
+        System.out.println("GameEngine initialized with difficulty: " + difficulty);
 
 
         Node entryLayout = entryScreen.createScreen();
@@ -142,7 +149,7 @@ public class UserInterface extends Application {
 
         canvasContainer.getChildren().add(meterLabel);
 
-        GameEngine gameEngine = new GameEngine(playerName, difficulty, this, streetCanvas.getHeight(), streetCanvas.getWidth());
+        this.gameEngine = new GameEngine(playerName, difficulty, this, streetCanvas.getHeight(), streetCanvas.getWidth());
 
         gameEngine.setCanvasHeight(streetCanvas.getHeight());
         gameEngine.setCanvasWidth(streetCanvas.getWidth());
@@ -222,6 +229,9 @@ public class UserInterface extends Application {
     public EntryScreen getEntryScreen(){
         return entryScreen;
     }
+    public GameEngine getGameEngine(){
+        return gameEngine;
+    }
 
     public GameUIManager getGameUIManager() {
         return gameUIManager;
@@ -232,7 +242,10 @@ public class UserInterface extends Application {
     public GraphicsContext getBackgroundGraphicsContext() {
         return streetGraphicsContext;
     }
-
+    public void setDifficulty(String difficulty) {
+        this.difficulty = difficulty.toLowerCase();
+        System.out.println("UserInterface difficulty set to: " + this.difficulty);
+    }
     public GraphicsContext getVehicleGraphicsContext() {
         return vehicleGraphicsContext;
     }

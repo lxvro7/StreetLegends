@@ -16,12 +16,12 @@ public class GameConstants {
     // Object properties: Velocity and radius for different vehicle types
     public static final int NPC_SOUTH_CAR_VELOCITY = 600;
     public static final int NPC_NORTH_CAR_VELOCITY = 200;
-    public static final int PLAYER_CAR_START_VELOCITY = 900;
+    public static final int PLAYER_CAR_START_VELOCITY = 500;
     public static final int CONE_RADIUS = 15;
     public static final int COIN_RADIUS = 10;
 
     // Game mechanics constants:
-    public static final int PLAYER_CAR_MAX_VELOCITY = 1050;
+    public static final int PLAYER_CAR_MAX_VELOCITY = 2000;
     public static final int EASY_DIFFICULTY_SPEED_INCREASE = 3;
     public static final int MEDIUM_DIFFICULTY_SPEED_INCREASE = 15;
     public static final int HARD_DIFFICULTY_SPEED_INCREASE = 25;
@@ -64,7 +64,7 @@ public class GameConstants {
 
     // File paths for audios
     public static final String MENU_AUDIO = "/audio/menu.mp3";
-    public static final String GAME_AUDIO = "/audio/menu.mp3";
+    public static final String GAME_AUDIO = "/audio/inGame.mp3";
     public static final String CRASH_AUDIO = "/audio/crash.mp3";
     public static final String COUNTDOWN_AUDIO = "/audio/mariostart.mp3";
 

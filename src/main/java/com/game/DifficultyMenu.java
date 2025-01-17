@@ -33,20 +33,31 @@ public class DifficultyMenu {
         easyButton.setOnAction(e -> {
             difficulty = "Easy";
             difficultyLabel.setText("Difficulty: " + difficulty);
+
+            userInterface.setDifficulty(difficulty);
+            userInterface.getGameEngine().setGameDifficulty(difficulty);
+
             userInterface.switchSceneWithFade(userInterface.getMainMenu().createMenu(userInterface.getPlayerName()));
         });
 
         mediumButton.setOnAction(e -> {
             difficulty = "Medium";
             difficultyLabel.setText("Difficulty: " + difficulty);
+
+            userInterface.setDifficulty(difficulty);
+            userInterface.getGameEngine().setGameDifficulty(difficulty);
+
             userInterface.switchSceneWithFade(userInterface.getMainMenu().createMenu(userInterface.getPlayerName()));
         });
 
         hardButton.setOnAction(e -> {
             difficulty = "Hard";
             difficultyLabel.setText("Difficulty: " + difficulty);
-            userInterface.switchSceneWithFade(userInterface.getMainMenu().createMenu(userInterface.getPlayerName()));
 
+            userInterface.setDifficulty(difficulty);
+            userInterface.getGameEngine().setGameDifficulty(difficulty);
+
+            userInterface.switchSceneWithFade(userInterface.getMainMenu().createMenu(userInterface.getPlayerName()));
         });
 
         VBox difficultyBox = new VBox(20, diffTitle, easyButton, mediumButton, hardButton);

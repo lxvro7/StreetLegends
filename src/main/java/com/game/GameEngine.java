@@ -26,7 +26,8 @@ public class GameEngine {
     public GameEngine(String playerName, String difficulty, UserInterface userInterface, double canvasHeight, double canvasWidth) {
         this.userInterface = userInterface;
         this.player = createPlayerVehicle(playerName);
-        this.gameManager = new GameManager(player, difficulty, canvasHeight,canvasWidth,this);
+        this.gameManager = new GameManager(player, difficulty, canvasHeight, canvasWidth, this);
+
         this.keyEventHandler = new KeyEventHandler(player);
     }
 
@@ -171,6 +172,9 @@ public class GameEngine {
 
     public int getDistanceTraveled() {
         return gameManager.getDistanceTraveled();
+    }
+    public void setGameDifficulty(String difficulty) {
+        this.gameManager.setDifficulty(difficulty.toLowerCase());
     }
 
 }

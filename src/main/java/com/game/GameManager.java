@@ -14,7 +14,7 @@ public class GameManager {
     private final GameLogic gameLogic;
     private final GameWorld gameWorld;
     private final GameRenderer gameRenderer;
-    private final String difficulty;
+    private String difficulty;
     private final Player player;
     private final GameEngine gameEngine;
 
@@ -23,7 +23,7 @@ public class GameManager {
 
     public GameManager(Player player, String difficulty, double canvasHeight, double canvasWidth, GameEngine gameEngine) {
         this.player = player;
-        this.difficulty = difficulty;
+        this.difficulty=difficulty;
         this.canvasHeight = canvasHeight;
         this.canvasWidth = canvasWidth;
         this.gameEngine=gameEngine;
@@ -32,7 +32,6 @@ public class GameManager {
         this.gameLogic = new GameLogic(this);
         this.gameWorld = new GameWorld(this);
         this.gameRenderer = new GameRenderer(this);
-
     }
 
     /**
@@ -81,6 +80,9 @@ public class GameManager {
 
     public String getDifficulty() {
         return difficulty;
+    }
+    public void setDifficulty(String difficulty) {
+        this.difficulty = difficulty.toLowerCase();
     }
 
     public double getWorldPartY() {

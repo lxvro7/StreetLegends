@@ -46,10 +46,12 @@ public class GameLogic {
     }
 
     private void increaseVelocity(String difficulty) {
-        float increaseAmount = switch (difficulty) {
-            case "Easy" -> GameConstants.EASY_DIFFICULTY_SPEED_INCREASE;
-            case "Medium" -> GameConstants.MEDIUM_DIFFICULTY_SPEED_INCREASE;
-            case "Hard" -> GameConstants.HARD_DIFFICULTY_SPEED_INCREASE;
+        System.out.println("Increasing velocity for difficulty: " + difficulty); // Debug
+
+        float increaseAmount = switch (difficulty.toLowerCase()) {
+            case "easy" -> GameConstants.EASY_DIFFICULTY_SPEED_INCREASE;
+            case "medium" -> GameConstants.MEDIUM_DIFFICULTY_SPEED_INCREASE;
+            case "hard" -> GameConstants.HARD_DIFFICULTY_SPEED_INCREASE;
             default -> {
                 System.err.println("UNKNOWN DIFFICULTY, DIFFICULTY EASY USED");
                 yield GameConstants.EASY_DIFFICULTY_SPEED_INCREASE;
@@ -76,6 +78,8 @@ public class GameLogic {
         // Increase velocity every 200m
         if (distanceTraveled >= lastDistanceCheckpointVelocity + 200) {
             lastDistanceCheckpointVelocity += 200;
+            String difficulty = gameManager.getDifficulty();
+            System.out.println("Using difficulty: " + difficulty);
             increaseVelocity(gameManager.getDifficulty());
         }
         // Check if 300m passed
