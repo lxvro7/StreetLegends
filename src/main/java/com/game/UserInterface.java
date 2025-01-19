@@ -244,7 +244,6 @@ public class UserInterface extends Application {
     }
     public void setDifficulty(String difficulty) {
         this.difficulty = difficulty.toLowerCase();
-        System.out.println("UserInterface difficulty set to: " + this.difficulty);
     }
     public GraphicsContext getVehicleGraphicsContext() {
         return vehicleGraphicsContext;

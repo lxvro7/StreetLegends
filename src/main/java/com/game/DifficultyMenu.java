@@ -32,8 +32,6 @@ public class DifficultyMenu {
 
         easyButton.setOnAction(e -> {
             difficulty = "Easy";
-            difficultyLabel.setText("Difficulty: " + difficulty);
-
             userInterface.setDifficulty(difficulty);
             userInterface.getGameEngine().setGameDifficulty(difficulty);
 
@@ -42,8 +40,6 @@ public class DifficultyMenu {
 
         mediumButton.setOnAction(e -> {
             difficulty = "Medium";
-            difficultyLabel.setText("Difficulty: " + difficulty);
-
             userInterface.setDifficulty(difficulty);
             userInterface.getGameEngine().setGameDifficulty(difficulty);
 
@@ -52,8 +48,6 @@ public class DifficultyMenu {
 
         hardButton.setOnAction(e -> {
             difficulty = "Hard";
-            difficultyLabel.setText("Difficulty: " + difficulty);
-
             userInterface.setDifficulty(difficulty);
             userInterface.getGameEngine().setGameDifficulty(difficulty);
 

@@ -33,7 +33,6 @@ public class HelpMenu {
 
         Label tipsInfo = new Label("💡 Pro Tips:\n" +
                 "- Stay focused and avoid obstacles.\n" +
-                "- Collect power-ups to improve your car (if available).\n" +
                 "- Can you beat Hard mode? Become a true Street Legend!");
         tipsInfo.getStyleClass().add("help-text");
 

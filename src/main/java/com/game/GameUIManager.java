@@ -36,7 +36,6 @@ public class GameUIManager {
         Label countdownLabel = new Label();
         countdownLabel.getStyleClass().add("countdown-label");
 
-        // Alle UI-Änderungen auf dem richtigen Thread durchführen
         Platform.runLater(() -> {
             root.getChildren().add(countdownLabel);
             StackPane.setAlignment(countdownLabel, Pos.CENTER);
@@ -45,7 +44,7 @@ public class GameUIManager {
         int[] countdownValues = {3, 2, 1};
         Timeline countdownTimeline = new Timeline();
 
-        double durationPerNumber = 1.4; // Dauer pro Zahl in Sekunden
+        double durationPerNumber = 1.4;
 
         for (int i = 0; i < countdownValues.length; i++) {
             int count = countdownValues[i];

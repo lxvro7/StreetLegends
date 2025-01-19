@@ -46,7 +46,6 @@ public class GameLogic {
     }
 
     private void increaseVelocity(String difficulty) {
-        System.out.println("Increasing velocity for difficulty: " + difficulty); // Debug
 
         float increaseAmount = switch (difficulty.toLowerCase()) {
             case "easy" -> GameConstants.EASY_DIFFICULTY_SPEED_INCREASE;

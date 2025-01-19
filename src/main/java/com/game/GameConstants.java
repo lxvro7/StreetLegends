@@ -64,7 +64,7 @@ public class GameConstants {
 
     // File paths for audios
     public static final String MENU_AUDIO = "/audio/menu.mp3";
-    public static final String GAME_AUDIO = "/audio/inGame.mp3";
+    public static final String GAME_AUDIO = "/audio/marioKart.mp3";
     public static final String CRASH_AUDIO = "/audio/crash.mp3";
     public static final String COUNTDOWN_AUDIO = "/audio/mariostart.mp3";
 
@@ -76,8 +76,8 @@ public class GameConstants {
 
     // Scaling Factor for easy-medium and hard
     public static final double EASY_COLLISION_SCALING_FACTOR = 8.0;
-    public static final double MEDIUM_COLLISION_SCALING_FACTOR = 7.0;
-    public static final double HARD_COLLISION_SCALING_FACTOR = 5.5;
+    public static final double MEDIUM_COLLISION_SCALING_FACTOR = 6.5;
+    public static final double HARD_COLLISION_SCALING_FACTOR = 5.0;
     public static final double FALLBACK_COLLISION_SCALING_FACTOR = 7.5;
 
     public static Map<Vehicle.VehicleType, String> NPC_NORTH_IMAGES() {
