@@ -120,7 +120,7 @@ public class GameConstants {
     }
 
     public static double getRoadCenter(double canvasWidth) {
-        return canvasWidth * 0.46;
+        return canvasWidth * 0.475;
     }
 }
 

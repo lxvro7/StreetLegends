@@ -21,9 +21,9 @@ public class GameWorld {
     private final GameManager gameManager;
     private double worldPartY = GameConstants.INITIAL_WORLD_PART_Y;
     private final ArrayList<NPC> npcs;
-    //private final ArrayList<Obstacle> obstacles;
     private final Random random = new Random();
-    private int lastMilestone = 0;
+    private final ArrayList<GameObject> gameObjects = new ArrayList<>();
+    private final ArrayList<Obstacle> obstacles = new ArrayList<>();
     private double spawnTriggerY;
 
     public GameWorld(GameManager gameManager) {
@@ -35,14 +35,26 @@ public class GameWorld {
     }
 
     public synchronized void update(double diffSeconds) {
-            moveAllVehicles(diffSeconds);
-            deleteVehicles();
-            gameManager.getGameLogic().update();
+        moveAllVehicles(diffSeconds);
+        deleteVehicles();
+        gameManager.getGameLogic().update();
+        if(isNewSpawnNeeded()) {
+            addNewNpcs();
+            addNewObstacle();
+        }
     }
 
     public void addNewNpcs() {
         ArrayList<NPC> newNpcs = spawnTheNpcVehicles();
         npcs.addAll(newNpcs);
+    }
+
+    public void addNewObstacle() {
+        obstacles.add(spawnCone());
+    }
+
+    public ArrayList<Obstacle> getAllObstacles() {
+        return obstacles;
     }
 
     public ArrayList<Vehicle> getAllVehicles() {
@@ -52,6 +64,14 @@ public class GameWorld {
             allVehicles.add(npc.getNpcVehicle());
         }
         return allVehicles;
+    }
+
+    public ArrayList<GameObject> getAllGameObjects() {
+        //gameObjects.removeIf(object -> object instanceof Vehicle);
+        gameObjects.clear();
+        gameObjects.addAll(getAllVehicles());
+        gameObjects.addAll(getAllObstacles());
+        return gameObjects;
     }
 
     public boolean adjustWorld() {
@@ -73,20 +93,19 @@ public class GameWorld {
         }
     }
 
-    // TODO Lovro: Fix this, based off the players velocity
     public boolean isNewSpawnNeeded() {
         double canvasHeight = gameManager.getCanvasHeight();
         double playerY = player.getPlayerVehicle().getY();
         double playerVelocity = player.getPlayerVehicle().getVelocity();
         boolean withinTolerance = Math.abs(playerY - spawnTriggerY) < GameConstants.SPAWN_TRIGGER_TOLERANCE;
         if(withinTolerance) {
-            System.out.println("SPAWN NEEDED");
             spawnTriggerY = playerY - canvasHeight - canvasHeight/2 - (playerVelocity * 0.1);
             return true;
         }
         return false;
     }
 
+    // TODO: Refactor this to GameObjects
     // Delete all vehicles, that are below the player's canvas
     public void deleteVehicles() {
         double deleteTriggerY = player.getPlayerVehicle().getY()
@@ -101,12 +120,15 @@ public class GameWorld {
     }
 
     public Obstacle spawnCone() {
+        final double SPAWN_OFFSET = GameConstants.SPAWN_OFFSET;
+        final double SPAWN_RANGE  = GameConstants.SPAWN_RANGE;
         double roadCenterX = GameConstants.getRoadCenter(gameManager.getCanvasWidth());
-        double coneY = player.getPlayerVehicle().getY() - 800;
-        return new Obstacle(roadCenterX, coneY, Obstacle.ObstacleType.CONE);
+        double coneY= spawnTriggerY + random.nextDouble() * SPAWN_RANGE - SPAWN_OFFSET;
+        Obstacle obstacle = new Obstacle(roadCenterX, coneY, Obstacle.ObstacleType.CONE);
+        return obstacle;
     }
 
-    private boolean CoinSpawnNeeded(){
+    private boolean coinSpawnNeeded(){
         return true;
     }
 
@@ -240,6 +262,10 @@ public class GameWorld {
 
     public double getWorldPartY() {
         return worldPartY;
+    }
+
+    public ArrayList<GameObject> getGameObjects() {
+        return gameObjects;
     }
 }
 

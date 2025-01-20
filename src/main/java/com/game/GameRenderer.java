@@ -15,26 +15,26 @@ public class GameRenderer {
         image = createImage(GameConstants.GAME_BACKGROUND_IMAGE_PATH);
     }
 
-    public void drawVehicles(ArrayList<Vehicle> vehicles,
+    public void drawObjects(ArrayList<GameObject> objects,
                              GraphicsContext vehicleGraphicsContext, double canvasWidth, double canvasHeight) {
 
         vehicleGraphicsContext.clearRect(0, 0, canvasWidth, canvasHeight);
         double worldPartY = gameManager.getWorldPartY();
-        for (Vehicle vehicle : vehicles) {
-            double canvasY = vehicle.getY() - worldPartY;
-            if (canvasY >= 0 && canvasY <= canvasHeight && vehicle.getImage() != null) {
-                double imageWidth = vehicle.getImage().getWidth();
-                double imageHeight = vehicle.getImage().getHeight();
+        for (GameObject object : objects) {
+            double canvasY = object.getY() - worldPartY;
+            if (canvasY >= 0 && canvasY <= canvasHeight && object.getImage() != null) {
+                double imageWidth = object.getImage().getWidth();
+                double imageHeight = object.getImage().getHeight();
 
                 double scaleFactorX;
                 double scaleFactorY;
-                scaleFactorX = canvasWidth * 0.125 / imageWidth;
+                scaleFactorX = canvasWidth * object.getImageScalingFactor() / imageWidth;
                 scaleFactorY = scaleFactorX;
 
                 double scaledWidth = imageWidth * scaleFactorX;
                 double scaledHeight = imageHeight * scaleFactorY;
 
-                vehicleGraphicsContext.drawImage(vehicle.getImage(), vehicle.getX(), canvasY, scaledWidth, scaledHeight);
+                vehicleGraphicsContext.drawImage(object.getImage(), object.getX(), canvasY, scaledWidth, scaledHeight);
             }
         }
     }

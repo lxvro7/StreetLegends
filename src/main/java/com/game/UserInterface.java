@@ -1,15 +1,11 @@
 package com.game;
 import javafx.animation.*;
 import javafx.application.Application;
-import javafx.application.Platform;
 import javafx.geometry.Insets;
-import javafx.geometry.Pos;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
-import javafx.scene.control.TextField;
 import javafx.scene.Node;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.layout.*;
@@ -27,8 +23,6 @@ public class UserInterface extends Application {
     private StackPane root;
     private String difficulty = "Easy";
     private String playerName = "";
-    private double windowWidth;
-    private double windowHeight;
     private MainMenu mainMenu;
     private DifficultyMenu difficultyMenu;
     private SoundSettingMenu soundSettingsMenu;
@@ -73,9 +67,6 @@ public class UserInterface extends Application {
         primaryStage.setScene(scene);
         primaryStage.setMaximized(true);
         primaryStage.show();
-
-        windowHeight = primaryStage.getHeight();
-        windowWidth = primaryStage.getWidth();
     }
 
     // Sets the background image and overlay for the application, adjusting it to the screen size.
@@ -154,7 +145,7 @@ public class UserInterface extends Application {
         gameEngine.setCanvasHeight(streetCanvas.getHeight());
         gameEngine.setCanvasWidth(streetCanvas.getWidth());
         gameEngine.renderBackground(streetGraphicsContext);
-        gameEngine.setUpdateCallback(vehicles -> gameEngine.renderVehicles(vehicleGraphicsContext, vehicles));
+        gameEngine.setUpdateCallback(gameObjects -> gameEngine.renderObjects(vehicleGraphicsContext, gameObjects));
 
         root.getChildren().clear();
         root.getChildren().add(canvasContainer);

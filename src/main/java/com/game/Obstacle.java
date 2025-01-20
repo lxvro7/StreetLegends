@@ -7,7 +7,7 @@ public class Obstacle extends GameObject {
     private final ObstacleType obstacleType;
 
     public Obstacle(double x, double y, ObstacleType obstacleType) {
-        super(x, y, getImagePath(obstacleType), getRadius(obstacleType));
+        super(x, y, getImagePath(obstacleType), getRadius(obstacleType), 0.05);
         this.obstacleType = obstacleType;
     }
 

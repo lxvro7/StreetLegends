@@ -13,7 +13,7 @@ public class GameEngine {
 
     private Player player;
     private boolean running;
-    private Consumer<ArrayList<Vehicle>> updateCallback;
+    private Consumer<ArrayList<GameObject>> updateCallback;
     private final GameManager gameManager;
     private final KeyEventHandler keyEventHandler;
     private double canvasWidth;
@@ -31,7 +31,7 @@ public class GameEngine {
         this.keyEventHandler = new KeyEventHandler(player);
     }
 
-    public void setUpdateCallback(Consumer<ArrayList<Vehicle>> callback) {
+    public void setUpdateCallback(Consumer<ArrayList<GameObject>> callback) {
         this.updateCallback = callback;
     }
 
@@ -57,13 +57,9 @@ public class GameEngine {
                     System.out.println("FPS: " + currentFps);
                 }
 
-                // Game logic in separate thread
+                // Game in separate thread
                 executorService.submit(() -> {
                     gameManager.updateWorld(diffSeconds);
-
-                    if (gameManager.isNewSpawnNeeded()) {
-                        gameManager.addNewNpcs();
-                    }
                     if (gameManager.checkIfGameOver()) {
                         stopGame();
                     }
@@ -72,23 +68,14 @@ public class GameEngine {
                 // Rendering on the UI thread
                 Platform.runLater(() -> {
                     if (updateCallback != null) {
-                        updateCallback.accept(gameManager.getAllVehicles());
+                        updateCallback.accept(gameManager.getAllGameObjects());
                     }
 
                     if (gameManager.adjustWorld()) {
                         gameManager.drawBackground(userInterface.getBackgroundGraphicsContext(),
                                 canvasWidth, canvasHeight);
                     }
-                    /*
-                    if (gameManager.isConeSpawnNeeded()) {
-                        Obstacle cone = gameManager.spawnCone();
-                        gameManager.drawVehicles(null, userInterface.getVehicleGraphicsContext(),
-                                cone, canvasWidth, canvasHeight);
-                    }
-
-                     */
-
-                    gameManager.drawVehicles(gameManager.getAllVehicles(),
+                    gameManager.drawObjects(gameManager.getAllGameObjects(),
                             userInterface.getVehicleGraphicsContext(), canvasWidth, canvasHeight);
                 });
 
@@ -154,8 +141,8 @@ public class GameEngine {
         return player;
     }
 
-    public void renderVehicles(GraphicsContext vgc, ArrayList<Vehicle> vehicles) {
-        gameManager.drawVehicles(vehicles, vgc,  canvasWidth, canvasHeight);
+    public void renderObjects(GraphicsContext vgc, ArrayList<GameObject> gameObjects) {
+        gameManager.drawObjects(gameObjects, vgc,  canvasWidth, canvasHeight);
     }
 
     public void renderBackground(GraphicsContext bgc) {

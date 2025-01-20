@@ -42,14 +42,6 @@ public class GameManager {
         gameWorld.update(diffSeconds);
     }
 
-    public synchronized ArrayList<Vehicle> getAllVehicles() {
-        return gameWorld.getAllVehicles();
-    }
-
-    public Obstacle spawnCone() {
-        return gameWorld.spawnCone();
-    }
-
     public boolean isConeSpawnNeeded() {
         return gameLogic.isConesSpawnNeeded();
     }
@@ -64,6 +56,14 @@ public class GameManager {
 
     public boolean isNewSpawnNeeded() {
         return gameWorld.isNewSpawnNeeded();
+    }
+
+    public synchronized ArrayList<GameObject> getAllGameObjects() {
+        return gameWorld.getAllGameObjects();
+    }
+
+    public void spawnCone() {
+        gameWorld.spawnCone();
     }
 
     /**
@@ -97,8 +97,8 @@ public class GameManager {
      * Delegates the GameRenderer methods
      * */
 
-    public void drawVehicles(ArrayList<Vehicle> vehicles, GraphicsContext vehicleGraphicsContext, double canvasWidth, double canvasHeight) {
-        gameRenderer.drawVehicles(vehicles, vehicleGraphicsContext, canvasWidth, canvasHeight);
+    public void drawObjects(ArrayList<GameObject> objects, GraphicsContext vehicleGraphicsContext, double canvasWidth, double canvasHeight) {
+        gameRenderer.drawObjects(objects, vehicleGraphicsContext, canvasWidth, canvasHeight);
     }
 
     public void drawBackground(GraphicsContext backgroundGraphicsContext, double canvasWidth, double canvasHeight) {

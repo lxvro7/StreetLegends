@@ -10,16 +10,18 @@ public abstract class GameObject {
     protected double radius;
     protected String imagePath;
     protected Image image;
+    private final double imageScalingFactor;
 
-    public GameObject(double x, double y, String imagePath, double radius) {
+    public GameObject(double x, double y, String imagePath, double radius, double imageScalingFactor) {
         this.x = x;
         this.y = y;
         this.imagePath = imagePath;
         this.radius = radius;
+        this.imageScalingFactor = imageScalingFactor;
         loadImage(imagePath);
     }
 
-    protected void loadImage(String imagePath) {
+    private void loadImage(String imagePath) {
         try {
             this.image = new Image(Objects.requireNonNull(getClass().getResource(imagePath)).toExternalForm());
         } catch (NullPointerException e) {
@@ -45,6 +47,10 @@ public abstract class GameObject {
 
     public double getRadius() {
         return radius;
+    }
+
+    public double getImageScalingFactor() {
+        return imageScalingFactor;
     }
 }
 

@@ -84,6 +84,7 @@ public class GameLogic {
         // Check if 300m passed
         if (distanceTraveled >= lastDistanceCheckpointCone + 300) {
             lastDistanceCheckpointCone += 300;
+            System.out.println("300 M PASSED");
             isConesSpawnNeeded = true;
         }
         else {
