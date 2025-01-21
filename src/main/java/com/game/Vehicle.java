@@ -1,5 +1,6 @@
 package com.game;
 
+import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.shape.Circle;
 
 import java.util.ArrayList;
@@ -65,7 +66,7 @@ public class Vehicle extends GameObject {
         if (playerType == PlayerType.NPC_NORTH) {
             velocity = GameConstants.NPC_NORTH_CAR_VELOCITY;
         }
-         if (playerType == PlayerType.NPC_SOUTH) {
+        if (playerType == PlayerType.NPC_SOUTH) {
             velocity = GameConstants.NPC_SOUTH_CAR_VELOCITY;
             alfa = GameConstants.ROTATION_90_RAD;
         }
@@ -93,4 +94,9 @@ public class Vehicle extends GameObject {
     public List<Circle> getCollisionCircles() {
         return collisionCircles;
     }
+    @Override
+    public void render(GraphicsContext gc) {
+        gc.drawImage(image, x, y, image.getWidth() * getImageScalingFactor(), image.getHeight() * getImageScalingFactor());
+    }
+
 }

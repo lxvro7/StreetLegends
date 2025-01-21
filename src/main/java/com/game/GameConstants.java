@@ -16,15 +16,17 @@ public class GameConstants {
     // Object properties: Velocity and radius for different vehicle types
     public static final int NPC_SOUTH_CAR_VELOCITY = 600;
     public static final int NPC_NORTH_CAR_VELOCITY = 200;
-    public static final int PLAYER_CAR_START_VELOCITY = 500;
     public static final int CONE_RADIUS = 50;
     public static final int COIN_RADIUS = 10;
 
     // Game mechanics constants:
     public static final int PLAYER_CAR_MAX_VELOCITY = 2000;
+    public static final int PLAYER_CAR_START_VELOCITY = 500;
+    public static final int INITIAL_VELOCITY = PLAYER_CAR_START_VELOCITY;
     public static final int EASY_DIFFICULTY_SPEED_INCREASE = 3;
     public static final int MEDIUM_DIFFICULTY_SPEED_INCREASE = 15;
     public static final int HARD_DIFFICULTY_SPEED_INCREASE = 25;
+
 
     // World properties: Boundaries and initial player position
     public static final int SCROLL_BOUNDS = 700;

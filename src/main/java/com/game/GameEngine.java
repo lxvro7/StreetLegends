@@ -172,6 +172,4 @@ public class GameEngine {
         return gameManager.getCoinCounter();
     }
 
-
-
 }

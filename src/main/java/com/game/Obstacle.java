@@ -1,5 +1,6 @@
 package com.game;
 
+import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.shape.Circle;
 
 import java.util.ArrayList;
@@ -45,5 +46,10 @@ public class Obstacle extends GameObject {
     public List<Circle> getCollisionCircles() {
         return collisionCircles;
     }
+    @Override
+    public void render(GraphicsContext gc) {
+        gc.drawImage(image, x, y, image.getWidth() * getImageScalingFactor(), image.getHeight() * getImageScalingFactor());
+    }
+
 }
 

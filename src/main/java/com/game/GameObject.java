@@ -1,5 +1,6 @@
 package com.game;
 
+import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
 
 import java.util.Objects;
@@ -11,7 +12,7 @@ public abstract class GameObject {
     protected String imagePath;
     protected Image image;
     private final double imageScalingFactor;
-    private CanvasContext canvasContext;
+
 
     public GameObject(double x, double y, String imagePath, double radius, double imageScalingFactor) {
         this.x = x;
@@ -21,6 +22,7 @@ public abstract class GameObject {
         this.imageScalingFactor = imageScalingFactor;
         loadImage(imagePath);
     }
+    public abstract void render(GraphicsContext gc);
 
     private void loadImage(String imagePath) {
         try {
@@ -54,5 +56,6 @@ public abstract class GameObject {
     public double getImageScalingFactor() {
         return imageScalingFactor;
     }
+
 }
 

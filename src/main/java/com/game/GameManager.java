@@ -143,5 +143,4 @@ public class GameManager {
     public int getCoinCounter() {
         return gameLogic.getCoinCounter();
     }
-
 }
