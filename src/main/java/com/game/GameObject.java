@@ -1,6 +1,5 @@
 package com.game;
 
-import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
 
 import java.util.Objects;
@@ -19,10 +18,10 @@ public abstract class GameObject {
         this.y = y;
         this.imagePath = imagePath;
         this.radius = radius;
+        System.out.println(radius);
         this.imageScalingFactor = imageScalingFactor;
         loadImage(imagePath);
     }
-    public abstract void render(GraphicsContext gc);
 
     private void loadImage(String imagePath) {
         try {

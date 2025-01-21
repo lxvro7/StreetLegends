@@ -46,10 +46,6 @@ public class Obstacle extends GameObject {
     public List<Circle> getCollisionCircles() {
         return collisionCircles;
     }
-    @Override
-    public void render(GraphicsContext gc) {
-        gc.drawImage(image, x, y, image.getWidth() * getImageScalingFactor(), image.getHeight() * getImageScalingFactor());
-    }
 
 }
 

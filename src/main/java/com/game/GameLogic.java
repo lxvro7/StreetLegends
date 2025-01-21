@@ -15,7 +15,10 @@ public class GameLogic {
     private int bonusDistance = 0;
     private int lastDistanceCheckpointCone = 0;
 
-
+    private boolean isOutOfBounds(Vehicle vehicle) {
+        double vehicleX = vehicle.getX();
+        return vehicleX < 0.3 * gameManager.getCanvasWidth() || vehicleX > 0.7 * gameManager.getCanvasWidth();
+    }
 
     public GameLogic(GameManager gameManager) {
         this.gameManager = gameManager;
@@ -73,14 +76,19 @@ public class GameLogic {
                 if(obstacle.getObstacleType() == Obstacle.ObstacleType.COIN) {
                     coinCounter++;
                     bonusDistance += 200;
-                    System.out.println("COINS COUNTER " + coinCounter);
                     obstacleIterator.remove();
                     gameManager.setObstacles(obstacles);
                 }
             }
         }
+        // Check if player is out of bounds
+        if(isOutOfBounds(playerVehicle)) {
+            return true;
+        }
+
         return false;
     }
+
 
     private void increaseVelocity(String difficulty) {
 
