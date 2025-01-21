@@ -168,5 +168,10 @@ public class GameEngine {
     public void setGameDifficulty(String difficulty) {
         this.gameManager.setDifficulty(difficulty.toLowerCase());
     }
+    public int getCoinCounter() {
+        return gameManager.getCoinCounter();
+    }
+
+
 
 }

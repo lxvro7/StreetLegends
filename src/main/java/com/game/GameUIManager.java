@@ -112,12 +112,17 @@ public class GameUIManager {
 
         Label quitGame = new Label("Press ESC to Quit the Game");
         quitGame.getStyleClass().add("game-over-instruction");
+        int coinsCollected = userInterface.getCoinCounter();
 
-        Label meterLabel = new Label("Congrats, you have reached " + finalDistance + " Meter!");
+        Label coinLabel = new Label("You collected " + coinsCollected + " Coins! Therfore you were " + 200*coinsCollected + " meter faster!");
+        coinLabel.getStyleClass().add("meter-display");
+        coinLabel.setTextAlignment(TextAlignment.CENTER);
+
+        Label meterLabel = new Label("You covered " + finalDistance + " meters!");
         meterLabel.getStyleClass().add("meter-display");
         meterLabel.setTextAlignment(TextAlignment.CENTER);
 
-        VBox layout = new VBox(30, gameOverLabel, meterLabel, restartInstruction, menuInstruction, quitGame);
+        VBox layout = new VBox(30, gameOverLabel, coinLabel, meterLabel, restartInstruction, menuInstruction, quitGame);
         layout.setAlignment(Pos.CENTER);
         layout.setPadding(new Insets(50));
 

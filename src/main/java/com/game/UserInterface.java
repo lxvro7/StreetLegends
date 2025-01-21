@@ -56,7 +56,6 @@ public class UserInterface extends Application {
                 Screen.getPrimary().getBounds().getHeight(),
                 Screen.getPrimary().getBounds().getWidth()
         );
-        System.out.println("GameEngine initialized with difficulty: " + difficulty);
 
 
         Node entryLayout = entryScreen.createScreen();
@@ -138,7 +137,13 @@ public class UserInterface extends Application {
         meterLabel.setLayoutY(20);
         meterLabel.setPadding(new Insets(10));
 
-        canvasContainer.getChildren().add(meterLabel);
+        Label coinLabel = new Label("Coins: 0");
+        coinLabel.getStyleClass().add("meter-label");
+        coinLabel.setLayoutX(20);
+        coinLabel.setLayoutY(110);
+        coinLabel.setPadding(new Insets(10));
+
+        canvasContainer.getChildren().addAll(meterLabel, coinLabel);
 
         this.gameEngine = new GameEngine(playerName, difficulty, this, streetCanvas.getHeight(), streetCanvas.getWidth());
         CanvasContext.initialize(streetCanvas.getWidth(), streetCanvas.getHeight());
@@ -150,15 +155,20 @@ public class UserInterface extends Application {
 
         root.getChildren().clear();
         root.getChildren().add(canvasContainer);
+
         gameUIManager.startCountdown(() -> gameEngine.startGameLoop());
-        AnimationTimer meterUpdater = new AnimationTimer() {
+
+        AnimationTimer gameUpdater = new AnimationTimer() {
             @Override
             public void handle(long now) {
                 int meters = gameEngine.getDistanceTraveled();
                 meterLabel.setText("Meter: " + meters);
+
+                int coins = gameEngine.getCoinCounter();
+                coinLabel.setText("Coins: " + coins);
             }
         };
-        meterUpdater.start();
+        gameUpdater.start();
 
         scene.setOnKeyPressed(keyEvent -> {
             gameEngine.processUserInput(keyEvent.getCode());
@@ -170,6 +180,7 @@ public class UserInterface extends Application {
 
         return canvasContainer;
     }
+
     public void restartGame() {
         soundManager.stopCollisionSound();
         switchScene(createGame(playerName));
@@ -243,4 +254,8 @@ public class UserInterface extends Application {
     public Node getScene() {
         return null;
     }
+    public int getCoinCounter() {
+        return gameEngine.getCoinCounter();
+    }
+
 }

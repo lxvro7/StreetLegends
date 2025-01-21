@@ -140,4 +140,8 @@ public class GameManager {
     public double getCanvasWidth() {
         return canvasWidth;
     }
+    public int getCoinCounter() {
+        return gameLogic.getCoinCounter();
+    }
+
 }

@@ -12,12 +12,10 @@ public class GameLogic {
     private int lastDistanceCheckpointVelocity = 0;
     private int coinCounter = 0;
     private boolean isConesSpawnNeeded = false;
+    private int bonusDistance = 0;
     private int lastDistanceCheckpointCone = 0;
 
-    // TODO Alton: Ne UI Anzeige erstellen wie für Metern genau drunter. Dann die Variable oben coinCounter verwenden
-    //  und immer die Anzeige Coins: x aktualisieren ,genau wie du es für die Meter Anzeige gemacht hast mit variable
-    //  distanceTraveled;
-    //  Außerdem bei der GameOver Anzeige unter blablabla Meter machst du noch super 20 Coins gesammelt
+
 
     public GameLogic(GameManager gameManager) {
         this.gameManager = gameManager;
@@ -74,6 +72,7 @@ public class GameLogic {
                 }
                 if(obstacle.getObstacleType() == Obstacle.ObstacleType.COIN) {
                     coinCounter++;
+                    bonusDistance += 200;
                     System.out.println("COINS COUNTER " + coinCounter);
                     obstacleIterator.remove();
                     gameManager.setObstacles(obstacles);
@@ -110,9 +109,8 @@ public class GameLogic {
         double distanceInPixels = Math.sqrt(Math.pow(startPointX - relativePlayerX, 2)
                 + Math.pow(relativePlayerY - startPointY, 2));
         double pixelsPerMeter = 10;
-        distanceTraveled = (int) (distanceInPixels / pixelsPerMeter);
+        distanceTraveled = (int) (distanceInPixels / pixelsPerMeter) + bonusDistance;
 
-        // Increase velocity every 200m
         if (distanceTraveled >= lastDistanceCheckpointVelocity + 200) {
             lastDistanceCheckpointVelocity += 200;
             String difficulty = gameManager.getDifficulty();
@@ -120,21 +118,23 @@ public class GameLogic {
             increaseVelocity(gameManager.getDifficulty());
         }
         // Check if 300m passed
-        if (distanceTraveled >= lastDistanceCheckpointCone + 300) {
-            lastDistanceCheckpointCone += 300;
-            System.out.println("300 M PASSED");
+        if (distanceTraveled >= lastDistanceCheckpointCone + 250) {
+            lastDistanceCheckpointCone += 250;
             isConesSpawnNeeded = true;
         }
-        else {
-            isConesSpawnNeeded = false;
-        }
-    }
+        else{
+                isConesSpawnNeeded = false;
+            }
 
+    }
     public boolean isConesSpawnNeeded() {
         return isConesSpawnNeeded;
     }
-
     public int getDistanceTraveled() {
         return distanceTraveled;
     }
+    public int getCoinCounter() {
+        return coinCounter;
+    }
+
 }
