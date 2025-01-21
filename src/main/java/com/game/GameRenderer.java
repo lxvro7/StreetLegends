@@ -16,7 +16,7 @@ public class GameRenderer {
     }
 
     public void drawObjects(ArrayList<GameObject> objects,
-                             GraphicsContext vehicleGraphicsContext, double canvasWidth, double canvasHeight) {
+                            GraphicsContext vehicleGraphicsContext, double canvasWidth, double canvasHeight) {
 
         vehicleGraphicsContext.clearRect(0, 0, canvasWidth, canvasHeight);
         double worldPartY = gameManager.getWorldPartY();
@@ -34,7 +34,10 @@ public class GameRenderer {
                 double scaledWidth = imageWidth * scaleFactorX;
                 double scaledHeight = imageHeight * scaleFactorY;
 
-                vehicleGraphicsContext.drawImage(object.getImage(), object.getX(), canvasY, scaledWidth, scaledHeight);
+                double topLeftX = object.getX() - (scaledWidth / 2);
+                double topLeftY = canvasY - (scaledHeight / 2);
+
+                vehicleGraphicsContext.drawImage(object.getImage(), topLeftX, topLeftY, scaledWidth, scaledHeight);
             }
         }
     }

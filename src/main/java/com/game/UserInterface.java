@@ -141,6 +141,7 @@ public class UserInterface extends Application {
         canvasContainer.getChildren().add(meterLabel);
 
         this.gameEngine = new GameEngine(playerName, difficulty, this, streetCanvas.getHeight(), streetCanvas.getWidth());
+        CanvasContext.initialize(streetCanvas.getWidth(), streetCanvas.getHeight());
 
         gameEngine.setCanvasHeight(streetCanvas.getHeight());
         gameEngine.setCanvasWidth(streetCanvas.getWidth());

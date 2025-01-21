@@ -17,7 +17,7 @@ public class GameConstants {
     public static final int NPC_SOUTH_CAR_VELOCITY = 600;
     public static final int NPC_NORTH_CAR_VELOCITY = 200;
     public static final int PLAYER_CAR_START_VELOCITY = 500;
-    public static final int CONE_RADIUS = 15;
+    public static final int CONE_RADIUS = 50;
     public static final int COIN_RADIUS = 10;
 
     // Game mechanics constants:
@@ -70,7 +70,7 @@ public class GameConstants {
 
 
     // Images for obstacles
-    public static final String CONE_IMAGE_PATH = "/images/icon/hut.png";
+    public static final String CONE_IMAGE_PATH = "/images/icon/falsch.png";
     public static final String COIN_IMAGE_PATH = "/images/icon/coin.png";
 
 
@@ -108,19 +108,15 @@ public class GameConstants {
 
     public static Map<VehicleType, Double> VEHICLE_RADIUS() {
         return Map.of(
-                VehicleType.AMBULANCE,   30.0,
-                VehicleType.AUDI,        30.0,
-                VehicleType.BLACK_VIPER, 30.0,
-                VehicleType.POLICE,      30.0,
-                VehicleType.TAXI,        30.0,
-                VehicleType.TRUCK,       30.0,
-                VehicleType.PICKUP,      30.0,
-                VehicleType.VAN,         30.0
+                VehicleType.AMBULANCE,   40.0,
+                VehicleType.AUDI,        40.0,
+                VehicleType.BLACK_VIPER, 40.0,
+                VehicleType.POLICE,      40.0,
+                VehicleType.TAXI,        40.0,
+                VehicleType.TRUCK,       40.0,
+                VehicleType.PICKUP,      40.0,
+                VehicleType.VAN,         40.0
         );
-    }
-
-    public static double getRoadCenter(double canvasWidth) {
-        return canvasWidth * 0.475;
     }
 }
 

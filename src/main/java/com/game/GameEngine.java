@@ -60,6 +60,11 @@ public class GameEngine {
                 // Game in separate thread
                 executorService.submit(() -> {
                     gameManager.updateWorld(diffSeconds);
+
+                    if (gameManager.isNewSpawnNeeded()) {
+                        gameManager.addNewNpcs();
+                        gameManager.addNewObstacle();
+                    }
                     if (gameManager.checkIfGameOver()) {
                         stopGame();
                     }

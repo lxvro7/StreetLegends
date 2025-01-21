@@ -11,6 +11,7 @@ public abstract class GameObject {
     protected String imagePath;
     protected Image image;
     private final double imageScalingFactor;
+    private CanvasContext canvasContext;
 
     public GameObject(double x, double y, String imagePath, double radius, double imageScalingFactor) {
         this.x = x;
@@ -23,6 +24,7 @@ public abstract class GameObject {
 
     private void loadImage(String imagePath) {
         try {
+            // Scale the Image
             this.image = new Image(Objects.requireNonNull(getClass().getResource(imagePath)).toExternalForm());
         } catch (NullPointerException e) {
             e.printStackTrace();

@@ -3,14 +3,21 @@ package com.game;
 import javafx.scene.shape.Circle;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 
 
 public class GameLogic {
     private final GameManager gameManager;
     private int distanceTraveled = 0;
     private int lastDistanceCheckpointVelocity = 0;
+    private int coinCounter = 0;
     private boolean isConesSpawnNeeded = false;
     private int lastDistanceCheckpointCone = 0;
+
+    // TODO Alton: Ne UI Anzeige erstellen wie für Metern genau drunter. Dann die Variable oben coinCounter verwenden
+    //  und immer die Anzeige Coins: x aktualisieren ,genau wie du es für die Meter Anzeige gemacht hast mit variable
+    //  distanceTraveled;
+    //  Außerdem bei der GameOver Anzeige unter blablabla Meter machst du noch super 20 Coins gesammelt
 
     public GameLogic(GameManager gameManager) {
         this.gameManager = gameManager;
@@ -31,7 +38,21 @@ public class GameLogic {
         return false;
     }
 
-    // Game is over, if the player collides with a npc
+    private boolean isCollisionDetected(Vehicle vehicle, Obstacle obstacle) {
+        for (Circle circle1 : vehicle.getCollisionCircles()) {
+            for (Circle circle2 : obstacle.getCollisionCircles()) {
+                double dx = circle1.getCenterX() - circle2.getCenterX();
+                double dy = circle1.getCenterY() - circle2.getCenterY();
+                double distance = circle1.getRadius() + circle2.getRadius();
+                if (dx * dx + dy * dy < distance * distance) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+    // Game is over, if the player collides with a npc or obstacle
     public synchronized boolean checkIfGameOver() {
         Player player = gameManager.getPlayer();
         Vehicle playerVehicle = player.getPlayerVehicle();
@@ -40,6 +61,23 @@ public class GameLogic {
             Vehicle npcVehicle = npc.getNpcVehicle();
             if(isCollisionDetected(playerVehicle, npcVehicle)) {
                 return true;
+            }
+        }
+        ArrayList<Obstacle> obstacles = gameManager.getAllObstacles();
+        Iterator<Obstacle> obstacleIterator = obstacles.iterator();
+        while(obstacleIterator.hasNext()) {
+            Obstacle obstacle = obstacleIterator.next();
+            if (isCollisionDetected(playerVehicle, obstacle)) {
+                // CHECK IF COLLISION IS A CONE OR A COIN
+                if(obstacle.getObstacleType() == Obstacle.ObstacleType.CONE) {
+                    return true;
+                }
+                if(obstacle.getObstacleType() == Obstacle.ObstacleType.COIN) {
+                    coinCounter++;
+                    System.out.println("COINS COUNTER " + coinCounter);
+                    obstacleIterator.remove();
+                    gameManager.setObstacles(obstacles);
+                }
             }
         }
         return false;

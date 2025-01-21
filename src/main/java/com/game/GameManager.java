@@ -46,6 +46,10 @@ public class GameManager {
         return gameLogic.isConesSpawnNeeded();
     }
 
+    public void addNewObstacle() {
+        gameWorld.addNewObstacle();
+    }
+
     public ArrayList<NPC> getAllNpcs() {
         return gameWorld.getAllNpcs();
     }
@@ -62,8 +66,16 @@ public class GameManager {
         return gameWorld.getAllGameObjects();
     }
 
+    public ArrayList<Obstacle> getAllObstacles() {
+        return gameWorld.getAllObstacles();
+    }
+
     public void spawnCone() {
         gameWorld.spawnCone();
+    }
+
+    public void setObstacles(ArrayList<Obstacle> obstacles) {
+        gameWorld.setObstacles(obstacles);
     }
 
     /**
