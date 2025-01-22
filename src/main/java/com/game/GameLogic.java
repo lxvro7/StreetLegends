@@ -78,6 +78,7 @@ public class GameLogic {
                     bonusDistance += 200;
                     obstacleIterator.remove();
                     gameManager.setObstacles(obstacles);
+                    decreaseVelocity(gameManager.getDifficulty());
                 }
             }
         }
@@ -91,7 +92,6 @@ public class GameLogic {
 
 
     private void increaseVelocity(String difficulty) {
-
         float increaseAmount = switch (difficulty.toLowerCase()) {
             case "easy" -> GameConstants.EASY_DIFFICULTY_SPEED_INCREASE;
             case "medium" -> GameConstants.MEDIUM_DIFFICULTY_SPEED_INCREASE;
@@ -108,6 +108,23 @@ public class GameLogic {
         gameManager.getPlayer().getPlayerVehicle().setVelocity(newVelocity);
         System.out.println("Current velocity: " + newVelocity);
     }
+    private void decreaseVelocity(String difficulty) {
+        float decreaseAmount = switch (difficulty.toLowerCase()) {
+            case "easy" -> GameConstants.EASY_DIFFICULTY_SPEED_DECREASE;
+            case "medium" -> GameConstants.MEDIUM_DIFFICULTY_SPEED_DECREASE;
+            case "hard" -> GameConstants.HARD_DIFFICULTY_SPEED_DECREASE;
+            default -> {
+                System.err.println("UNKNOWN DIFFICULTY, USING EASY AS DEFAULT");
+                yield GameConstants.EASY_DIFFICULTY_SPEED_DECREASE;
+            }
+        };
+
+        float newVelocity = gameManager.getPlayer().getPlayerVehicle().getVelocity() - decreaseAmount;
+        if (newVelocity < GameConstants.PLAYER_CAR_MIN_VELOCITY) {
+            newVelocity = GameConstants.PLAYER_CAR_MIN_VELOCITY;
+        }
+        gameManager.getPlayer().getPlayerVehicle().setVelocity(newVelocity);
+    }
 
     public void update() {
         final double startPointY = GameConstants.INITIAL_PLAYER_Y;
@@ -122,18 +139,8 @@ public class GameLogic {
         if (distanceTraveled >= lastDistanceCheckpointVelocity + 200) {
             lastDistanceCheckpointVelocity += 200;
             String difficulty = gameManager.getDifficulty();
-            System.out.println("Using difficulty: " + difficulty);
             increaseVelocity(gameManager.getDifficulty());
         }
-        // Check if 300m passed
-        if (distanceTraveled >= lastDistanceCheckpointCone + 250) {
-            lastDistanceCheckpointCone += 250;
-            isConesSpawnNeeded = true;
-        }
-        else{
-                isConesSpawnNeeded = false;
-            }
-
     }
     public boolean isConesSpawnNeeded() {
         return isConesSpawnNeeded;

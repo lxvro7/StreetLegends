@@ -143,7 +143,7 @@ public class UserInterface extends Application {
         coinLabel.setLayoutY(110);
         coinLabel.setPadding(new Insets(10));
 
-        canvasContainer.getChildren().addAll(meterLabel, coinLabel);
+        canvasContainer.getChildren().addAll(meterLabel/*, coinLabel*/);
 
         this.gameEngine = new GameEngine(playerName, difficulty, this, streetCanvas.getHeight(), streetCanvas.getWidth());
         CanvasContext.initialize(streetCanvas.getWidth(), streetCanvas.getHeight());
@@ -162,7 +162,7 @@ public class UserInterface extends Application {
             @Override
             public void handle(long now) {
                 int meters = gameEngine.getDistanceTraveled();
-                meterLabel.setText("Meter: " + meters);
+                meterLabel.setText("Score: " + meters);
 
                 int coins = gameEngine.getCoinCounter();
                 coinLabel.setText("Coins: " + coins);
