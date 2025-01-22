@@ -18,7 +18,6 @@ public abstract class GameObject {
         this.y = y;
         this.imagePath = imagePath;
         this.radius = radius;
-        System.out.println(radius);
         this.imageScalingFactor = imageScalingFactor;
         loadImage(imagePath);
     }

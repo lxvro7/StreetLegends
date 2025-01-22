@@ -129,6 +129,14 @@ public class GameManager {
         return gameLogic.getDistanceTraveled();
     }
 
+    public int getCoinBonus() {
+        return gameLogic.getCoinBonus();
+    }
+
+    public int getScore() {
+        return gameLogic.getScore();
+    }
+
     public GameLogic getGameLogic() {
         return gameLogic;
     }

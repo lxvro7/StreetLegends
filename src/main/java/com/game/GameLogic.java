@@ -12,8 +12,7 @@ public class GameLogic {
     private int lastDistanceCheckpointVelocity = 0;
     private int coinCounter = 0;
     private boolean isConesSpawnNeeded = false;
-    private int bonusDistance = 0;
-    private int lastDistanceCheckpointCone = 0;
+    private int coinBonus = 0;
 
     private boolean isOutOfBounds(Vehicle vehicle) {
         double vehicleX = vehicle.getX();
@@ -75,10 +74,9 @@ public class GameLogic {
                 }
                 if(obstacle.getObstacleType() == Obstacle.ObstacleType.COIN) {
                     coinCounter++;
-                    bonusDistance += 200;
+                    coinBonus += 200;
                     obstacleIterator.remove();
                     gameManager.setObstacles(obstacles);
-                    decreaseVelocity(gameManager.getDifficulty());
                 }
             }
         }
@@ -108,23 +106,6 @@ public class GameLogic {
         gameManager.getPlayer().getPlayerVehicle().setVelocity(newVelocity);
         System.out.println("Current velocity: " + newVelocity);
     }
-    private void decreaseVelocity(String difficulty) {
-        float decreaseAmount = switch (difficulty.toLowerCase()) {
-            case "easy" -> GameConstants.EASY_DIFFICULTY_SPEED_DECREASE;
-            case "medium" -> GameConstants.MEDIUM_DIFFICULTY_SPEED_DECREASE;
-            case "hard" -> GameConstants.HARD_DIFFICULTY_SPEED_DECREASE;
-            default -> {
-                System.err.println("UNKNOWN DIFFICULTY, USING EASY AS DEFAULT");
-                yield GameConstants.EASY_DIFFICULTY_SPEED_DECREASE;
-            }
-        };
-
-        float newVelocity = gameManager.getPlayer().getPlayerVehicle().getVelocity() - decreaseAmount;
-        if (newVelocity < GameConstants.PLAYER_CAR_MIN_VELOCITY) {
-            newVelocity = GameConstants.PLAYER_CAR_MIN_VELOCITY;
-        }
-        gameManager.getPlayer().getPlayerVehicle().setVelocity(newVelocity);
-    }
 
     public void update() {
         final double startPointY = GameConstants.INITIAL_PLAYER_Y;
@@ -134,7 +115,7 @@ public class GameLogic {
         double distanceInPixels = Math.sqrt(Math.pow(startPointX - relativePlayerX, 2)
                 + Math.pow(relativePlayerY - startPointY, 2));
         double pixelsPerMeter = 10;
-        distanceTraveled = (int) (distanceInPixels / pixelsPerMeter) + bonusDistance;
+        distanceTraveled = (int) (distanceInPixels / pixelsPerMeter);
 
         if (distanceTraveled >= lastDistanceCheckpointVelocity + 200) {
             lastDistanceCheckpointVelocity += 200;
@@ -142,12 +123,23 @@ public class GameLogic {
             increaseVelocity(gameManager.getDifficulty());
         }
     }
+
     public boolean isConesSpawnNeeded() {
         return isConesSpawnNeeded;
     }
+
     public int getDistanceTraveled() {
         return distanceTraveled;
     }
+
+    public int getScore() {
+        return distanceTraveled + coinBonus;
+    }
+
+    public int getCoinBonus() {
+        return coinBonus;
+    }
+
     public int getCoinCounter() {
         return coinCounter;
     }

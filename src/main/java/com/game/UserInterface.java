@@ -161,7 +161,7 @@ public class UserInterface extends Application {
         AnimationTimer gameUpdater = new AnimationTimer() {
             @Override
             public void handle(long now) {
-                int meters = gameEngine.getDistanceTraveled();
+                int meters = gameEngine.getScore();
                 meterLabel.setText("Score: " + meters);
 
                 int coins = gameEngine.getCoinCounter();

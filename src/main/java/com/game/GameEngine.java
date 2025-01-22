@@ -128,7 +128,7 @@ public class GameEngine {
             currentState = GameState.GAME_OVER;
             running = false;
             Platform.runLater(() -> {
-                int finalDistance = getDistanceTraveled();
+                int finalDistance = getScore();
                 userInterface.getGameUIManager().showGameOverWindow(
                         finalDistance,
                         userInterface::restartGame,
@@ -165,6 +165,11 @@ public class GameEngine {
     public int getDistanceTraveled() {
         return gameManager.getDistanceTraveled();
     }
+
+    public int getScore() {
+        return gameManager.getScore();
+    }
+
     public void setGameDifficulty(String difficulty) {
         this.gameManager.setDifficulty(difficulty.toLowerCase());
     }
