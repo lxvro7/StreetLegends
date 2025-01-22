@@ -29,7 +29,6 @@ Welcome to **Street Legends**! Get ready for the ultimate racing experience wher
 
 ### Controls
 - **Arrow Keys**: Steer your car left or right.
-- 
 ---
 
 ## Development Team
@@ -40,7 +39,7 @@ Welcome to **Street Legends**! Get ready for the ultimate racing experience wher
 ---
 
 ## Support
-If you encounter any issues or have suggestions for the game, please contact us at **Altonbekolli_1@web.de** 📧
+If you encounter any issues or have suggestions for the game, please contact us at **Altonbekolli_1@web.de**📧 or **Lovro.lupis7@gmail.com**📧
 
 ---
 
