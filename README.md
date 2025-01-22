@@ -32,9 +32,10 @@ Welcome to **Street Legends**! Get ready for the ultimate racing experience wher
 ---
 
 ## Development Team
-- **Design**: Alton
+- **Design**: Alton & Lovro
 - **Programming**: Alton & Lovro
-- **Sound**: Alton
+- **Sound**: Alton & Lovro
+- **Images*: Alton & Lovro
 
 ---
 
