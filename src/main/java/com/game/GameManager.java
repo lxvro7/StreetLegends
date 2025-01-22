@@ -70,9 +70,6 @@ public class GameManager {
         return gameWorld.getAllObstacles();
     }
 
-    public void spawnCone() {
-        gameWorld.spawnCone();
-    }
 
     public void setObstacles(ArrayList<Obstacle> obstacles) {
         gameWorld.setObstacles(obstacles);

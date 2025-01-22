@@ -74,7 +74,7 @@ public class GameConstants {
 
 
     // Images for obstacles
-    public static final String CONE_IMAGE_PATH = "/images/icon/falsch.png";
+    public static final String CONE_IMAGE_PATH = "/images/icon/cone.png";
     public static final String COIN_IMAGE_PATH = "/images/icon/coin.png";
 
 

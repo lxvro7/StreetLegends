@@ -46,7 +46,13 @@ public class GameWorld {
     }
 
     public void addNewObstacle() {
-        obstacles.add(spawnCone());
+        double leftLaneCenterX = gameManager.getCanvasWidth() * 0.385;
+        double roadCenterX = gameManager.getCanvasWidth() * 0.5;
+        double rightLaneCenterX = gameManager.getCanvasWidth() * 0.615;
+        obstacles.add(spawnCone(leftLaneCenterX));
+        obstacles.add(spawnCone(roadCenterX));
+        obstacles.add(spawnCone(rightLaneCenterX));
+
         obstacles.add(spawnCoin());
     }
 
@@ -123,12 +129,11 @@ public class GameWorld {
         return false;
     }
 
-    public Obstacle spawnCone() {
+    public Obstacle spawnCone(double xValue) {
         final double SPAWN_OFFSET = GameConstants.SPAWN_OFFSET;
-        final double SPAWN_RANGE  = GameConstants.SPAWN_RANGE;
-        double roadCenterX = gameManager.getCanvasWidth() * 0.5;
+        final double SPAWN_RANGE  = GameConstants.SPAWN_RANGE * 2;
         double coneY = spawnTriggerY + random.nextDouble() * SPAWN_RANGE - SPAWN_OFFSET;
-        return new Obstacle(roadCenterX, coneY, Obstacle.ObstacleType.CONE);
+        return new Obstacle(xValue, coneY, Obstacle.ObstacleType.CONE);
     }
 
     public Obstacle spawnCoin() {
@@ -268,6 +273,8 @@ public class GameWorld {
             default       -> GameConstants.MIN_NPC_QUANTITY;
         };
     }
+
+    // TODO: SPAWN CONES DIFFERENT FOR ANOTHER DIFFICULTY
 
     public double getWorldPartY() {
         return worldPartY;
