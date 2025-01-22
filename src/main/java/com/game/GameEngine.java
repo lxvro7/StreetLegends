@@ -137,6 +137,7 @@ public class GameEngine {
             });
             executorService.shutdown();
         }
+        System.out.println("Spiel beendet");
     }
 
     private Player createPlayerVehicle(String playerName) {

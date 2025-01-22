@@ -21,6 +21,10 @@ public class GameLogic {
 
     public GameLogic(GameManager gameManager) {
         this.gameManager = gameManager;
+        String difficulty=gameManager.getDifficulty();
+        checkDifficulty(difficulty);
+        int velocityNow= checkDifficulty(difficulty);
+        gameManager.getPlayer().getPlayerVehicle().setVelocity(velocityNow);
     }
 
     // Checks the collision between two vehicles
@@ -106,6 +110,18 @@ public class GameLogic {
         gameManager.getPlayer().getPlayerVehicle().setVelocity(newVelocity);
         System.out.println("Current velocity: " + newVelocity);
     }
+    public int checkDifficulty(String difficulty) {
+        return switch(difficulty.toLowerCase()) {
+            case "easy" -> GameConstants.PLAYER_CAR_EASY_START;
+            case "medium" -> GameConstants.PLAYER_CAR_Medium_START;
+            case "hard" -> GameConstants.PLAYER_CAR_Hard_START;
+            default -> {
+                System.err.println("UNKNOWN DIFFICULTY, DIFFICULTY EASY USED");
+                yield GameConstants.EASY_DIFFICULTY_SPEED_INCREASE;
+            }
+        };
+    }
+
 
     public void update() {
         final double startPointY = GameConstants.INITIAL_PLAYER_Y;
@@ -117,11 +133,12 @@ public class GameLogic {
         double pixelsPerMeter = 10;
         distanceTraveled = (int) (distanceInPixels / pixelsPerMeter);
 
-        if (distanceTraveled >= lastDistanceCheckpointVelocity + 200) {
-            lastDistanceCheckpointVelocity += 200;
+        if (distanceTraveled >= lastDistanceCheckpointVelocity + 400) {
+            lastDistanceCheckpointVelocity += 400;
             String difficulty = gameManager.getDifficulty();
             increaseVelocity(gameManager.getDifficulty());
         }
+
     }
 
     public boolean isConesSpawnNeeded() {

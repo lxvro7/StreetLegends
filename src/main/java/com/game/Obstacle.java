@@ -14,7 +14,7 @@ public class Obstacle extends GameObject {
     private final List<Circle> collisionCircles = new ArrayList<>();
 
     public Obstacle(double x, double y, ObstacleType obstacleType) {
-        super(x, y, getImagePath(obstacleType), getRadius(obstacleType), 0.04, 0.05);
+        super(x, y, getImagePath(obstacleType), getRadius(obstacleType), 0.04);
         this.obstacleType = obstacleType;
         initializeCollisionCircles();
     }

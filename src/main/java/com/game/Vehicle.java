@@ -21,7 +21,7 @@ public class Vehicle extends GameObject {
     private final List<Circle> collisionCircles = new ArrayList<>();
 
     public Vehicle(double x, double y, VehicleType vehicleType, PlayerType playerType) {
-        super(x, y, getImagePath(vehicleType, playerType), getRadius(vehicleType), 0.125, 0.05);
+        super(x, y, getImagePath(vehicleType, playerType), getRadius(vehicleType), 0.125);
         this.x = x;
         this.y = y;
         this.vehicleType = vehicleType;

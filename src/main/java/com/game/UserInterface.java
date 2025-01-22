@@ -34,6 +34,8 @@ public class UserInterface extends Application {
     private GraphicsContext streetGraphicsContext;
     public boolean isGameOver = false;
     private final SoundManager soundManager = new SoundManager();
+    private double screenHeight = Screen.getScreens().get(1).getBounds().getHeight();
+    private double screenWidth = Screen.getScreens().get(1).getBounds().getWidth();
 
     public static void main(String[] args) {
         launch(args);
@@ -53,8 +55,8 @@ public class UserInterface extends Application {
         helpMenu = new HelpMenu(this, mainMenu);
 
         this.gameEngine = new GameEngine(playerName, difficulty, this,
-                Screen.getPrimary().getBounds().getHeight(),
-                Screen.getPrimary().getBounds().getWidth()
+                screenHeight,
+                screenWidth
         );
 
 
@@ -70,8 +72,6 @@ public class UserInterface extends Application {
 
     // Sets the background image and overlay for the application, adjusting it to the screen size.
     public void background() {
-        double screenWidth = Screen.getPrimary().getBounds().getWidth();
-        double screenHeight = Screen.getPrimary().getBounds().getHeight();
         String imagePath = Objects.requireNonNull(getClass().getResource(GameConstants.MENU_BACKGROUND_IMAGE_PATH)).toExternalForm();
 
         BackgroundImage backgroundImage = new BackgroundImage(

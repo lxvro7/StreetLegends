@@ -14,21 +14,20 @@ import static com.game.Vehicle.VehicleType;
 public class GameConstants {
 
     // Object properties: Velocity and radius for different vehicle types
-    public static final int NPC_SOUTH_CAR_VELOCITY = 600;
+    public static final int NPC_SOUTH_CAR_VELOCITY = 400;
     public static final int NPC_NORTH_CAR_VELOCITY = 200;
-    public static final int CONE_RADIUS = 50;
-    public static final int COIN_RADIUS = 10;
+    public static final int CONE_RADIUS = 35;
+    public static final int COIN_RADIUS = 35;
 
     // Game mechanics constants:
-    public static final int PLAYER_CAR_MAX_VELOCITY = 2000;
+    public static final int PLAYER_CAR_MAX_VELOCITY = 1000;
+    public static final int PLAYER_CAR_EASY_START = 450;
+    public static final int PLAYER_CAR_Medium_START = 500;
+    public static final int PLAYER_CAR_Hard_START = 600;
     public static final int PLAYER_CAR_START_VELOCITY = 500;
     public static final int EASY_DIFFICULTY_SPEED_INCREASE = 3;
-    public static final int MEDIUM_DIFFICULTY_SPEED_INCREASE = 15;
-    public static final int HARD_DIFFICULTY_SPEED_INCREASE = 25;
-    public static final int EASY_DIFFICULTY_SPEED_DECREASE = 5;
-    public static final int MEDIUM_DIFFICULTY_SPEED_DECREASE = 15;
-    public static final int HARD_DIFFICULTY_SPEED_DECREASE = 25;
-    public static final int PLAYER_CAR_MIN_VELOCITY = 500;
+    public static final int MEDIUM_DIFFICULTY_SPEED_INCREASE = 8;
+    public static final int HARD_DIFFICULTY_SPEED_INCREASE = 13;
 
     // World properties: Boundaries and initial player position
     public static final int SCROLL_BOUNDS = 700;
@@ -44,8 +43,8 @@ public class GameConstants {
     // Game mechanics constants: NPC spawning limits and turning angles
     public static final int MAX_NPC_ATTEMPTS = 5;
     public static final int MIN_NPC_QUANTITY = 2;
-    public static final int EASY_DIFFICULTY_NPC_NORTH_AMOUNT = 3;
-    public static final int MIDDLE_DIFFICULTY_NPC_NORTH_AMOUNT = 4;
+    public static final int EASY_DIFFICULTY_NPC_NORTH_AMOUNT = 1;
+    public static final int MIDDLE_DIFFICULTY_NPC_NORTH_AMOUNT = 3;
     public static final int HARD_DIFFICULTY_NPC_NORTH_AMOUNT = 5;
     public static final int EASY_DIFFICULTY_NPC_SOUTH_AMOUNT = 1;
     public static final int MIDDLE_DIFFICULTY_NPC_SOUTH_AMOUNT = 2;
