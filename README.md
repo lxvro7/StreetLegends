@@ -35,7 +35,7 @@ Welcome to **Street Legends**! Get ready for the ultimate racing experience wher
 - **Design**: Alton & Lovro
 - **Programming**: Alton & Lovro
 - **Sound**: Alton & Lovro
-- **Images*: Alton & Lovro
+- **Images**: Alton & Lovro
 
 ---
 
