@@ -1,4 +1,4 @@
-# Street Legends
+# Street Legends, a simple JavaFX game.
 
 Welcome to **Street Legends**! Get ready for the ultimate racing experience where speed, skill, and strategy collide. Dominate the streets, conquer challenges, and prove you're the best racer out there! 🏎️💨
 
