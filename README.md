@@ -33,10 +33,8 @@ Get ready for the ultimate racing experience where speed, skill, and strategy co
 ---
 
 ## Development Team
-- **Design**: Alton & Lovro
-- **Programming**: Alton & Lovro
-- **Sound**: Alton & Lovro
-- **Images**: Alton & Lovro
+@lxvro7
+@Altonbekolli
 
 ---
 
